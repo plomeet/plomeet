@@ -1,7 +1,7 @@
 package main.java.com.ssafy.PloMeet.api.response;
 
 /**
- * Entity에서 가공이 필요한 경우 이런식으로 생성
+ * 예시 - Entity에서 가공이 필요한 경우 이런식으로 생성
  */
 
 //import com.ssafy.sayeon.model.entity.SentStory;
@@ -17,7 +17,7 @@ package main.java.com.ssafy.PloMeet.api.response;
 //@Getter
 //@ToString
 //@ApiModel("SentStoryResponse")
-public class ExampleRes {
+public class SentStoryRes {
 //    @ApiModelProperty(name = "storyId")
 //    String storyId;
 //
