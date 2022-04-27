@@ -24,6 +24,10 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        // 네이버 지도 저장소
+        maven {
+            url 'https://naver.jfrog.io/artifactory/maven/'
+        }
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.0.4")
