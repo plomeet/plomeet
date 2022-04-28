@@ -35,10 +35,10 @@ const AppTabComponent = () => {
                     return <Icon name={iconName} size={size} color={color} />;
                 },
             })}
-            // tabBarOptions={{
-            //     activeTintColor: 'black',
-            //     inactiveTintColor: 'gray',
-            // }}
+            tabBarOptions={{
+                activeTintColor: 'black',
+                inactiveTintColor: 'gray',
+            }}
         >
             <MainScreenTab.Screen name="홈" component={Home} />
             <MainScreenTab.Screen name="기록" component={Record} />

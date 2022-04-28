@@ -1,15 +1,17 @@
 import React, { Component, Node, Button } from 'react';
 import 'react-native-gesture-handler';
-import { SafeAreaView, StyleSheet, Text, View, FlatList, Card, Image, StatusBar  } from "react-native";
+import { Chip } from 'react-native-paper';
+import { LogBox , SafeAreaView, StyleSheet, Text, View, FlatList, Image, StatusBar, TouchableOpacity } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Align } from '../plogging/map';
+
+LogBox.ignoreAllLogs();
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-    paddingHorizontal: 20,
     // marginTop: StatusBar.currentHeight || 0,
   },
   item: {
@@ -21,16 +23,16 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    width : '47%',
-    // padding: 20,
+    flex:1,
     borderRadius: 8,
-    marginVertical: 10,
+    marginBottom: 20,
+    marginLeft: 20,
     paddingBottom: 10,
     paddingRight: 10,
   },
   elevation: {
-    elevation: 10,
-    shadowColor: '#969696',
+    elevation: 5,
+    shadowColor: '#bbbbbb',
   },
   img: {
     borderTopLeftRadius: 8,
@@ -55,6 +57,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 10,
     marginTop: 3,
+  },
+  TouchableOpacityStyle: {
+    position: 'absolute',
+    width: 65,
+    height: 65,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 20,
+    bottom: 20,
+  },
+  FloatingButtonStyle: {
+    resizeMode: 'contain',
+    width: 65,
+    height: 65,
+    elevation: 5,
+    shadowColor: '#bbbbbb',
   }
 });
 
@@ -149,8 +167,8 @@ const DATA = [
   },
 ];
 
-const Item = ({ img, title, place, numMember, maxMember, date}) => (
-  <View style={[styles.card, styles.elevation]}>
+const Item = ({ img, title, place, numMember, maxMember, date, index}) => (
+  <View style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles.card, styles.elevation]}>
     <Image source={{uri: img}} style={styles.img} />
     <Text style={styles.title}>{title}</Text>
     <View style={styles.row}>
@@ -162,8 +180,7 @@ const Item = ({ img, title, place, numMember, maxMember, date}) => (
     <View style={styles.row}>
     <Icon name='md-calendar-sharp' size={14} color='#292D32' />
       <Text style={styles.content}>{date}</Text>
-    </View>
-    
+    </View>    
   </View>
 );
 
@@ -175,11 +192,17 @@ const App = () => {
     place={item.meetingPlace}
     numMember={item.memberCnt}
     maxMember={item.memberMax}
-    date={item.meetingDate} />
+    date={item.meetingDate}
+    index = {item.meetingId} />
   );
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={[styles.row, {marginLeft:20}, {marginBottom:10}, {marginTop:10}]}>
+        <Chip style={{marginRight:10}} icon="map-marker" mode="outlined" selectedColor="#232732" onPress={() => console.log('지역')}>지역</Chip>
+        <Chip style={{marginRight:10}} icon="clock" mode="outlined" selectedColor='#232732' onPress={() => console.log('일정')}>일정</Chip>
+        <Chip icon="align-vertical-center" mode="outlined" selectedColor='#232732' onPress={() => console.log('정렬')}>정렬</Chip>
+      </View>
       <FlatList
         columnWrapperStyle={{justifyContent: 'space-between'}}
         data={data}
@@ -187,6 +210,10 @@ const App = () => {
         keyExtractor={item => item.meetingId}
         numColumns = {2}
       />
+      <TouchableOpacity activeOpacity={0.5} style= {styles.TouchableOpacityStyle} >
+        <Image source={{ uri: 'https://i.postimg.cc/v8p4fK53/plus-btn.png' }}
+          style={styles.FloatingButtonStyle} />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
