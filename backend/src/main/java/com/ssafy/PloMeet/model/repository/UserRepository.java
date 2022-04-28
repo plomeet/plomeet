@@ -1,4 +1,4 @@
-package main.java.com.ssafy.PloMeet.model.repository;
+package com.ssafy.PloMeet.model.repository;
 
 public interface UserRepository {
 }

@@ -1,4 +1,4 @@
-package main.java.com.ssafy.PloMeet.api.request;
+package com.ssafy.PloMeet.api.request;
 
 public class UserRegisterReq {
 //    @Getter

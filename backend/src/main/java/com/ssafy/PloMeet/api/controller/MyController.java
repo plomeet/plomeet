@@ -1,4 +1,4 @@
-package main.java.com.ssafy.PloMeet.api.controller;
+package com.ssafy.PloMeet.api.controller;
 
 public class MyController {
     /** AdvancedResponseBody 사용 예시 */

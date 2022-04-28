@@ -1,4 +1,4 @@
-package main.java.com.ssafy.PloMeet.api.response;
+package com.ssafy.PloMeet.api.response;
 
 /**
  * Entity 자체로 응답할때는 보통 여기에 담아서 보냄
