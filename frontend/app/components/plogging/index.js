@@ -5,6 +5,8 @@ import { Image, ImageBackground, PermissionsAndroid, Platform, ScrollView, Text,
 import { LayerGroup } from './map/index';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Geolocation from 'react-native-geolocation-service';
+import haversine from 'haversine';
+
 
 //테스트용으로 남겨둔 데이터 삭제 X
 const P0 = { latitude: 37.564362, longitude: 126.977011 };
@@ -13,12 +15,17 @@ const P2 = { latitude: 37.565383, longitude: 126.976292 };
 const P4 = { latitude: 37.564834, longitude: 126.977218 };
 const P5 = { latitude: 37.562834, longitude: 126.976218 };
 
-const Plogging = () => {
+const Plogging = ({distSum, setDistSum}) => {
     const mapView = useRef(null);
     const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
+    // const [location, setLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); //ios 테스트용 - 지우지마세여 ㅠㅠㅠ
     const [ploggingPath, setPloggingPath] = useState([]);
     const [enableLayerGroup, setEnableLayerGroup] = useState(true);
     const [center, setCenter] = useState();
+    const [prevLocation, setPrevLocation] = useState({ latitude: 37.33117775, longitude: 126.977011 });
+    // const [prevLocation, setPrevLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); ////ios 테스트용  - 지우지마세여 ㅠㅠㅠ
+    const [totalDist, setTotalDist] = useState(0);
+
 
     //화면에 렌더링되면 권한부터 살피자
     useEffect(() => {
@@ -65,7 +72,26 @@ const Plogging = () => {
     // 위치가 갱신되면 플로깅 이동 기록 쌓자
     useEffect(() => {
         setPloggingPath(ploggingPath => [...ploggingPath, location]);
+        setTotalDist(() => {
+            const prevLatLng  = {
+                lat: prevLocation.latitude,
+                lng: prevLocation.longitude
+            }
+            const curLatLng = {
+                lat: location.latitude,
+                lng: location.longitude
+            }
+            const options = {
+                format: '{lat,lng}',
+                unit: 'km'
+            }
+
+            return (totalDist + haversine(prevLatLng, curLatLng, options)) || 0;
+        })
+
+        setPrevLocation(location);
         console.log(ploggingPath);
+        setDistSum(totalDist.toFixed(2));
     }, [location]);
 
     //렌더링 시 실행해서 현재 위치 및 주요 state들 셋팅
@@ -216,4 +242,7 @@ const style = StyleSheet.create({
     container: { width: '100%', height: '100%' },
     realLocBtn: { position: 'absolute', bottom: 100, right: 10, alignSelf: 'flex-end' }
 });
+
+
+
 export default Plogging;
