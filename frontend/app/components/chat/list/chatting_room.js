@@ -3,7 +3,6 @@ import moment from 'moment';
 import Icon from 'react-native-vector-icons/Octicons'
 import { color,
     ChattingRoomComp,
-    //ChattingRoomTouchable,
     ChattingRoomInfoComp,
     ChattingRoomInfoAddComp,
     ChattingRoomInfoUpLineComp,
@@ -45,9 +44,13 @@ const ChattingRoom = ( props ) => {
             </ChattingRoomInfoComp>
             <ChattingRoomInfoAddComp>
                 <ChattingRoomLastTime>{chatting.lastTime}</ChattingRoomLastTime>
-                <ChattingRoomUnReadBadge>
-                    <ChattingRoomUnRead>{chatting.unReadCnt}</ChattingRoomUnRead>
-                </ChattingRoomUnReadBadge>
+                { chatting.unReadCnt==0
+                ? null :
+                    <ChattingRoomUnReadBadge>
+                        <ChattingRoomUnRead>{chatting.unReadCnt}</ChattingRoomUnRead>
+                    </ChattingRoomUnReadBadge>
+                }
+                
             </ChattingRoomInfoAddComp>
         </ChattingRoomComp>
     );
