@@ -15,7 +15,7 @@ import { color,
     ChattingRoomLastChat,
     ChattingRoomUnReadBadge,
     ChattingRoomUnRead,
-} from '../styles';
+} from './styles';
 
 const getDateOrTime = (dateTime) => {
     const now = moment().startOf('day')
