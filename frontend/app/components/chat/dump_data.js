@@ -39,7 +39,7 @@ const data = [
         meeting: {
             meetingId: 3,
             meetingName: "강아지 보실 분",
-            meetingImg: "https://images.mypetlife.co.kr/content/uploads/2021/06/07161807/sq-lim-k4vhuUHv08o-unsplash-1024x683.jpgC",
+            meetingImg: "https://smtmap.com/wp-content/uploads/2020/10/%EA%B0%9C-%EA%B3%BC%EC%9D%BC.jpg",
             memberCnt: 4,
             memberMax: 4,
             meetingPlace: "하이디라오 앞",
@@ -51,6 +51,60 @@ const data = [
             lastMsg: "고생많으셨습니다...!",
             lastTime: "2022-04-28 19:50:00.00",
             unReadCnt: 0,
+        }, 
+    },
+    {
+        meeting: {
+            meetingId: 9,
+            meetingName: "저희 집 고앵이 산책 보러오세요",
+            meetingImg: "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/4arX/image/SJuLakbym40KmD8amz_Bx8QaCfE.jpg",
+            memberCnt: 10,
+            memberMax: 20,
+            meetingPlace: "하이디라오 앞",
+            item: {
+
+            },
+        },
+        chatting: {
+            lastMsg: "고앵이 간식 어떤 거 좋아해요..? 츄르면 되나요..?",
+            lastTime: "2022-04-29 17:50:00.00",
+            unReadCnt: 2,
+        }, 
+    },
+    {
+        meeting: {
+            meetingId: 10,
+            meetingName: "저희 집 강아지 진짜 귀엽습니다. 안보시면 후회하실 거예요...!",
+            meetingImg: "http://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg",
+            memberCnt: 10,
+            memberMax: 20,
+            meetingPlace: "하이디라오 앞",
+            item: {
+
+            },
+        },
+        chatting: {
+            lastMsg: "강아지 사진 보여줘요. 제발....",
+            lastTime: "2022-04-29 17:50:00.00",
+            unReadCnt: 2,
+        }, 
+    },
+    {
+        meeting: {
+            meetingId: 20,
+            meetingName: "저희 집 강아지 진짜 귀엽습니다. 안보시면 후회하실 거예요...!",
+            meetingImg: "https://i.pinimg.com/originals/52/b3/9c/52b39cd0e5b9499fc2e0f3ec7184202f.jpg",
+            memberCnt: 2,
+            memberMax: 20,
+            meetingPlace: "하이디라오 앞",
+            item: {
+
+            },
+        },
+        chatting: {
+            lastMsg: "강아지 사진 보여줘요. 제발...3장 이상 보내지 않으면 신고합니다.",
+            lastTime: "2022-04-29 17:50:00.00",
+            unReadCnt: 2,
         }, 
     },
 ];

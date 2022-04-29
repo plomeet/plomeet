@@ -34,8 +34,8 @@ const ChattingRoom = ( props ) => {
             <ChattingRoomImg source={{uri: meeting.meetingImg}} />
             <ChattingRoomInfoComp>
                 <ChattingRoomInfoUpLineComp>
-                    <ChattingRoomName>{meeting.meetingName}</ChattingRoomName>
-                    <Icon name="person" size={15} color={color.black} style={{marginLeft: 7}}/>
+                    <ChattingRoomName numberOfLines={1} ellipsizeMode="tail">{meeting.meetingName}</ChattingRoomName>
+                    <Icon name="person" size={14} color={color.black} style={{marginLeft: 5, marginTop: 2}}/>
                     <ChattingRoomMember>{meeting.memberCnt}</ChattingRoomMember>
                 </ChattingRoomInfoUpLineComp>
                 <ChattingRoomInfoDownLineComp>

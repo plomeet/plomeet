@@ -35,7 +35,8 @@ export const ChattingRoomInfoComp = styled.View`
     flex: 1;
     flex-grow: 1;
     margin-top: 10px;
-    margin-left: 20px;
+    margin-left: 10px;
+    margin-right: 11px;
 `;
 //채팅방 추가 정보{최신 수신 시점, 안읽은 메세지 개수}
 export const ChattingRoomInfoAddComp = styled.View`
@@ -43,11 +44,12 @@ export const ChattingRoomInfoAddComp = styled.View`
     flex-basis: auto;
     align-items: flex-end;
     margin-top: 10px;
-    margin-right: 10px;
+    margin-left: 5px;
 `;
 //채팅방 정보 첫번째 줄
 export const ChattingRoomInfoUpLineComp = styled.View`
     flexDirection: row;
+    padding-right: 25px;
 `;
 //채팅방 정보 두번째 줄
 export const ChattingRoomInfoDownLineComp = styled.View`
@@ -66,19 +68,19 @@ export const ChattingRoomImg = styled.Image`
 `;
 //채팅방 이름
 export const ChattingRoomName = styled.Text`
-    font-size: 13px;
+    font-size: 14px;
     font-weight: bold;
     color: ${color.blackFont};
 `;
 //채팅방 참여인원
 export const ChattingRoomMember = styled.Text`
-    marginLeft: 3px;
+    margin-left: 3px;
     font-size: 13px;
     color: ${color.blackLightFont};
 `;
 //채팅방 최신 수신 시점
 export const ChattingRoomLastTime = styled.Text`
-    font-size: 13px;
+    font-size: 12px;
     color: ${color.greyFont};
 `;
 //채팅방 최근 메세지
@@ -92,7 +94,7 @@ export const ChattingRoomUnReadBadge = styled.View`
     border-radius: 10px;
     background-color: ${color.redBadge};
     padding-left: 7px;
-    padding-right: 7px
+    padding-right: 7px;
 `;
 //채팅방 안읽은 메세지 개수 글자
 export const ChattingRoomUnRead = styled.Text`
