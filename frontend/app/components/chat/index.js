@@ -1,15 +1,9 @@
 import React from 'react';
-import 'react-native-gesture-handler';
-import {StyleSheet, Text, View} from 'react-native';
+import ChattingList from './list/chatting_list';
 
 const Chat = () => {
-    return (
-        <View>
-        <Text>채팅 화면</Text>
-        </View>
-    );
-};
-
-const styles = StyleSheet.create({});
-
+    return(
+        <ChattingList/>
+    )
+}
 export default Chat;
