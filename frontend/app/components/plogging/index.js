@@ -15,7 +15,7 @@ const P2 = { latitude: 37.565383, longitude: 126.976292 };
 const P4 = { latitude: 37.564834, longitude: 126.977218 };
 const P5 = { latitude: 37.562834, longitude: 126.976218 };
 
-const Plogging = ({distSum, setDistSum}) => {
+const Plogging = ({setDistSum, isPlogging}) => {
     const mapView = useRef(null);
     const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
     // const [location, setLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); //ios 테스트용 - 지우지마세여 ㅠㅠㅠ
@@ -72,26 +72,29 @@ const Plogging = ({distSum, setDistSum}) => {
     // 위치가 갱신되면 플로깅 이동 기록 쌓자
     useEffect(() => {
         setPloggingPath(ploggingPath => [...ploggingPath, location]);
-        setTotalDist(() => {
-            const prevLatLng  = {
-                lat: prevLocation.latitude,
-                lng: prevLocation.longitude
-            }
-            const curLatLng = {
-                lat: location.latitude,
-                lng: location.longitude
-            }
-            const options = {
-                format: '{lat,lng}',
-                unit: 'km'
-            }
+        
+        if (isPlogging) { //이동 거리 계산
+            setTotalDist(() => { 
+                const prevLatLng = {
+                    lat: prevLocation.latitude,
+                    lng: prevLocation.longitude
+                }
+                const curLatLng = {
+                    lat: location.latitude,
+                    lng: location.longitude
+                }
+                const options = {
+                    format: '{lat,lng}',
+                    unit: 'km'
+                }
 
-            return (totalDist + haversine(prevLatLng, curLatLng, options)) || 0;
-        })
+                return (totalDist + haversine(prevLatLng, curLatLng, options)) || 0;
+            })
 
-        setPrevLocation(location);
-        console.log(ploggingPath);
-        setDistSum(totalDist.toFixed(2));
+            setPrevLocation(location);
+            console.log(ploggingPath);
+            setDistSum(totalDist.toFixed(2));
+        }
     }, [location]);
 
     //렌더링 시 실행해서 현재 위치 및 주요 state들 셋팅
@@ -200,7 +203,7 @@ const Plogging = ({distSum, setDistSum}) => {
                 */}
             </NaverMapView>
         }
-        <TouchableOpacity style={{ position: 'absolute', bottom: '10%', right: 8 }} onPress={() => setMyLocToCenter()}>
+        <TouchableOpacity style={{ position: 'absolute', bottom: '20%', right: 8 }} onPress={() => setMyLocToCenter()}>
             <Icon name="md-compass" size={50} color="#1BE58D" />
         </TouchableOpacity>
 
