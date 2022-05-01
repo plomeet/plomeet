@@ -2,7 +2,8 @@ import React, { Component, Node, Button } from 'react';
 import 'react-native-gesture-handler';
 import { Chip } from 'react-native-paper';
 import { LogBox , SafeAreaView, StyleSheet, Text, View, FlatList, Image, StatusBar, TouchableOpacity } from "react-native";
-import { NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Align } from '../plogging/map';
 
@@ -152,21 +153,6 @@ const data = [
   
 ];
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-];
-
 const Item = ({ img, title, place, numMember, maxMember, date, index}) => (
   <View style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles.card, styles.elevation]}>
     <Image source={{uri: img}} style={styles.img} />
@@ -184,7 +170,9 @@ const Item = ({ img, title, place, numMember, maxMember, date, index}) => (
   </View>
 );
 
-const App = () => {
+const Home = () => {
+  const navigation = useNavigation();
+  
   const renderItem = ({ item }) => (
     <Item 
     img = {item.meetingImg}
@@ -208,14 +196,15 @@ const App = () => {
         data={data}
         renderItem={renderItem}
         keyExtractor={item => item.meetingId}
+        windowSize={3}
         numColumns = {2}
       />
-      <TouchableOpacity activeOpacity={0.5} style= {styles.TouchableOpacityStyle} >
+      <TouchableOpacity onPress={() => navigation.navigate('OpenMeeting')} activeOpacity={0.5} style= {styles.TouchableOpacityStyle} >
         <Image source={{ uri: 'https://i.postimg.cc/v8p4fK53/plus-btn.png' }}
-          style={styles.FloatingButtonStyle} />
+          style={styles.FloatingButtonStyle}/>
       </TouchableOpacity>
     </SafeAreaView>
   );
 }
 
-export default App;
+export default Home;

@@ -8,6 +8,11 @@ import Record from './components/record/index';
 import Plogging from './components/plogging/index';
 import Chat from './components/chat/index';
 import MyPage from './components/my/index';
+import OpenMeeting from './components/home/OpenMeeting1';
+import OpenMeeting2 from './components/home/OpenMeeting2';
+import OpenMeeting3 from './components/home/OpenMeeting3';
+import OpenMeeting4 from './components/home/OpenMeeting4';
+
 
 const Stack = createStackNavigator();
 const MainScreenTab = createBottomTabNavigator();
@@ -40,7 +45,7 @@ const AppTabComponent = () => {
                 inactiveTintColor: 'gray',
             }}
         >
-            <MainScreenTab.Screen name="홈" component={Home} />
+            <MainScreenTab.Screen name="홈" component={Home} options={{title: '플로밋!'}} />
             <MainScreenTab.Screen name="기록" component={Record} />
             <MainScreenTab.Screen name="플로깅" component={Plogging} />
             <MainScreenTab.Screen name="채팅" component={Chat} />
@@ -51,11 +56,16 @@ const AppTabComponent = () => {
 
 export const RootNavigator = () => {
     return (
-        <Stack.Navigator
-            screenOptions={{
-                headerShown: false
-            }}>
-            <Stack.Screen name="M" component={AppTabComponent} Screen={{ Headers }} />
+        // <Stack.Navigator
+        // screenOptions={{
+        //   headerShown: false
+        // }}>
+        <Stack.Navigator>
+            <Stack.Screen name="M" component={AppTabComponent} options={{headerShown: false}} Screen={{ Headers }} />
+            <Stack.Screen name="OpenMeeting" component={OpenMeeting} options={{title: '플로깅 모임 생성'}} />
+            <Stack.Screen name="OpenMeeting2" component={OpenMeeting2} options={{title: '플로깅 모임 생성'}} />
+            <Stack.Screen name="OpenMeeting3" component={OpenMeeting3} options={{title: '플로깅 모임 생성'}} />
+            <Stack.Screen name="OpenMeeting4" component={OpenMeeting4} options={{title: '플로깅 모임 생성'}} />
         </Stack.Navigator>
     )
 }
