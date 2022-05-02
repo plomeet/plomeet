@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Geolocation from 'react-native-geolocation-service';
 import axiosInstance from "../../../utils/API";
 import haversine from 'haversine';
+import TrashcanInfo from './trashcan-modal/index';
 
 //테스트용으로 남겨둔 데이터 삭제 X
 const P0 = { latitude: 37.564362, longitude: 126.977011 };
@@ -15,7 +16,7 @@ const P2 = { latitude: 37.565383, longitude: 126.976292 };
 const P4 = { latitude: 37.564834, longitude: 126.977218 };
 const P5 = { latitude: 37.562834, longitude: 126.976218 };
 
-const Plogging = ({setDistSum, isPlogging}) => {
+const Plogging = ({ setDistSum, isPlogging }) => {
     const mapView = useRef(null);
     const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
     // const [location, setLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); //ios 테스트용 - 지우지마세여 ㅠㅠㅠ 넹!!
@@ -27,6 +28,9 @@ const Plogging = ({setDistSum, isPlogging}) => {
     const [prevLocation, setPrevLocation] = useState({ latitude: 37.33117775, longitude: 126.977011 });
     // const [prevLocation, setPrevLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); ////ios 테스트용  - 지우지마세여 ㅠㅠㅠ  넹!!
     const [totalDist, setTotalDist] = useState(0);
+    const [showThisNum, setShowThisNum] = useState(-2);
+    const [showInfoDetail, setShowInfoDetail] = useState(false);
+    const [trashInfoDetail, setTrashInfoDetail] = useState();
 
     //화면에 렌더링되면 권한부터 살피자
     useEffect(() => {
@@ -92,9 +96,9 @@ const Plogging = ({setDistSum, isPlogging}) => {
     // 위치가 갱신되면 플로깅 이동 기록 쌓자
     useEffect(() => {
         setPloggingPath(ploggingPath => [...ploggingPath, location]);
-        
+
         if (isPlogging) { //이동 거리 계산
-            setTotalDist(() => { 
+            setTotalDist(() => {
                 const prevLatLng = {
                     lat: prevLocation.latitude,
                     lng: prevLocation.longitude
@@ -121,7 +125,32 @@ const Plogging = ({setDistSum, isPlogging}) => {
         if (trashcanList.length > 0) {
             setShowTrashcans(true);
         }
-    }, [trashcanList])
+    }, [trashcanList]);
+
+    useEffect(() => {
+        if (showThisNum === -1) {
+            setShowInfoDetail(false);
+            return;
+        }
+
+        if (showThisNum >= 0) {
+            setShowInfoDetail(true);
+            const { latitude, longitude } = trashcanList[showThisNum];
+            setCenter({ //마커 클릭하면 해당마커를 지도 중앙으로
+                ...center,
+                latitude,
+                longitude,
+            });
+            console.log(trashcanList[showThisNum]);
+            const { cityName, detailAddr, streetName, location, trashCanType } = trashcanList[showThisNum];
+            setTrashInfoDetail({
+                ...trashInfoDetail,
+                cityName, detailAddr, streetName, location, trashCanType
+            })
+        }
+        //인덱스 맵핑으로 처리했음 그 키값이 곧 해당 value 인덱스이다. 데이터가 커질꺼 같아서 시간 줄이려고.. 안전하진 않음
+
+    }, [showThisNum]);
 
     //렌더링 시 실행해서 현재 위치 및 주요 state들 셋팅
     const getRealTimeLoc = () => {
@@ -165,15 +194,15 @@ const Plogging = ({setDistSum, isPlogging}) => {
     //강제로 좌표 살짝 바꾸서 리렌더링을 강요
     const forceRendering = () => {
         const { latitude, longitude } = location;
-        const upLat = latitude + 0.00001;
-        const upLon = longitude + 0.00001;
+        const upLat = latitude + 0.000001;
+        const upLon = longitude + 0.000001;
         setCenter({ ...center, upLat, upLon });
         setTimeout(() => recoverLoc(), 1000);
     }
 
     //강제로 변경 좌표 복구
     const recoverLoc = () => {
-        const { latitude, longitude } = center;
+        const { latitude, longitude } = location;
         setCenter({
             ...center,
             latitude,
@@ -215,6 +244,7 @@ const Plogging = ({setDistSum, isPlogging}) => {
                 // onTouch={e => console.warn('onTouch', JSON.stringify(e.nativeEvent))}
                 // onCameraChange={e => console.warn('onCameraChange', JSON.stringify(e))}
                 // onMapClick={e => console.warn('onMapClick', JSON.stringify(e))}
+                onMapClick={() => setShowThisNum(-1)}
                 useTextureView>
                 <Marker
                     coordinate={location}
@@ -239,8 +269,12 @@ const Plogging = ({setDistSum, isPlogging}) => {
                                 coordinate={{ latitude: parseFloat(item.latitude), longitude: parseFloat(item.longitude) }}
                                 width={25}
                                 height={25}
+                                onClick={() => setShowThisNum(parseInt(item.trashcanId) - 1)}
                             >
-                                <Icon name="trash" size={20} color="#0C48D2" />
+                                {showThisNum === (parseInt(item.trashcanId) - 1) ?
+                                    <Icon name="trash" size={20} color="#1BE58D" /> :
+                                    <Icon name="trash" size={20} color="#0C48D2" />
+                                }
                             </Marker>
                         );
                     })
@@ -271,10 +305,15 @@ const Plogging = ({setDistSum, isPlogging}) => {
                 */}
             </NaverMapView>
         }
-        <TouchableOpacity style={{ position: 'absolute', bottom: '20%', right: 8 }} onPress={() => setMyLocToCenter()}>
-            <Icon name="md-compass" size={50} color="#1BE58D" />
-        </TouchableOpacity>
+        {center &&
+            <TouchableOpacity style={{ position: 'absolute', bottom: '20%', right: 8 }} onPress={() => setMyLocToCenter()}>
+                <Icon name="md-compass" size={50} color="#1BE58D" />
+            </TouchableOpacity>
 
+        }
+        {trashInfoDetail &&
+            <TrashcanInfo showInfoDetail={showInfoDetail} setShowInfoDetail={setShowInfoDetail} setShowThisNum={setShowThisNum} trashInfoDetail={trashInfoDetail} />
+        }
         {/*<TouchableOpacity style={{ position: 'absolute', bottom: '10%', right: 8 }} onPress={() => navigation.navigate('stack')}>
             <View style={{ backgroundColor: 'gray', padding: 4 }}>
                 <Text style={{ color: 'white' }}>open stack</Text>
