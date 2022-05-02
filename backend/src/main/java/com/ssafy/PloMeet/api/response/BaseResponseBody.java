@@ -1,4 +1,4 @@
-package main.java.com.ssafy.PloMeet.api.response;
+package com.ssafy.PloMeet.api.response;
 
 //import io.swagger.annotations.ApiModel;
 //import lombok.AllArgsConstructor;

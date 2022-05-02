@@ -25,7 +25,7 @@ const AppTabComponent = () => {
                         iconName = focused ? 'calendar' : 'calendar-outline';
                     } else if (route.name === '플로깅') {
                         iconName = focused ? 'alert-circle' : 'alert-circle-outline';
-                    } else if (route.name === '채팅') {
+                    } else if (route.name === '채팅 목록') {
                         iconName = focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline';
                     } else if (route.name === 'MY') {
                         iconName = focused ? 'person-circle' : 'person-circle-outline';
@@ -43,7 +43,7 @@ const AppTabComponent = () => {
             <MainScreenTab.Screen name="홈" component={Home} />
             <MainScreenTab.Screen name="기록" component={Record} />
             <MainScreenTab.Screen name="플로깅" component={Plogging} />
-            <MainScreenTab.Screen name="채팅" component={Chat} />
+            <MainScreenTab.Screen name="채팅 목록" component={Chat} />
             <MainScreenTab.Screen name="MY" component={MyPage} />
         </MainScreenTab.Navigator>
     )
