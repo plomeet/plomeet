@@ -1,4 +1,4 @@
-package main.java.com.ssafy.PloMeet.api.response;
+package com.ssafy.PloMeet.api.response;
 
 /**
  * 예시 - Entity에서 가공이 필요한 경우 이런식으로 생성
