@@ -6,27 +6,28 @@ import TimeSvg from '../icons/timer.svg';
 import SunSvg from '../icons/weather/sun.svg'
 
 
-const PloggingStatusBar = ({ mm = 0, ss = 0, distSum }) => {
+const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging }) => {
   const layout = useWindowDimensions();
   const countInterval = useRef(null);
   const [minutes, setMinutes] = useState(parseInt(mm));
   const [seconds, setSeconds] = useState(parseInt(ss));
 
-
   useEffect(() => {
     countInterval.current = setInterval(() => {
-      if (parseInt(seconds) >= 0) {
-        setSeconds(parseInt(seconds) + 1);
-      }
-      if (parseInt(seconds) === 59) {
+      if (isPlogging) {
+        if (parseInt(seconds) >= 0) {
+          setSeconds(parseInt(seconds) + 1);
+        }
+        if (parseInt(seconds) === 59) {
           setMinutes(parseInt(minutes) + 1);
           setSeconds(0);
+        }
       }
     }, 1000);
       return () => {
       clearInterval(countInterval.current);
     };
-  }, [minutes, seconds]);
+  }, [minutes, seconds, isPlogging]);
 
     return (
       <PloggingStatusBarBlock width={layout.width}>

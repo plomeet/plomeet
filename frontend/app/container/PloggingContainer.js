@@ -5,13 +5,15 @@ import * as actions from '../actions/action'
 
 const mapDispatchToProps = dispatch => { 
     return {
-        setDistSum: distSum => dispatch(actions.setDistSum(distSum))
+        setDistSum: distSum => dispatch(actions.setDistSum(distSum)),
+        handleIsPlogging: isPlogging => dispatch(actions.IsPlogging(isPlogging)),
     }
 }
 
 const mapStateToProps = state => { 
     return {
-        distSum: state.distSum
+        distSum: state.distSum,
+        isPlogging: state.isPlogging
     }
 }
   
