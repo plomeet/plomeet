@@ -5,8 +5,8 @@ import { Image, ImageBackground, PermissionsAndroid, Platform, ScrollView, Text,
 import { LayerGroup } from './map/index';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Geolocation from 'react-native-geolocation-service';
+import axiosInstance from "../../../utils/API";
 import haversine from 'haversine';
-
 
 //테스트용으로 남겨둔 데이터 삭제 X
 const P0 = { latitude: 37.564362, longitude: 126.977011 };
@@ -15,20 +15,22 @@ const P2 = { latitude: 37.565383, longitude: 126.976292 };
 const P4 = { latitude: 37.564834, longitude: 126.977218 };
 const P5 = { latitude: 37.562834, longitude: 126.976218 };
 
-const Plogging = ({distSum, setDistSum}) => {
+const Plogging = ({ distSum, setDistSum }) => {
     const mapView = useRef(null);
     const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
-    // const [location, setLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); //ios 테스트용 - 지우지마세여 ㅠㅠㅠ
+    // const [location, setLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); //ios 테스트용 - 지우지마세여 ㅠㅠㅠ 넹!!
     const [ploggingPath, setPloggingPath] = useState([]);
     const [enableLayerGroup, setEnableLayerGroup] = useState(true);
     const [center, setCenter] = useState();
+    const [trashcanList, setTrashcanList] = useState([]);
+    const [showTrashcans, setShowTrashcans] = useState(false);
     const [prevLocation, setPrevLocation] = useState({ latitude: 37.33117775, longitude: 126.977011 });
-    // const [prevLocation, setPrevLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); ////ios 테스트용  - 지우지마세여 ㅠㅠㅠ
+    // const [prevLocation, setPrevLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); ////ios 테스트용  - 지우지마세여 ㅠㅠㅠ  넹!!
     const [totalDist, setTotalDist] = useState(0);
-
 
     //화면에 렌더링되면 권한부터 살피자
     useEffect(() => {
+
         if (Platform.OS === 'ios') {
             Geolocation.requestAuthorization('whenInUse');
             getRealTimeLoc();
@@ -38,11 +40,29 @@ const Plogging = ({distSum, setDistSum}) => {
                 getRealTimeLoc();           // 이거 안하면 사용자 입장에서 시작시 좌표 중심이 바로 바뀐다.
     }, []);
 
+    //시작시 쓰레기통 전부를 가져온다.
+    useEffect(() => {
+        async function getTrashCans() {
+            try {
+                await axiosInstance.get("/trashcans")
+                    .then((response) => {
+                        if (response.status === 200) {
+                            setTrashcanList(response.data.data);
+                            console.log("SUCCESS");
+                        } else {
+                            console.log("FAIL");
+                        }
+                    })
+                    .catch((response) => { console.log(response); });
+            } catch (err) { console.log(err); }
+        };
+        getTrashCans();
+    }, []);
+
     // 일정 시간 간격으로 위치 감시해서 현재 위치 갱신하자
     useEffect(() => {
         const _watchId = Geolocation.watchPosition(
             position => {
-                // console.log(position);
                 const { latitude, longitude } = position.coords;
 
                 setLocation({
@@ -73,7 +93,7 @@ const Plogging = ({distSum, setDistSum}) => {
     useEffect(() => {
         setPloggingPath(ploggingPath => [...ploggingPath, location]);
         setTotalDist(() => {
-            const prevLatLng  = {
+            const prevLatLng = {
                 lat: prevLocation.latitude,
                 lng: prevLocation.longitude
             }
@@ -90,15 +110,19 @@ const Plogging = ({distSum, setDistSum}) => {
         })
 
         setPrevLocation(location);
-        console.log(ploggingPath);
         setDistSum(totalDist.toFixed(2));
     }, [location]);
+
+    useEffect(() => {
+        if (trashcanList.length > 0) {
+            setShowTrashcans(true);
+        }
+    }, [trashcanList])
 
     //렌더링 시 실행해서 현재 위치 및 주요 state들 셋팅
     const getRealTimeLoc = () => {
         Geolocation.getCurrentPosition(
             (position) => {
-                console.log(position);
                 const { latitude, longitude } = position.coords;
                 setPloggingPath([]);
                 setLocation({
@@ -153,6 +177,31 @@ const Plogging = ({distSum, setDistSum}) => {
         });
     }
 
+    async function requestLocationPermission() { // 승인 안했을때나 에러 났을때의 처리는 나중에..
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                    title: '위치 권한',
+                    message: '플로깅 중 위치정보 활용에 동의합니다.',
+                    buttonNeutral: '나중에',
+                    buttonNegative: '거부',
+                    buttonPositive: '승인',
+                },
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('You can use the location');
+                return true;
+            } else {
+                console.log('Location permission denied');
+                return false;
+            }
+        } catch (err) {
+            console.warn(err);
+            return false;
+        }
+    }
+
     //주석이 많은데 나중에 다 정리함,, 차후 수정시 참고하려고 남겨둠
     return <>
         {center &&
@@ -176,6 +225,24 @@ const Plogging = ({distSum, setDistSum}) => {
                 {ploggingPath.length >= 2 &&
                     <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
                 }
+
+                {/* 쓰레기통 마커 다 띄우기 */}
+                {showTrashcans &&
+                    trashcanList.map(item => {
+                        return (
+                            <Marker
+                                key={item.trashcanId}
+                                coordinate={{ latitude: parseFloat(item.latitude), longitude: parseFloat(item.longitude) }}
+                                width={25}
+                                height={25}
+                            >
+                                <Icon name="trash" size={20} color="#0C48D2" />
+                            </Marker>
+                        );
+                    })
+
+                }
+
                 {/* <Marker coordinate={P1} pinColor="blue" zIndex={1000} onClick={() => console.warn('onClick! p1')} />
                     <Marker coordinate={P2} pinColor="red" zIndex={100} alpha={0.5} onClick={() => console.warn('onClick! p2')} />
                     <Marker coordinate={P4} onClick={() => console.warn('onClick! p4')} image={require("../../../assets/imgs/marker.png")} width={48} height={48} /> 
@@ -213,30 +280,6 @@ const Plogging = ({distSum, setDistSum}) => {
         */}
     </>
 };
-async function requestLocationPermission() { // 승인 안했을때나 에러 났을때의 처리는 나중에..
-    try {
-        const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-                title: '위치 권한',
-                message: '플로깅 중 위치정보 활용에 동의합니다.',
-                buttonNeutral: '나중에',
-                buttonNegative: '거부',
-                buttonPositive: '승인',
-            },
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log('You can use the location');
-            return true;
-        } else {
-            console.log('Location permission denied');
-            return false;
-        }
-    } catch (err) {
-        console.warn(err);
-        return false;
-    }
-}
 
 const style = StyleSheet.create({
     container: { width: '100%', height: '100%' },

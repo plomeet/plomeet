@@ -1,4 +1,4 @@
-package main.java.com.ssafy.PloMeet.api.service;
+package com.ssafy.PloMeet.api.service;
 
 public interface MyService {
 //    void modifyUserProfile(String userId, UserProfileUpdateReq updateProfile);

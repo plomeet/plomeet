@@ -1,4 +1,4 @@
-package main.java.com.ssafy.PloMeet.common.exception;
+package com.ssafy.PloMeet.common.exception;
 
 public class NotExistUserException extends RuntimeException{
     public NotExistUserException() {
