@@ -56,10 +56,10 @@ const data = [
     {
         meeting: {
             meetingId: 9,
-            meetingName: "저희 집 고앵이 산책 보러오세요",
+            meetingName: "저희 집 고앵이 산책 보러오세요!!!",
             meetingImg: "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/4arX/image/SJuLakbym40KmD8amz_Bx8QaCfE.jpg",
-            memberCnt: 10,
-            memberMax: 20,
+            memberCnt: 99,
+            memberMax: 99,
             meetingPlace: "하이디라오 앞",
             item: {
 
