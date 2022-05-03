@@ -112,7 +112,7 @@ const Plogging = ({setDistSum, isPlogging}) => {
             })
 
             setPrevLocation(location);
-            console.log(ploggingPath);
+            // console.log(ploggingPath);
             setDistSum(totalDist.toFixed(2));
         }
     }, [location]);
