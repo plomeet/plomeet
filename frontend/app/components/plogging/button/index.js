@@ -51,11 +51,12 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging }) => {
         }
     }
 
+const PloggingStartEndButton = ({ isPlogging, handleIsPlogging }) => {
     console.log({ isPlogging });
     if (!isPlogging) { //시작중이 아니면 시작으로 처리
         return (
             <View style={styles.startBtn}>
-                <TouchableOpacity onPress={() => handleIsPlogging(true)}>
+                <TouchableOpacity style={styles.elevation} onPress={() => handleIsPlogging(true)}>
                     <StartBtn />
                 </TouchableOpacity>
             </View>
@@ -65,12 +66,12 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging }) => {
         return (
             <View style={styles.endState} >
                 <View style={styles.endBtn}>
-                    <TouchableOpacity onPress={() => handleIsPlogging(false)}>
+                    <TouchableOpacity style={styles.elevation} onPress={() => handleIsPlogging(false)}>
                         <EndBtn />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.cameraBtn}>
-                    <TouchableOpacity onPress={() => openCamera()}>
+                    <TouchableOpacity style={styles.elevation} onPress={() => openCamera()}>
                         <RequestCameraBtn />
                     </TouchableOpacity>
                 </View>
@@ -104,7 +105,13 @@ const styles = StyleSheet.create({
     cameraBtn: {
         flex: 1,
         alignItems: 'flex-end',
-        marginRight: 5
+        marginRight: 8
+    },
+    elevation: {
+        width: "100%",
+        height: "100%",
+        borderRadius: 26,
+        elevation: 5
     }
 })
 
