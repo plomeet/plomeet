@@ -23,28 +23,19 @@ function CameraPage({ route }) {
             })
 
             if (photo) {
-                if (Platform.OS === 'ios') {
-                    if (askPermission()) {
-                        const result = await CameraRoll.save(photo.path);
-                        if (result) {
-                            showMessage({
-                                message: "사진이 앨범에 저장되었습니다",
-                                type: "info",
-                            });
-                        }
+                if (askPermission()) {
+                    const result = await CameraRoll.save(photo.path);
+                    if (result) {
+                        showMessage({
+                            message: "사진이 앨범에 저장되었습니다",
+                            type: "info",
+                        });
                     }
+
                 }
             }
         }
     }
-
-    // const showPhotoSaveFlash = () => { 
-    //     showMessage({
-    //         message: "Simple message",
-    //         type: "info",
-    //     });
-    // }
-
 
     const askPermission = async () => {
         if (Platform.OS === 'ios') {
@@ -62,7 +53,7 @@ function CameraPage({ route }) {
                 if (result === RESULTS.GRANTED) {
                     return true;
                 }
-            }catch (error) {
+            } catch (error) {
                 console.log('askPermission', error);
             }
         }
