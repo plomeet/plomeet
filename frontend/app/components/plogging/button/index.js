@@ -6,11 +6,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import styled from "styled-components/native";
 import StartBtn from '../icons/startBtn.svg';
 import EndBtn from '../icons/endBtn.svg';
+import SaveBtn from '../icons/saveBtn.svg';
 import RequestCameraBtn from '../icons/requestCameraBtn.svg';
 
-const PloggingStartEndButton = ({ isPlogging, handleIsPlogging }) => {
+const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage }) => {
     console.log({ isPlogging });
-    if (!isPlogging) { //시작중이 아니면 시작으로 처리
+    if (!isPlogging && !showPloggingEndPage) { //시작중이 아니면 시작으로 처리
         return (
             <View style={styles.startBtn}>
                 <TouchableOpacity style={styles.elevation} onPress={() => handleIsPlogging(true)}>
@@ -19,11 +20,13 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging }) => {
             </View>
         )
     }
-    else { //플로깅 종료하기
+    else if (isPlogging && !showPloggingEndPage) { //플로깅 종료하기
         return (
             <View style={styles.endState} >
                 <View style={styles.endBtn}>
-                    <TouchableOpacity style={styles.elevation} onPress={() => handleIsPlogging(false)}>
+                    <TouchableOpacity style={styles.elevation} onPress={() => {
+                        handleIsPlogging(false); handleShowEndPage(true);
+                    }}>
                         <EndBtn />
                     </TouchableOpacity>
                 </View>
@@ -32,6 +35,14 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging }) => {
                         <RequestCameraBtn />
                     </TouchableOpacity>
                 </View>
+            </View>
+        )
+    } else { //종료하고 기록 화면 보여줄때
+        return (
+            <View style={styles.startBtn} >
+                <TouchableOpacity style={styles.elevation} onPress={() => { handleShowEndPage(false); }}>
+                    <SaveBtn />
+                </TouchableOpacity>
             </View>
         )
     }
@@ -43,7 +54,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: '12%'
+        bottom: '10%'
     },
     endState: {
         flexDirection: 'row',
@@ -51,7 +62,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: '12%',
+        bottom: '10%',
     },
     endBtn: {
         flex: 4,
