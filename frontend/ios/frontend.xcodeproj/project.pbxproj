@@ -12,6 +12,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		16202011B8F96FC767E223AE /* libPods-frontend-frontendTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CA9EB96FC3BF6D738006CDB /* libPods-frontend-frontendTests.a */; };
+		192514782820B5A200033847 /* libreact-native-nmap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 192514772820B5A100033847 /* libreact-native-nmap.a */; };
+		1925147A2820B7C500033847 /* libreact-native-nmap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 192514792820B7C500033847 /* libreact-native-nmap.a */; };
 		1978927E281A24ED009CDEB2 /* geoSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1978927D281A24ED009CDEB2 /* geoSetting.swift */; };
 		7C8506A1119266E4751D78B1 /* libPods-frontend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CDE3E4D35625077C9FE1A65 /* libPods-frontend.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -37,6 +39,8 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = frontend/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = frontend/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = frontend/main.m; sourceTree = "<group>"; };
+		192514772820B5A100033847 /* libreact-native-nmap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-nmap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		192514792820B7C500033847 /* libreact-native-nmap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-nmap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1978927C281A24ED009CDEB2 /* frontend-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "frontend-Bridging-Header.h"; sourceTree = "<group>"; };
 		1978927D281A24ED009CDEB2 /* geoSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = geoSetting.swift; sourceTree = "<group>"; };
 		635DF426EFA2FC0BDC6BDAF0 /* Pods-frontend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-frontend.debug.xcconfig"; path = "Target Support Files/Pods-frontend/Pods-frontend.debug.xcconfig"; sourceTree = "<group>"; };
@@ -62,6 +66,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1925147A2820B7C500033847 /* libreact-native-nmap.a in Frameworks */,
+				192514782820B5A200033847 /* libreact-native-nmap.a in Frameworks */,
 				7C8506A1119266E4751D78B1 /* libPods-frontend.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +117,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				192514792820B7C500033847 /* libreact-native-nmap.a */,
+				192514772820B5A100033847 /* libreact-native-nmap.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				7CDE3E4D35625077C9FE1A65 /* libPods-frontend.a */,
 				6CA9EB96FC3BF6D738006CDB /* libPods-frontend-frontendTests.a */,
@@ -335,7 +343,7 @@
 		};
 		80B767E48D5E9FEFCD3F8EBA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -446,6 +454,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 8NTL25S723;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -475,6 +484,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 8NTL25S723;
 				INFOPLIST_FILE = frontendTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -500,6 +510,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8NTL25S723;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = frontend/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -527,6 +538,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8NTL25S723;
 				INFOPLIST_FILE = frontend/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
