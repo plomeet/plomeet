@@ -51,7 +51,6 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging }) => {
         }
     }
 
-const PloggingStartEndButton = ({ isPlogging, handleIsPlogging }) => {
     console.log({ isPlogging });
     if (!isPlogging) { //시작중이 아니면 시작으로 처리
         return (

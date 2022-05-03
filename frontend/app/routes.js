@@ -66,14 +66,10 @@ export const RootNavigator = () => {
     const isPlogging = useSelector(state => state.isPlogging);
 
     return (
-        <Stack.Navigator
-            screenOptions={{
-                headerShown: false
-            }}>
         <Stack.Navigator>
             <Stack.Screen name="M" component={AppTabComponent} options={{ headerShown: false }} />
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: !isPlogging }} />
-            <Stack.Screen name="CameraPage" component={CameraPage} />
+            <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
 
         </Stack.Navigator>
     )
