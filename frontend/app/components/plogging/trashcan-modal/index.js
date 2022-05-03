@@ -97,15 +97,15 @@ const styles = StyleSheet.create({
     modalText1: {
         fontWeight: "bold",
         color: "black",
-        fontSize: 15
+        fontSize: 17
     },
     modalText2: {
         textAlign: "left",
-        fontSize: 12
+        fontSize: 14
     },
     modalText3: {
         marginTop: 15,
-        fontSize: 20,
+        fontSize: 17,
         color: "#12D3DD",
     }
 });

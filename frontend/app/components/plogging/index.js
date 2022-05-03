@@ -4,6 +4,7 @@ import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "./
 import { Image, ImageBackground, PermissionsAndroid, Platform, ScrollView, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { LayerGroup } from './map/index';
 import Icon from 'react-native-vector-icons/Ionicons';
+import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Geolocation from 'react-native-geolocation-service';
 import axiosInstance from "../../../utils/API";
 import haversine from 'haversine';
@@ -95,9 +96,9 @@ const Plogging = ({ setDistSum, isPlogging }) => {
 
     // 위치가 갱신되면 플로깅 이동 기록 쌓자
     useEffect(() => {
-        setPloggingPath(ploggingPath => [...ploggingPath, location]);
-
         if (isPlogging) { //이동 거리 계산
+            setPloggingPath(ploggingPath => [...ploggingPath, location]);
+
             setTotalDist(() => {
                 const prevLatLng = {
                     lat: prevLocation.latitude,
@@ -307,7 +308,9 @@ const Plogging = ({ setDistSum, isPlogging }) => {
         }
         {center &&
             <TouchableOpacity style={{ position: 'absolute', bottom: '20%', right: 8 }} onPress={() => setMyLocToCenter()}>
-                <Icon name="md-compass" size={50} color="#1BE58D" />
+                <View style={style.compassBackGround}>
+                    <IconMaterialIcons name="gps-fixed" size={30} color="#303644" />
+                </View>
             </TouchableOpacity>
 
         }
@@ -326,7 +329,16 @@ const Plogging = ({ setDistSum, isPlogging }) => {
 
 const style = StyleSheet.create({
     container: { width: '100%', height: '100%' },
-    realLocBtn: { position: 'absolute', bottom: 100, right: 10, alignSelf: 'flex-end' }
+    realLocBtn: { position: 'absolute', bottom: 100, right: 10, alignSelf: 'flex-end' },
+    compassBackGround: {
+        width: 48,
+        height: 48,
+        borderRadius: 25,
+        padding: 9,
+        backgroundColor: "#FFFFFF",
+        elevation: 5
+
+    },
 });
 
 
