@@ -12,8 +12,10 @@ const CustomInputToolbar = (props) => {
                 marginLeft: 10,
                 marginRight: 10,
                 borderRadius: 25,
-                borderColor: color.primaryDark,
-                borderWidth: 1,
+                borderTopWidth: 0.3,
+                borderTopColor: color.greyFont,
+                borderWidth: 0.3,
+                borderColor: color.greyFont,
             }}
         >
         </InputToolbar>
