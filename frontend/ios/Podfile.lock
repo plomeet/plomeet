@@ -74,7 +74,7 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - libevent (2.1.12)
-  - NMapsMap (3.14.2)
+  - NMapsMap (3.15.0)
   - OpenSSL-Universal (1.1.1100)
   - Permission-AppTrackingTransparency (3.3.1):
     - RNPermissions
@@ -321,6 +321,12 @@ PODS:
   - React-jsinspector (0.68.1)
   - React-logger (0.68.1):
     - glog
+  - react-native-cameraroll (4.1.2):
+    - React-Core
+  - react-native-config (1.4.5):
+    - react-native-config/App (= 1.4.5)
+  - react-native-config/App (1.4.5):
+    - React-Core
   - react-native-geolocation-service (5.3.0-beta.4):
     - React
   - react-native-nmap (0.0.66):
@@ -433,11 +439,17 @@ PODS:
   - RNScreens (3.13.1):
     - React-Core
     - React-RCTImage
+  - RNStaticSafeAreaInsets (2.1.1):
+    - React
   - RNSVG (12.3.0):
     - React-Core
   - RNVectorIcons (9.1.0):
     - React-Core
   - SocketRocket (0.6.0)
+  - VisionCamera (2.13.2):
+    - React
+    - React-callinvoker
+    - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -505,6 +517,8 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
+  - react-native-config (from `../node_modules/react-native-config`)
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-nmap (from `../node_modules/react-native-nmap`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -525,8 +539,10 @@ DEPENDENCIES:
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNStaticSafeAreaInsets (from `../node_modules/react-native-static-safe-area-insets`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -623,6 +639,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-cameraroll:
+    :path: "../node_modules/@react-native-community/cameraroll"
+  react-native-config:
+    :path: "../node_modules/react-native-config"
   react-native-geolocation-service:
     :path: "../node_modules/react-native-geolocation-service"
   react-native-nmap:
@@ -663,10 +683,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNStaticSafeAreaInsets:
+    :path: "../node_modules/react-native-static-safe-area-insets"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
+  VisionCamera:
+    :path: "../node_modules/react-native-vision-camera"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -688,7 +712,7 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 476ee3e89abb49e07f822b48323c51c57124b572
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  NMapsMap: efb3a5cf593ff0d89f2a55bb3d4f8c30fe10bd7f
+  NMapsMap: f151761c088d6516064c59da03ab6503769486e6
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   Permission-AppTrackingTransparency: 507f031f783885aad86f5754bd23edba587b2125
   Permission-BluetoothPeripheral: a408e2ba4b43e60c5a4b8b4d442bb8abc93394b2
@@ -722,6 +746,8 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 4a4bae5671b064a2248a690cf75957669489d08c
   React-jsinspector: 218a2503198ff28a085f8e16622a8d8f507c8019
   React-logger: f79dd3cc0f9b44f5611c6c7862badd891a862cf8
+  react-native-cameraroll: 2957f2bce63ae896a848fbe0d5352c1bd4d20866
+  react-native-config: 6502b1879f97ed5ac570a029961fc35ea606cd14
   react-native-geolocation-service: c0efb872258ed9240f1003a70fca9e9757e5c785
   react-native-nmap: cfcc5402746040494c544ea90a6062f49505acdf
   react-native-safe-area-context: ebf8c413eb8b5f7c392a036a315eb7b46b96845f
@@ -742,9 +768,11 @@ SPEC CHECKSUMS:
   RNPermissions: 34d678157c800b25b22a488e4d8babb57456e796
   RNReanimated: 64573e25e078ae6bec03b891586d50b9ec284393
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
+  RNStaticSafeAreaInsets: 6103cf09647fa427186d30f67b0f5163c1ae8252
   RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+  VisionCamera: cd6d1bb690d34645513b2e70f7b77a258e29e0c2
   Yoga: 17cd9a50243093b547c1e539c749928dd68152da
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

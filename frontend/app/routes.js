@@ -12,6 +12,7 @@ import Record from './components/record/index';
 import Plogging from './container/PloggingContainer';
 import Chat from './components/chat/index';
 import MyPage from './components/my/index';
+import CameraPage from './components/plogging/button/CameraPage';
 
 const Stack = createStackNavigator();
 const MainScreenTab = createBottomTabNavigator();
@@ -71,6 +72,7 @@ export const RootNavigator = () => {
         <Stack.Navigator>
             <Stack.Screen name="M" component={AppTabComponent} options={{ headerShown: false }} />
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: (!isPlogging && !showPloggingEndPage) }} />
+            <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }
