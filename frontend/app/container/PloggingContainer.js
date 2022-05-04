@@ -8,6 +8,7 @@ const mapDispatchToProps = dispatch => {
         setDistSum: distSum => dispatch(actions.setDistSum(distSum)),
         handleIsPlogging: isPlogging => dispatch(actions.IsPlogging(isPlogging)),
         handleShowEndPage: showPloggingEndPage => dispatch(actions.IsEndPage(showPloggingEndPage)),
+        setTimeSum: timeSum => dispatch(actions.setTimeSum(timeSum)),
     }
 }
 
@@ -16,6 +17,7 @@ const mapStateToProps = state => {
         distSum: state.distSum,
         isPlogging: state.isPlogging,
         showPloggingEndPage: state.showPloggingEndPage,
+        timeSum: state.timeSum,
     }
 }
 

@@ -12,3 +12,8 @@ export const IsEndPage = (showPloggingEndPage) => ({
   type: "SET_SHOWENDPAGE",
   payload: showPloggingEndPage,
 })
+
+export const setTimeSum = (time) => ({
+  type: "SET_TIMESUM",
+  payload: time
+})
