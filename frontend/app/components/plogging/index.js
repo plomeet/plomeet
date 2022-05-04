@@ -9,6 +9,7 @@ import Geolocation from 'react-native-geolocation-service';
 import axiosInstance from "../../../utils/API";
 import haversine from 'haversine';
 import TrashcanInfo from './trashcan-modal/index';
+import EndPlogging from './endScreen/index';
 
 //테스트용으로 남겨둔 데이터 삭제 X
 const P0 = { latitude: 37.564362, longitude: 126.977011 };
@@ -17,7 +18,7 @@ const P2 = { latitude: 37.565383, longitude: 126.976292 };
 const P4 = { latitude: 37.564834, longitude: 126.977218 };
 const P5 = { latitude: 37.562834, longitude: 126.976218 };
 
-const Plogging = ({ setDistSum, isPlogging }) => {
+const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage }) => {
     const mapView = useRef(null);
     const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
     // const [location, setLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); //ios 테스트용 - 지우지마세여 ㅠㅠㅠ 넹!!
@@ -26,7 +27,7 @@ const Plogging = ({ setDistSum, isPlogging }) => {
     const [center, setCenter] = useState();
     const [trashcanList, setTrashcanList] = useState([]);
     const [showTrashcans, setShowTrashcans] = useState(false);
-    const [prevLocation, setPrevLocation] = useState({ latitude: 37.33117775, longitude: 126.977011 });
+    const [prevLocation, setPrevLocation] = useState();
     // const [prevLocation, setPrevLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); ////ios 테스트용  - 지우지마세여 ㅠㅠㅠ  넹!!
     const [totalDist, setTotalDist] = useState(0);
     const [showThisNum, setShowThisNum] = useState(-2);
@@ -98,23 +99,26 @@ const Plogging = ({ setDistSum, isPlogging }) => {
     useEffect(() => {
         if (isPlogging) { //이동 거리 계산
             setPloggingPath(ploggingPath => [...ploggingPath, location]);
+            if (prevLocation) {
+                console.log("here has not a location before");
+                setTotalDist(() => {
+                    const prevLatLng = {
+                        lat: prevLocation.latitude,
+                        lng: prevLocation.longitude
+                    }
+                    const curLatLng = {
+                        lat: location.latitude,
+                        lng: location.longitude
+                    }
+                    const options = {
+                        format: '{lat,lng}',
+                        unit: 'km'
+                    }
 
-            setTotalDist(() => {
-                const prevLatLng = {
-                    lat: prevLocation.latitude,
-                    lng: prevLocation.longitude
-                }
-                const curLatLng = {
-                    lat: location.latitude,
-                    lng: location.longitude
-                }
-                const options = {
-                    format: '{lat,lng}',
-                    unit: 'km'
-                }
-
-                return (totalDist + haversine(prevLatLng, curLatLng, options)) || 0;
-            })
+                    return (totalDist + haversine(prevLatLng, curLatLng, options)) || 0;
+                })
+            }
+            console.log("here has a location before");
 
             setPrevLocation(location);
             // console.log(ploggingPath);
@@ -238,51 +242,54 @@ const Plogging = ({ setDistSum, isPlogging }) => {
 
     //주석이 많은데 나중에 다 정리함,, 차후 수정시 참고하려고 남겨둠
     return <>
-        {center &&
-            <NaverMapView ref={mapView}
-                style={style.container}
-                center={{ ...center, zoom: 16 }}
-                // onTouch={e => console.warn('onTouch', JSON.stringify(e.nativeEvent))}
-                // onCameraChange={e => console.warn('onCameraChange', JSON.stringify(e))}
-                // onMapClick={e => console.warn('onMapClick', JSON.stringify(e))}
-                onMapClick={() => setShowThisNum(-1)}
-                useTextureView>
-                <Marker
-                    coordinate={location}
-                    onClick={() => {
-                        console.log('onClick! myLoc')
-                        mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_BICYCLE, enableLayerGroup);
-                        mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_TRANSIT, enableLayerGroup);
-                        setEnableLayerGroup(!enableLayerGroup)
-                    }}
-                />
-
-                {ploggingPath.length >= 2 &&
-                    <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
-                }
-
-                {/* 쓰레기통 마커 다 띄우기 */}
-                {showTrashcans &&
-                    trashcanList.map(item => {
-                        return (
+        {
+            !showPloggingEndPage ?
+                <>
+                    {center &&
+                        <NaverMapView ref={mapView}
+                            style={style.container}
+                            center={{ ...center, zoom: 16 }}
+                            // onTouch={e => console.warn('onTouch', JSON.stringify(e.nativeEvent))}
+                            // onCameraChange={e => console.warn('onCameraChange', JSON.stringify(e))}
+                            // onMapClick={e => console.warn('onMapClick', JSON.stringify(e))}
+                            onMapClick={() => setShowThisNum(-1)}
+                            useTextureView>
                             <Marker
-                                key={item.trashcanId}
-                                coordinate={{ latitude: parseFloat(item.latitude), longitude: parseFloat(item.longitude) }}
-                                width={25}
-                                height={25}
-                                onClick={() => setShowThisNum(parseInt(item.trashcanId) - 1)}
-                            >
-                                {showThisNum === (parseInt(item.trashcanId) - 1) ?
-                                    <Icon name="trash" size={20} color="#1BE58D" /> :
-                                    <Icon name="trash" size={20} color="#0C48D2" />
-                                }
-                            </Marker>
-                        );
-                    })
+                                coordinate={location}
+                                onClick={() => {
+                                    console.log('onClick! myLoc')
+                                    mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_BICYCLE, enableLayerGroup);
+                                    mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_TRANSIT, enableLayerGroup);
+                                    setEnableLayerGroup(!enableLayerGroup)
+                                }}
+                            />
 
-                }
+                            {ploggingPath.length >= 2 &&
+                                <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
+                            }
 
-                {/* <Marker coordinate={P1} pinColor="blue" zIndex={1000} onClick={() => console.warn('onClick! p1')} />
+                            {/* 쓰레기통 마커 다 띄우기 */}
+                            {showTrashcans &&
+                                trashcanList.map(item => {
+                                    return (
+                                        <Marker
+                                            key={item.trashcanId}
+                                            coordinate={{ latitude: parseFloat(item.latitude), longitude: parseFloat(item.longitude) }}
+                                            width={25}
+                                            height={25}
+                                            onClick={() => setShowThisNum(parseInt(item.trashcanId) - 1)}
+                                        >
+                                            {showThisNum === (parseInt(item.trashcanId) - 1) ?
+                                                <Icon name="trash" size={20} color="#1BE58D" /> :
+                                                <Icon name="trash" size={20} color="#0C48D2" />
+                                            }
+                                        </Marker>
+                                    );
+                                })
+
+                            }
+
+                            {/* <Marker coordinate={P1} pinColor="blue" zIndex={1000} onClick={() => console.warn('onClick! p1')} />
                     <Marker coordinate={P2} pinColor="red" zIndex={100} alpha={0.5} onClick={() => console.warn('onClick! p2')} />
                     <Marker coordinate={P4} onClick={() => console.warn('onClick! p4')} image={require("../../../assets/imgs/marker.png")} width={48} height={48} /> 
                     <Polyline coordinates={[P1, P2]} onClick={() => console.warn('onClick! polyline')} />
@@ -304,26 +311,30 @@ const Plogging = ({ setDistSum, isPlogging }) => {
                         </View>
                     </Marker>
                 */}
-            </NaverMapView>
-        }
-        {center &&
-            <TouchableOpacity style={{ position: 'absolute', bottom: '20%', right: 8 }} onPress={() => setMyLocToCenter()}>
-                <View style={style.compassBackGround}>
-                    <IconMaterialIcons name="gps-fixed" size={30} color="#303644" />
-                </View>
-            </TouchableOpacity>
+                        </NaverMapView>
+                    }
+                    {center &&
+                        <TouchableOpacity style={{ position: 'absolute', bottom: '20%', right: 8 }} onPress={() => setMyLocToCenter()}>
+                            <View style={style.compassBackGround}>
+                                <IconMaterialIcons name="gps-fixed" size={30} color="#303644" />
+                            </View>
+                        </TouchableOpacity>
 
-        }
-        {trashInfoDetail &&
-            <TrashcanInfo showInfoDetail={showInfoDetail} setShowInfoDetail={setShowInfoDetail} setShowThisNum={setShowThisNum} trashInfoDetail={trashInfoDetail} />
-        }
-        {/*<TouchableOpacity style={{ position: 'absolute', bottom: '10%', right: 8 }} onPress={() => navigation.navigate('stack')}>
+                    }
+                    {trashInfoDetail &&
+                        <TrashcanInfo showInfoDetail={showInfoDetail} setShowInfoDetail={setShowInfoDetail} setShowThisNum={setShowThisNum} trashInfoDetail={trashInfoDetail} />
+                    }
+                    {/*<TouchableOpacity style={{ position: 'absolute', bottom: '10%', right: 8 }} onPress={() => navigation.navigate('stack')}>
             <View style={{ backgroundColor: 'gray', padding: 4 }}>
                 <Text style={{ color: 'white' }}>open stack</Text>
             </View>
         </TouchableOpacity>
         <Text style={{ position: 'absolute', top: '95%', width: '100%', textAlign: 'center' }}>Icon made by Pixel perfect from www.flaticon.com</Text>
         */}
+                </>
+                :
+                <EndPlogging ploggingPath={ploggingPath} center={center} />
+        }
     </>
 };
 

@@ -38,7 +38,9 @@ const AppTabComponent = () => {
                         iconName = focused ? 'person-circle' : 'person-circle-outline';
                     }
                     if (route.name === '플로깅') return (
-                        <TouchableOpacity onPress={() => navigation.navigate('ploggingActivity', { msg: "plogging start" })}>
+                        <TouchableOpacity
+                            hitSlop={{ top: 0, bottom: 20, left: 10, right: 10 }}
+                            onPress={() => navigation.navigate('ploggingActivity', { msg: "plogging start" })}>
                             <View style={style.backGround}>
                                 <IconMaterialIcons style={style.icon} name="gps-fixed" size={30} color="#303644" />
                             </View>
@@ -64,13 +66,13 @@ const AppTabComponent = () => {
 
 export const RootNavigator = () => {
     const isPlogging = useSelector(state => state.isPlogging);
+    const showPloggingEndPage = useSelector(state => state.showPloggingEndPage);
 
     return (
         <Stack.Navigator>
             <Stack.Screen name="M" component={AppTabComponent} options={{ headerShown: false }} />
-            <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: !isPlogging }} />
+            <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: (!isPlogging && !showPloggingEndPage) }} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
-
         </Stack.Navigator>
     )
 }
@@ -78,11 +80,11 @@ export const RootNavigator = () => {
 const style = StyleSheet.create({
     backGround: {
         width: "100%",
-        height: 55,
+        height: 35,
         //borderRadius: 25,
         paddingLeft: 20,
         paddingRight: 20,
-        paddingTop: 12,
+        paddingTop: 2,
         backgroundColor: "grey",
         opacity: 0.2
 
