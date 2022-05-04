@@ -37,7 +37,6 @@ const InsideRoom = ({ navigation, route: {params: {item}} }) => {
             conUser: user,
         }
         return(
-            
             <CustomBubble {...bubbleProps} />
         )
     }
@@ -67,7 +66,6 @@ const InsideRoom = ({ navigation, route: {params: {item}} }) => {
             list.push(m);
         })
         setMessages(list);
-        console.log(messages);
     }, []);
 
     useEffect(() => {

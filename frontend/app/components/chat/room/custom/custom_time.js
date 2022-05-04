@@ -13,6 +13,14 @@ const CustomTime = (props) => {
                     color: color.blackFont,
                 },
             }}
+            containerStyle={{
+                right: {
+                    marginLeft: 10,
+                },
+                left: {
+                    marginRight: 10,
+                }
+            }}
         />
     )
 }
