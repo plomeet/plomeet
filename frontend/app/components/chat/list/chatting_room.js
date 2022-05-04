@@ -1,7 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Octicons'
-import { color,
+import { color } from '../styles';
+import {
     ChattingRoomComp,
     ChattingRoomInfoComp,
     ChattingRoomInfoAddComp,
@@ -30,7 +31,7 @@ const ChattingRoom = ( props ) => {
 
 
     return(
-        <ChattingRoomComp>
+        <ChattingRoomComp onPress={props.onPress}>
             <ChattingRoomImg source={{uri: meeting.meetingImg}} />
             <ChattingRoomInfoComp>
                 <ChattingRoomInfoUpLineComp>

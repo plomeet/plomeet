@@ -9,6 +9,10 @@ import Plogging from './components/plogging/index';
 import Chat from './components/chat/index';
 import MyPage from './components/my/index';
 
+//Chatting
+import InsideRoom from './components/chat/room/inside_room';
+
+
 const Stack = createStackNavigator();
 const MainScreenTab = createBottomTabNavigator();
 
@@ -52,10 +56,15 @@ const AppTabComponent = () => {
 export const RootNavigator = () => {
     return (
         <Stack.Navigator
-            screenOptions={{
-                headerShown: false
-            }}>
-            <Stack.Screen name="M" component={AppTabComponent} Screen={{ Headers }} />
+            //screenOptions={{
+            //    headerShown: false
+            //}}
+        >
+            <Stack.Screen name="M" component={AppTabComponent} 
+                options={{ headerShown: false }}
+                Screen={{ Headers }}
+            />
+            <Stack.Screen name="InChatRoom" component={InsideRoom} />
         </Stack.Navigator>
     )
 }
