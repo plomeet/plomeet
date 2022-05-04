@@ -123,11 +123,11 @@ const CustomBubble = (props) => {
                 }}
                 wrapperStyle={{
                     right: {
-                        marginLeft: 0,
+                        //marginLeft: 0,
                         backgroundColor: color.primaryBlue,
                     },
                     left: {
-                        marginRight: 0,
+                        //marginRight: 0,
                     }
                 }}
                 //renderTime={renderTime}
