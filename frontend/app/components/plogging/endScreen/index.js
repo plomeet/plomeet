@@ -10,6 +10,7 @@ const EndPlogging = ({ ploggingPath, center }) => {
     const [middle, setMiddle] = useState();
     const distSum = useSelector(state => state.distSum);
     const isPlogging = useSelector(state => state.isPlogging);
+    const timeSum = useSelector(state => state.timeSum);
 
     useEffect(() => {
 
@@ -50,7 +51,7 @@ const EndPlogging = ({ ploggingPath, center }) => {
                     </NaverMapView>
                 </View>
                 <View style={style.containerState} >
-                    <PloggingStatusBar distSum={distSum} isPlogging={isPlogging}></PloggingStatusBar>
+                    <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} timeSumString={timeSum}></PloggingStatusBar>
                 </View>
                 <View style={style.containerPicture} >
                     <Text>사진 영역</Text>

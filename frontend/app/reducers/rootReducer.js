@@ -2,6 +2,7 @@ const initialState = {
     distSum: 0,
     isPlogging: false,
     showPloggingEndPage: false,
+    timeSum: 0,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -12,6 +13,8 @@ const rootReducer = (state = initialState, action) => {
             return { ...state, isPlogging: action.payload }
         case "SET_SHOWENDPAGE":
             return { ...state, showPloggingEndPage: action.payload }
+        case "SET_TIMESUM":
+            return { ...state, timeSum: action.payload }
         default:
             return state;
     }
