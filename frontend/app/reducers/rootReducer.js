@@ -2,7 +2,7 @@ const initialState = {
     distSum: 0,
     isPlogging: false,
     showPloggingEndPage: false,
-    timeSum: 0,
+    timeSum: "0 : 00",
 };
 
 const rootReducer = (state = initialState, action) => {
