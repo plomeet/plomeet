@@ -266,10 +266,10 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc }
                                     // setEnableLayerGroup(!enableLayerGroup)
                                 }}
                             >
-                                <Image
+                                {/* <Image
                                     style={style.myLoc}
                                     source={require('./icons/myLocMarker.png')}
-                                />
+                                /> */}
                             </Marker>
 
                             {ploggingPath.length >= 2 &&
