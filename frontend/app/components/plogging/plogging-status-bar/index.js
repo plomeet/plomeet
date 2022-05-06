@@ -6,7 +6,7 @@ import TimeSvg from '../icons/timer.svg';
 import SunSvg from '../icons/weather/sun.svg'
 
 
-const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, showPloggingEndPage, timeSumString }) => {
+const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString }) => {
   const layout = useWindowDimensions();
   const countInterval = useRef(null);
   const [minutes, setMinutes] = useState(parseInt(mm));
@@ -22,6 +22,8 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, sh
           setMinutes(parseInt(minutes) + 1);
           setSeconds(0);
         }
+        if (seconds< 10) setTimeSum(minutes+ " : " + 0 + seconds);
+        else setTimeSum(minutes+ " : " + seconds);
       }
     }, 1000);
       return () => {
@@ -29,11 +31,6 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, sh
     };
   }, [minutes, seconds, isPlogging]);
 
-  useEffect(() => {
-    if (showPloggingEndPage) { 
-      setTimeSum(minutes + ":"+ seconds);
-    }
-  }, [showPloggingEndPage])
 
     return (
       <PloggingStatusBarBlock width={layout.width}>
@@ -43,9 +40,9 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, sh
         </View>
         <View style={styles.statusView}>
           <TimeSvg width={20} height={20} fill={"#FFF"} /> 
-          <Text style={styles.statusText}>
+            <Text style={styles.statusText}>
             {timeSumString}
-            {minutes} : {seconds < 10 ? `0${seconds}` : seconds }</Text>
+            </Text>
         </View>   
         <View style={styles.statusView}>
           <SunSvg width={20} height={20} fill={"#FFF"} /> 
