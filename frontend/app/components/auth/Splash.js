@@ -10,28 +10,17 @@ import AuthLogo from './authLogo';
 import LinearGradient from 'react-native-linear-gradient';
 
 const AuthComponent = () => {
-  const loading = false;
-
-  if (loading) {
-    return (
-      <View style={styles.loading}>
-        <ActivityIndicator />
+  return (
+    <LinearGradient
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 1}}
+      colors={['#D5FF7C', '#74E9AD', '#12D3DD']}
+      style={styles.container}>
+      <View>
+        <AuthLogo />
       </View>
-    );
-  } else {
-    return (
-      <LinearGradient
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 1}}
-        colors={['#D5FF7C', '#74E9AD', '#12D3DD']}
-        // colors={['#3AE468', '#3BDF86', '#3BDBA4']}
-        style={styles.container}>
-        <View>
-          <AuthLogo />
-        </View>
-      </LinearGradient>
-    );
-  }
+    </LinearGradient>
+  );
 };
 
 const styles = StyleSheet.create({

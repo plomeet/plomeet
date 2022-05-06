@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 //Screens
+import Splash from './components/auth/Splash';
 import SignUp from './components/auth/SignUp';
 import Home from './components/home/index';
 import Record from './components/record/index';
@@ -12,8 +13,6 @@ import MyPage from './components/my/index';
 
 const Stack = createStackNavigator();
 const MainScreenTab = createBottomTabNavigator();
-
-const isLoggedIn = false;
 
 const AppTabComponent = () => {
   return (
@@ -33,18 +32,18 @@ export const RootNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      {isLoggedIn ? (
-        <Stack.Screen name="M" component={AppTabComponent} Screen={{Headers}} />
-      ) : (
-        <>
-          <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen
-            name="M"
-            component={AppTabComponent}
-            Screen={{Headers}}
-          />
-        </>
-      )}
+      <Stack.Screen name="Splash" component={Splash} />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={() => ({gestureEnabled: false})}
+      />
+      <Stack.Screen
+        name="M"
+        component={AppTabComponent}
+        Screen={{Headers}}
+        options={() => ({gestureEnabled: false})}
+      />
     </Stack.Navigator>
   );
 };
