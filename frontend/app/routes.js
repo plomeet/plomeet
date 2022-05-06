@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { TouchableOpacity, View, StyleSheet } from "react-native";
+import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { useSelector } from "react-redux"
 //Screens
 import Home from './components/home/index';
@@ -42,7 +42,10 @@ const AppTabComponent = () => {
                             hitSlop={{ top: 0, bottom: 20, left: 10, right: 10 }}
                             onPress={() => navigation.navigate('ploggingActivity', { msg: "plogging start" })}>
                             <View style={style.backGround}>
-                                <IconMaterialIcons style={style.icon} name="gps-fixed" size={30} color="#303644" />
+                                <Image
+                                    style={style.icon}
+                                    source={require('./components/plogging/icons/ploggingBottomTap.png')}
+                                />
                             </View>
                         </TouchableOpacity>
                     )
@@ -85,12 +88,12 @@ const style = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 20,
         paddingTop: 2,
-        backgroundColor: "grey",
-        opacity: 0.2
+        backgroundColor: "white",
 
     },
     icon: {
         zIndex: 100,
-
+        width: 30,
+        height: 30
     }
 });

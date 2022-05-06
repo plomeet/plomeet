@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import 'react-native-gesture-handler';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "./map";
-import { Image, ImageBackground, PermissionsAndroid, Platform, ScrollView, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { ImageBackground, PermissionsAndroid, Platform, ScrollView, Text, TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { LayerGroup } from './map/index';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -10,6 +10,7 @@ import axiosInstance from "../../../utils/API";
 import haversine from 'haversine';
 import TrashcanInfo from './trashcan-modal/index';
 import EndPlogging from './endScreen/index';
+import dfs_xy_conv from '../../../utils/IHateMeteorologicalAgency'
 
 //테스트용으로 남겨둔 데이터 삭제 X
 const P0 = { latitude: 37.564362, longitude: 126.977011 };
@@ -18,12 +19,12 @@ const P2 = { latitude: 37.565383, longitude: 126.976292 };
 const P4 = { latitude: 37.564834, longitude: 126.977218 };
 const P5 = { latitude: 37.562834, longitude: 126.976218 };
 
-const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage }) => {
+const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc }) => {
     const mapView = useRef(null);
     const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
     // const [location, setLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); //ios 테스트용 - 지우지마세여 ㅠㅠㅠ 넹!!
     const [ploggingPath, setPloggingPath] = useState([]);
-    const [enableLayerGroup, setEnableLayerGroup] = useState(true);
+    //const [enableLayerGroup, setEnableLayerGroup] = useState(true);
     const [center, setCenter] = useState();
     const [trashcanList, setTrashcanList] = useState([]);
     const [showTrashcans, setShowTrashcans] = useState(false);
@@ -83,8 +84,8 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage }) => {
             {
                 enableHighAccuracy: true,
                 distanceFilter: 0,
-                interval: 60000,
-                fastestInterval: 20000,
+                interval: 10000,
+                fastestInterval: 5000,
             },
         );
 
@@ -100,7 +101,6 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage }) => {
         if (isPlogging) { //이동 거리 계산
             setPloggingPath(ploggingPath => [...ploggingPath, location]);
             if (prevLocation) {
-                console.log("here has not a location before");
                 setTotalDist(() => {
                     const prevLatLng = {
                         lat: prevLocation.latitude,
@@ -118,7 +118,6 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage }) => {
                     return (totalDist + haversine(prevLatLng, curLatLng, options)) || 0;
                 })
             }
-            console.log("here has a location before");
 
             setPrevLocation(location);
             // console.log(ploggingPath);
@@ -146,7 +145,6 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage }) => {
                 latitude,
                 longitude,
             });
-            console.log(trashcanList[showThisNum]);
             const { cityName, detailAddr, streetName, location, trashCanType } = trashcanList[showThisNum];
             setTrashInfoDetail({
                 ...trashInfoDetail,
@@ -173,6 +171,9 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage }) => {
                     latitude,
                     longitude,
                 });
+                const rs = dfs_xy_conv("toXY", latitude, longitude);
+                console.log("기상청 전용 좌표 : " + rs.x, rs.y);
+                setWeatherLoc([rs.x, rs.y]);
             },
             (error) => {
                 // See error code charts below.
@@ -256,13 +257,20 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage }) => {
                             useTextureView>
                             <Marker
                                 coordinate={location}
+                                width={39}
+                                height={39}
                                 onClick={() => {
                                     console.log('onClick! myLoc')
-                                    mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_BICYCLE, enableLayerGroup);
-                                    mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_TRANSIT, enableLayerGroup);
-                                    setEnableLayerGroup(!enableLayerGroup)
+                                    // mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_BICYCLE, enableLayerGroup);
+                                    // mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_TRANSIT, enableLayerGroup);
+                                    // setEnableLayerGroup(!enableLayerGroup)
                                 }}
-                            />
+                            >
+                                <Image
+                                    style={style.myLoc}
+                                    source={require('./icons/myLocMarker.png')}
+                                />
+                            </Marker>
 
                             {ploggingPath.length >= 2 &&
                                 <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
@@ -280,8 +288,15 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage }) => {
                                             onClick={() => setShowThisNum(parseInt(item.trashcanId) - 1)}
                                         >
                                             {showThisNum === (parseInt(item.trashcanId) - 1) ?
-                                                <Icon name="trash" size={20} color="#1BE58D" /> :
-                                                <Icon name="trash" size={20} color="#0C48D2" />
+                                                <Image
+                                                    style={style.icon}
+                                                    source={require('./icons/clickedMaker.png')}
+                                                />
+                                                :
+                                                <Image
+                                                    style={style.icon}
+                                                    source={require('./icons/unClickedMarker.png')}
+                                                />
                                             }
                                         </Marker>
                                     );
@@ -342,14 +357,23 @@ const style = StyleSheet.create({
     container: { width: '100%', height: '100%' },
     realLocBtn: { position: 'absolute', bottom: 100, right: 10, alignSelf: 'flex-end' },
     compassBackGround: {
-        width: 48,
-        height: 48,
+        width: 50,
+        height: 50,
         borderRadius: 25,
         padding: 9,
         backgroundColor: "#FFFFFF",
-        elevation: 5
+        elevation: 5,
+        borderWidth: 1,
 
     },
+    icon: {
+        width: 20,
+        height: 20,
+    },
+    myLoc: {
+        width: 35,
+        height: 37,
+    }
 });
 
 
