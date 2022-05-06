@@ -329,7 +329,7 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc }
                         </NaverMapView>
                     }
                     {center &&
-                        <TouchableOpacity style={{ position: 'absolute', bottom: '20%', right: 8 }} onPress={() => setMyLocToCenter()}>
+                    <TouchableOpacity style={{ position: 'absolute', bottom: '75%', right: 8 }} onPress={() => setMyLocToCenter()}>
                             <View style={style.compassBackGround}>
                                 <IconMaterialIcons name="gps-fixed" size={30} color="#303644" />
                             </View>

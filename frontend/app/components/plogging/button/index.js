@@ -103,7 +103,7 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
         )
     } else { //종료하고 기록 화면 보여줄때
         return (
-            <View style={styles.startBtn} >
+            <View style={styles.saveBtn} >
                 <TouchableOpacity style={styles.elevation} onPress={() => { handleShowEndPage(false); }}>
                     <SaveBtn />
                 </TouchableOpacity>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 50
+        bottom: 150
     },
     endState: {
         flexDirection: 'row',
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 122,
+        bottom: 150,
     },
     endBtn: {
         flex: 4,
@@ -145,7 +145,14 @@ const styles = StyleSheet.create({
         height: "100%",
         borderRadius: 26,
         elevation: 5
-    }
+    },
+    saveBtn: {
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 40
+    },
 })
 
 export default PloggingStartEndButton;
