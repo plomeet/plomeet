@@ -109,7 +109,7 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
       </View>
       <View style={styles.statusView}>
         <TimeSvg width={20} height={20} fill={"#FFF"} />
-        <Text style={styles.statusText}>{minutes}:{seconds < 10 ? `0${seconds}` : seconds}</Text>
+        <Text style={styles.statusText}>{timeSumString}</Text>
       </View>
       <View style={styles.statusView}>
         <Icon name={weather} size={20} color="#292D32" />
