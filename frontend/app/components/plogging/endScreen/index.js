@@ -210,7 +210,8 @@ const style = StyleSheet.create({
         flex: 1, backgroundColor: "purple"
     },
     containerState: {
-        marginTop: 5,
+        borderTopWidth: 1.6,
+        borderBottomWidth: 1.6,
     },
     containerPicture: {
         flex: 0.4,
