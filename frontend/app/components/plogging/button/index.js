@@ -9,10 +9,19 @@ import RequestCameraBtn from '../icons/requestCameraBtn.svg';
 import { useCameraDevices, Camera, LoadingView } from 'react-native-vision-camera';
 import { useNavigation } from '@react-navigation/native';
 
-const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage }) => {
+const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage, setStart }) => {
     const navigation = useNavigation();
-    const devices = useCameraDevices()
-    const device = devices.back
+    const devices = useCameraDevices();
+    const device = devices.back;
+    const curr = new Date();
+    const utc = curr.getTime() + (curr.getTimezoneOffset() * 60 * 1000);
+    const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+    const kr_curr = new Date(utc + (KR_TIME_DIFF));
+    const WEEKDAY = ['(일)', '(월)', '(화)', '(수)', '(목)', '(금)', '(토)'];
+    // const nowDate = moment().format('YYYY/MM/DD');
+    // const nowDay = moment().day();
+    // const nowTime = moment().format('HH:mm');
+
 
     const openCamera = async () => {
         if (Platform.OS === 'ios') {
@@ -50,10 +59,26 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
         }
     }
 
+    const onStart = () => {
+        handleIsPlogging(true);
+
+        const year = kr_curr.getFullYear();
+        const month = ('0' + (kr_curr.getMonth() + 1)).slice(-2);
+        const day = ('0' + kr_curr.getDate()).slice(-2);
+        const dateString = year + '/' + month + '/' + day;
+
+        const hours = ('0' + kr_curr.getHours()).slice(-2);
+        const minutes = ('0' + kr_curr.getMinutes()).slice(-2);
+        const timeString = hours + ':' + minutes;
+
+        const week = WEEKDAY[kr_curr.getDay()];
+        setStart([dateString, week, timeString, kr_curr]);
+    }
+
     if (!isPlogging && !showPloggingEndPage) { //시작중이 아니면 시작으로 처리
         return (
             <View style={styles.startBtn}>
-                <TouchableOpacity style={styles.elevation} onPress={() => handleIsPlogging(true)}>
+                <TouchableOpacity style={styles.elevation} onPress={() => onStart()}>
                     <StartBtn />
                 </TouchableOpacity>
             </View>
@@ -94,7 +119,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: '10%'
+        bottom: 50
     },
     endState: {
         flexDirection: 'row',
@@ -102,12 +127,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: '10%',
+        bottom: 122,
     },
     endBtn: {
         flex: 4,
         justifyContent: 'center',
         alignItems: 'flex-end',
+        marginRight: 7
     },
     cameraBtn: {
         flex: 1,

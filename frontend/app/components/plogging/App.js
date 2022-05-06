@@ -5,12 +5,12 @@ import Plogging from '.';
 import PloggingStatusBar from './plogging-status-bar';
 import PloggingStartEndButton from './button/index';
 
-const App = ({ distSum, setDistSum, isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage }) => {
+const App = ({ distSum, setDistSum, isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage, setStart, setWeatherLoc }) => {
     return (
         <View>
-            {!showPloggingEndPage && <PloggingStatusBar distSum={distSum} isPlogging={isPlogging}></PloggingStatusBar>}
-            <Plogging setDistSum={setDistSum} isPlogging={isPlogging} showPloggingEndPage={showPloggingEndPage}></Plogging>
-            <PloggingStartEndButton isPlogging={isPlogging} handleIsPlogging={handleIsPlogging} showPloggingEndPage={showPloggingEndPage} handleShowEndPage={handleShowEndPage}></PloggingStartEndButton>
+            {(!showPloggingEndPage && isPlogging) && <PloggingStatusBar distSum={distSum} isPlogging={isPlogging}></PloggingStatusBar>}
+            <Plogging setDistSum={setDistSum} isPlogging={isPlogging} showPloggingEndPage={showPloggingEndPage} setWeatherLoc={setWeatherLoc}></Plogging>
+            <PloggingStartEndButton isPlogging={isPlogging} handleIsPlogging={handleIsPlogging} showPloggingEndPage={showPloggingEndPage} handleShowEndPage={handleShowEndPage} setStart={setStart}></PloggingStartEndButton>
         </View>
     )
 }

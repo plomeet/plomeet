@@ -6,9 +6,19 @@ export const setDistSum = (dist) => ({
 export const IsPlogging = (isPlogging) => ({
   type: "ISPLOGGING",
   payload: isPlogging,
-})
+});
 
 export const IsEndPage = (showPloggingEndPage) => ({
   type: "SET_SHOWENDPAGE",
   payload: showPloggingEndPage,
-})
+});
+
+export const setStart = (startTime) => ({
+  type: "SET_STARTTIME",
+  payload: startTime,
+});
+
+export const setWeatherLoc = (weatherLoc) => ({
+  type: "SET_WEATHERLOC",
+  payload: weatherLoc,
+});
