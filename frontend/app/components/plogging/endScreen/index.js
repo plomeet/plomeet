@@ -116,16 +116,13 @@ const EndPlogging = ({ ploggingPath, center }) => {
                 <View
                     style={style.container}
                 >
+                    <View style={style.containerTitle}>
+                        <Text style={style.titleText}>플로깅 결과</Text>
+                    </View>
                     <View style={style.containerTime} >
                         <View style={style.innerContainerTime} >
                             <Text style={style.date}>{startTime[0]}{startTime[1]}</Text>
-                            <Text style={style.timeStart}>{startTime[2]}</Text>
-                            <Text style={style.start}>~</Text>
-                            {/* <Text style={style.date}>{endTime[0]}{endTime[1]}</Text> */}
-                            <Text style={style.time}>{endTime[2]}</Text>
-                        </View>
-                        <View style={style.innerContainerTime} >
-                            <Text style={style.elapsedTime}>{elapsedTime}</Text>
+                            <Text style={style.timeStart}>{startTime[2]} ~ {endTime[2]}</Text>
                         </View>
                     </View>
                     <View style={style.containerMap} >
@@ -172,46 +169,52 @@ const style = StyleSheet.create({
     container: {
         flexDirection: "column",
         height: "100%",
-        backgroundColor: "white"
+        backgroundColor: "white",
+    },
+    containerTitle: {
+        flex: 0.2,
+        backgroundColor: "white",
+        alignItems: 'center',
+        borderBottomWidth: 0.2,
+    },
+    titleText: {
+        fontSize: 20,
+        marginTop: 15,
+        fontWeight: "bold",
+
     },
     containerTime: {
         flex: 0.3,
         backgroundColor: "white",
         flexDirection: 'column',
-        alignItems: 'center',
-        marginLeft: 10,
+        // alignItems: 'center',
+        marginLeft: 15,
     },
     innerContainerTime: {
         flex: 1,
-        flexDirection: 'row',
-        alignItems: 'flex-end',
+        flexDirection: 'column',
+        marginTop: 20,
     },
     date: {
         fontSize: 15,
         color: 'black',
+        fontWeight: "500"
     },
     timeStart: {
-        marginLeft: 20,
-        fontSize: 14,
+        fontSize: 12,
+        color: "#ABABAB",
     },
-    time: {
-        fontSize: 14,
-    },
-    start: {
-        marginLeft: 5,
-        marginRight: 5,
-        fontSize: 15,
-    },
-    elapsedTime: {
-        fontSize: 18,
-        color: 'black',
-    },
+
     containerMap: {
-        flex: 1, backgroundColor: "purple"
+        flex: 1, 
+        paddingLeft: 10,
+        paddingRight: 10
     },
     containerState: {
-        borderTopWidth: 1.6,
-        borderBottomWidth: 1.6,
+        borderBottomWidth: 5,
+        borderColor: "#DDDDDD",
+        marginBottom: 10,
+
     },
     containerPicture: {
         flex: 0.4,
