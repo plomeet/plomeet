@@ -150,7 +150,7 @@ const EndPlogging = ({ ploggingPath, center }) => {
                                 <View>
                                     <Photo source={{ uri: img.uri }} key="{i}" />
                                     <TouchableOpacity onPress={() => deleteImg(img.id)} hitSlop={{ right: 12, bottom: -90, left: -90, top: 120 }}>
-                                        <ImageDelete style={style.delBtn} />
+                                        <ImageDelete width={20} height={20} style={style.delBtn} />
                                     </TouchableOpacity>
                                 </View>
                             ))
@@ -223,8 +223,8 @@ const style = StyleSheet.create({
     },
     delBtn: {
         position: "relative",
-        top: -110,
-        left: 110,
+        top: -105,
+        left: 100,
     }
 })
 
