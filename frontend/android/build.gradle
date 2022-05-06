@@ -56,6 +56,8 @@ allprojects {
             }
         }
         google()
+        jcenter()
+        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/'}
         maven { url 'https://www.jitpack.io' }
         // 네이버 지도 저장소
         maven {
