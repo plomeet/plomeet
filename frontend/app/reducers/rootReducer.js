@@ -4,6 +4,7 @@ const initialState = {
     showPloggingEndPage: false,
     startTime: [],
     weatherLoc: [],
+    timeSum: 0,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -18,6 +19,8 @@ const rootReducer = (state = initialState, action) => {
             return { ...state, startTime: action.payload }
         case "SET_WEATHERLOC":
             return { ...state, weatherLoc: action.payload }
+        case "SET_TIMESUM":
+            return { ...state, timeSum: action.payload }
         default:
             return state;
     }

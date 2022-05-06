@@ -10,6 +10,7 @@ const mapDispatchToProps = dispatch => {
         handleShowEndPage: showPloggingEndPage => dispatch(actions.IsEndPage(showPloggingEndPage)),
         setStart: startTime => dispatch(actions.setStart(startTime)),
         setWeatherLoc: weatherLoc => dispatch(actions.setWeatherLoc(weatherLoc)),
+        setTimeSum: timeSum => dispatch(actions.setTimeSum(timeSum)),
     }
 }
 
@@ -20,6 +21,7 @@ const mapStateToProps = state => {
         showPloggingEndPage: state.showPloggingEndPage,
         startTime: state.startTime,
         weatherLoc: state.weatherLoc,
+        timeSum: state.timeSum,
     }
 }
 

@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 //나중에 환경변수 처리
 const serviceKey = "Yw3zPCyzMoX2VB0yMPfZgip2qIHGaFLGT5RuJ9gtVFGvzjbuNNZa5qB5DFUm%2BNMe%2B0kHhUWAYIH1j0BK%2Fdj6MQ%3D%3D";
 
-const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging }) => {
+const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, showPloggingEndPage, timeSumString }) => {
   const layout = useWindowDimensions();
   const countInterval = useRef(null);
   const [minutes, setMinutes] = useState(parseInt(mm));

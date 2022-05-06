@@ -22,3 +22,8 @@ export const setWeatherLoc = (weatherLoc) => ({
   type: "SET_WEATHERLOC",
   payload: weatherLoc,
 });
+
+export const setTimeSum = (time) => ({
+  type: "SET_TIMESUM",
+  payload: time
+})
