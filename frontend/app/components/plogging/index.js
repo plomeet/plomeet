@@ -279,11 +279,11 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc }
                                         <Marker
                                             key={item.trashcanId}
                                             coordinate={{ latitude: parseFloat(item.latitude), longitude: parseFloat(item.longitude) }}
+                                            image={showThisNum === (parseInt(item.trashcanId) - 1) ?
+                                                require("./icons/clickedMaker.png") : require("./icons/unClickedMarker.png")}
                                             width={25}
                                             height={25}
                                             onClick={() => setShowThisNum(parseInt(item.trashcanId) - 1)}
-                                            image={showThisNum === (parseInt(item.trashcanId) - 1) ?
-                                                require('./icons/clickedMaker.png') : require('./icons/unClickedMarker.png')}
                                         />
                                     );
                                 })
