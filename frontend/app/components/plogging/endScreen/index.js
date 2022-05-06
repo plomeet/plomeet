@@ -24,7 +24,7 @@ const EndPlogging = ({ ploggingPath, center }) => {
     const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
     const kr_curr = new Date(utc + (KR_TIME_DIFF));
     const WEEKDAY = ['(일)', '(월)', '(화)', '(수)', '(목)', '(금)', '(토)'];
-    const [elapsedTime, setElapsedTime] = useState("");
+    // const [elapsedTime, setElapsedTime] = useState("");
     const timeSum = useSelector(state => state.timeSum);
     const [imageSource, setImageSource] = useState([]);
     const nextId = useRef(1);
@@ -66,24 +66,24 @@ const EndPlogging = ({ ploggingPath, center }) => {
         const week = WEEKDAY[kr_curr.getDay()];
         setEndTime([dateString, week, timeString, kr_curr]);
 
-        let TimeTaken = kr_curr.getTime() - startTime[3].getTime();
+        // let TimeTaken = kr_curr.getTime() - startTime[3].getTime();
 
-        const hour = parseInt(TimeTaken / 1000 / 60 / 60);
-        TimeTaken = TimeTaken - (hour * 1000 * 60 * 60);
-        const min = parseInt(TimeTaken / 1000 / 60);
-        TimeTaken = TimeTaken - (min * 1000 * 60);
-        const sec = parseInt(TimeTaken / 1000);
-        let str = "총 ";
-        if (hour > 0)
-            str += hour + "시간 "
-        if (min > 0)
-            str += min + "분 "
-        if (sec > 0)
-            str += sec + "초 "
-        str += "플로깅을 했어요"
+        // const hour = parseInt(TimeTaken / 1000 / 60 / 60);
+        // TimeTaken = TimeTaken - (hour * 1000 * 60 * 60);
+        // const min = parseInt(TimeTaken / 1000 / 60);
+        // TimeTaken = TimeTaken - (min * 1000 * 60);
+        // const sec = parseInt(TimeTaken / 1000);
+        // let str = "총 ";
+        // if (hour > 0)
+        //     str += hour + "시간 "
+        // if (min > 0)
+        //     str += min + "분 "
+        // if (sec > 0)
+        //     str += sec + "초 "
+        // str += "플로깅을 했어요"
 
-        if (elapsedTime === "")
-            setElapsedTime(str);
+        // if (elapsedTime === "")
+        //     setElapsedTime(str);
     }, []);
 
     const showCameraRoll = () => {
@@ -124,9 +124,9 @@ const EndPlogging = ({ ploggingPath, center }) => {
                             {/* <Text style={style.date}>{endTime[0]}{endTime[1]}</Text> */}
                             <Text style={style.time}>{endTime[2]}</Text>
                         </View>
-                        <View style={style.innerContainerTime} >
+                        {/* <View style={style.innerContainerTime} >
                             <Text style={style.elapsedTime}>{elapsedTime}</Text>
-                        </View>
+                        </View> */}
                     </View>
                     <View style={style.containerMap} >
                         <NaverMapView ref={mapView}
@@ -175,7 +175,7 @@ const style = StyleSheet.create({
         backgroundColor: "white"
     },
     containerTime: {
-        flex: 0.3,
+        flex: 0.2,
         backgroundColor: "white",
         flexDirection: 'column',
         alignItems: 'center',
@@ -184,7 +184,7 @@ const style = StyleSheet.create({
     innerContainerTime: {
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
     },
     date: {
         fontSize: 15,

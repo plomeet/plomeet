@@ -265,12 +265,8 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc }
                                     // mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_TRANSIT, enableLayerGroup);
                                     // setEnableLayerGroup(!enableLayerGroup)
                                 }}
-                            >
-                                <Image
-                                    style={style.myLoc}
-                                    source={require('./icons/myLocMarker.png')}
-                                />
-                            </Marker>
+                                image={require("./icons/myLocMarker.png")}
+                            />
 
                             {ploggingPath.length >= 2 &&
                                 <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
@@ -286,19 +282,9 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc }
                                             width={25}
                                             height={25}
                                             onClick={() => setShowThisNum(parseInt(item.trashcanId) - 1)}
-                                        >
-                                            {showThisNum === (parseInt(item.trashcanId) - 1) ?
-                                                <Image
-                                                    style={style.icon}
-                                                    source={require('./icons/clickedMaker.png')}
-                                                />
-                                                :
-                                                <Image
-                                                    style={style.icon}
-                                                    source={require('./icons/unClickedMarker.png')}
-                                                />
-                                            }
-                                        </Marker>
+                                            image={showThisNum === (parseInt(item.trashcanId) - 1) ?
+                                                require('./icons/clickedMaker.png') : require('./icons/unClickedMarker.png')}
+                                        />
                                     );
                                 })
 
