@@ -181,7 +181,7 @@ const style = StyleSheet.create({
 
     },
     containerTime: {
-        flex: 0.2,
+        flex: 0.3,
         backgroundColor: "white",
         flexDirection: 'column',
         borderTopWidth: 0.2,
