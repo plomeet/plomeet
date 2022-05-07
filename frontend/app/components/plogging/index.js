@@ -49,17 +49,15 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc }
 
     //시작시 쓰레기통 전부를 가져온다.
     useEffect(() => {
-        console.log("쓰레기통 리렌더링")
         async function getTrashCans() {
             try {
                 await axiosInstance.get("/trashcans")
                     .then((response) => {
                         if (response.status === 200) {
                             setTrashcanList(response.data.data);
-                            console.log("##############" + response.data.data.length);
-                            console.log("SUCCESS");
+                            console.log("get Trashcans SUCCESS");
                         } else {
-                            console.log("FAIL");
+                            console.log("get Trashcans FAIL");
                         }
                     })
                     .catch((response) => { console.log(response); });
@@ -128,7 +126,6 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc }
     }, [location]);
 
     useEffect(() => {
-        console.log("여긴가?");
         if (trashcanList.length > 0) {
             setShowTrashcans(true);
         }

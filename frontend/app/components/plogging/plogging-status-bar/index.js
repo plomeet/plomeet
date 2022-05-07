@@ -65,12 +65,11 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
     if (parseInt(minutes) <= 40)  // 매시간 40분 후에 api가 제공됨..하..
       weatherTimeParam = (parseInt(hours) - 1) + "" + 50;
 
-    console.log(weatherTimeParam);
-
     async function getWeatherInfo() {
       await weatherApiInstance.get(`/getUltraSrtNcst?serviceKey=${serviceKey}&pageNo=1&numOfRows=10&dataType=JSON&base_date=${dateString}&base_time=${weatherTimeParam}&nx=${weatherLoc[0]}&ny=${weatherLoc[1]}`)
         .then((response) => {
           if (response.status === 200) {
+            console.log(response.data.response.body.items);
             organizeWeatherData(response.data.response.body.items.item, parseInt(timeString));
           } else {
             console.log("FAIL");
