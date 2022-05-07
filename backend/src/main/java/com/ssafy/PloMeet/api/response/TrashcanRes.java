@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @ToString
 public class TrashcanRes {
-    String trashcanId;
+    Long trashcanId;
     String cityName;
     String streetName;
     String detailAddr;
