@@ -6,6 +6,9 @@ import TimeSvg from '../icons/timer.svg';
 import { useSelector } from "react-redux"
 import weatherApiInstance from "../../../../utils/weatherAPI";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import BackSvg from '../icons/back.svg'
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //나중에 환경변수 처리
 const serviceKey = "Yw3zPCyzMoX2VB0yMPfZgip2qIHGaFLGT5RuJ9gtVFGvzjbuNNZa5qB5DFUm%2BNMe%2B0kHhUWAYIH1j0BK%2Fdj6MQ%3D%3D";
@@ -23,6 +26,8 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
   const kr_curr = new Date(utc + (KR_TIME_DIFF));
   const [temp, setTemp] = useState(20);
   const [weather, setWeather] = useState("weather-sunny");
+  const navigation = useNavigation();
+  const showEndPage = useSelector(state => state.showPloggingEndPage);
 
   useEffect(() => {
     countInterval.current = setInterval(() => {
@@ -101,22 +106,35 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
         else
           setWeather("weather-night-partly-cloudy");
   };
-  return (
-    <PloggingStatusBarBlock width={layout.width}>
-      <View style={styles.statusView}>
-        <MapSvg width={20} height={20} fill={"#FFF"} />
-        <Text style={styles.statusText}>{distSum}km</Text>
-      </View>
-      <View style={styles.statusView}>
-        <TimeSvg width={20} height={20} fill={"#FFF"} />
-        <Text style={styles.statusText}>{timeSumString}</Text>
-      </View>
-      <View style={styles.statusView}>
-        <Icon name={weather} size={20} color="#292D32" />
-        <Text style={styles.statusText}>{temp}℃</Text>
-      </View>
 
-    </PloggingStatusBarBlock>
+  return (
+    <View style={styles.container}>
+      <View style={styles.containerTitle}>
+        {!isPlogging &&
+          <TouchableOpacity onPress={navigation.goBack}>
+            <BackSvg width={20} height={20} fill={"#FFF"} style={{ marginLeft: 5 }}></BackSvg>
+          </TouchableOpacity>
+        }
+        {!showEndPage &&
+          <Text style={styles.titleText}>플로깅</Text>
+        }
+      </View>
+      <PloggingStatusBarBlock width={layout.width}>
+        <View style={styles.statusView}>
+          <MapSvg width={20} height={20} fill={"#FFF"} />
+          <Text style={styles.statusText}>{distSum}km</Text>
+        </View>
+        <View style={styles.statusView}>
+          <TimeSvg width={20} height={20} fill={"#FFF"} />
+          <Text style={styles.statusText}>{timeSumString}</Text>
+        </View>
+        <View style={styles.statusView}>
+          <Icon name={weather} size={20} color="#292D32" />
+          <Text style={styles.statusText}>{temp}℃</Text>
+        </View>
+
+      </PloggingStatusBarBlock>
+    </View>
   );
 };
 
@@ -132,7 +150,25 @@ const styles = StyleSheet.create({
   },
   statusText: {
     marginLeft: 10
-  }
+  },
+  containerTitle: {
+    flex: 1,
+    backgroundColor: "white",
+    alignItems: 'center',
+    borderBottomWidth: 0.3,
+    flexDirection: "row",
+  },
+  titleText: {
+    fontSize: 20,
+    marginLeft: 40,
+    fontWeight: "bold",
+    position: "absolute",
+  },
+  container: {
+    flexDirection: "column",
+    height: "15%",
+    backgroundColor: "white",
+  },
 })
 
 const PloggingStatusBarBlock = styled.View`
@@ -143,12 +179,4 @@ const PloggingStatusBarBlock = styled.View`
   background-color: #ffffff;
   padding: 26px 20px 26px 20px;
 `
-
-// const ProgressBarBlock = styled.View`
-//   height: 8px;
-//   flex-direction: row;
-//   width: ${props => props.width - 50}px;
-//   background-color: #ffffff;
-//   border-radius: 10px;
-// `;
 

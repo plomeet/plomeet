@@ -49,12 +49,14 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc }
 
     //시작시 쓰레기통 전부를 가져온다.
     useEffect(() => {
+        console.log("쓰레기통 리렌더링")
         async function getTrashCans() {
             try {
                 await axiosInstance.get("/trashcans")
                     .then((response) => {
                         if (response.status === 200) {
                             setTrashcanList(response.data.data);
+                            console.log("##############" + response.data.data.length);
                             console.log("SUCCESS");
                         } else {
                             console.log("FAIL");
@@ -126,6 +128,7 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc }
     }, [location]);
 
     useEffect(() => {
+        console.log("여긴가?");
         if (trashcanList.length > 0) {
             setShowTrashcans(true);
         }
@@ -315,7 +318,7 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc }
                         </NaverMapView>
                     }
                     {center &&
-                        <TouchableOpacity style={{ position: 'absolute', bottom: '20%', right: 8 }} onPress={() => setMyLocToCenter()}>
+                        <TouchableOpacity style={{ position: 'absolute', bottom: '75%', right: 8 }} onPress={() => setMyLocToCenter()}>
                             <View style={style.compassBackGround}>
                                 <IconMaterialIcons name="gps-fixed" size={30} color="#303644" />
                             </View>

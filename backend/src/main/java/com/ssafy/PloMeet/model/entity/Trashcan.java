@@ -19,20 +19,19 @@ import javax.persistence.Table;
 @Table(name="TrashCan")
 public class Trashcan {
     @Id
-    @Column(name="trashcanId")
-    private String trashcanId;
-    @Column(name="cityName")
+    private Long trashcanId;
+    @Column
     private String cityName;
-    @Column(name="streetName")
+    @Column
     private String streetName;
-    @Column(name="detailAddr")
+    @Column
     private String detailAddr;
-    @Column(name="location")
+    @Column
     private String location;
-    @Column(name="trashCanType")
+    @Column
     private String trashCanType;
-    @Column(name="latitude")
+    @Column
     private float latitude;
-    @Column(name="longitude")
+    @Column
     private float longitude;
 }

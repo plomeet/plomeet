@@ -74,7 +74,7 @@ export const RootNavigator = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen name="M" component={AppTabComponent} options={{ title:' ', headerShown: false }} />
-            <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: (!isPlogging && !showPloggingEndPage) }} />
+            <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: false, gestureEnabled: false}} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
         </Stack.Navigator>
     )

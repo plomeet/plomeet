@@ -7,7 +7,6 @@ import { useSelector } from "react-redux"
 import { launchImageLibrary } from 'react-native-image-picker';
 import styled from "styled-components/native";
 import ImageAppend from '../icons/imageAppend.svg'
-import { SafeAreaView } from 'react-native-safe-area-context';
 import ImageDelete from '../icons/imageDelete.svg';
 
 
@@ -111,56 +110,54 @@ const EndPlogging = ({ ploggingPath, center }) => {
     }
 
     return (<>
-        <SafeAreaView>
-            {middle &&
-                <View
-                    style={style.container}
-                >
-                    <View style={style.containerTitle}>
-                        <Text style={style.titleText}>플로깅 결과</Text>
-                    </View>
-                    <View style={style.containerTime} >
-                        <View style={style.innerContainerTime} >
-                            <Text style={style.date}>{startTime[0]}{startTime[1]}</Text>
-                            <Text style={style.timeStart}>{startTime[2]} ~ {endTime[2]}</Text>
-                        </View>
-                    </View>
-                    <View style={style.containerMap} >
-                        <NaverMapView ref={mapView}
-                            style={style.container}
-                            center={{ ...middle, zoom: 16 }}
-                            useTextureView>
-                            {ploggingPath.length >= 2 &&
-                                <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
-                            }
-                        </NaverMapView>
-                    </View>
-                    <View style={style.containerState} >
-                        <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} timeSumString={timeSum}></PloggingStatusBar>
-                    </View>
-                    <Text style={{ marginLeft: 10, color: "grey" }}>최대 9개 업로드 가능</Text>
-                    <ScrollView horizontal={true} style={style.containerPicture} >
-                        {imageSource.length < 9 &&
-                            <ImageAppendButton>
-                                <ImageAppend onPress={showCameraRoll}>
-                                    <Label>Show Camera Roll</Label>
-                                </ImageAppend>
-                            </ImageAppendButton>
-                        }
-                        {
-                            imageSource.map((img, i) => (
-                                <View>
-                                    <Photo source={{ uri: img.uri }} key="{i}" />
-                                    <TouchableOpacity onPress={() => deleteImg(img.id)} hitSlop={{ right: 12, bottom: -90, left: -90, top: 120 }}>
-                                        <ImageDelete style={style.delBtn} />
-                                    </TouchableOpacity>
-                                </View>
-                            ))
-                        }
-                    </ScrollView>
+        {middle &&
+            <View
+                style={style.container}
+            >
+                <View style={style.containerTitle}>
+                    <Text style={style.titleText}>플로깅 결과</Text>
                 </View>
-            }
-        </SafeAreaView>
+                <View style={style.containerTime} >
+                    <View style={style.innerContainerTime} >
+                        <Text style={style.date}>{startTime[0]}{startTime[1]}</Text>
+                        <Text style={style.timeStart}>{startTime[2]} ~ {endTime[2]}</Text>
+                    </View>
+                </View>
+                <View style={style.containerMap} >
+                    <NaverMapView ref={mapView}
+                        style={style.container}
+                        center={{ ...middle, zoom: 16 }}
+                        useTextureView>
+                        {ploggingPath.length >= 2 &&
+                            <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
+                        }
+                    </NaverMapView>
+                </View>
+                <View style={style.containerState} >
+                    <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} timeSumString={timeSum}></PloggingStatusBar>
+                </View>
+                <Text style={{ marginLeft: 10, color: "grey" }}>최대 9개 업로드 가능</Text>
+                <ScrollView horizontal={true} style={style.containerPicture} >
+                    {imageSource.length < 9 &&
+                        <ImageAppendButton>
+                            <ImageAppend onPress={showCameraRoll}>
+                                <Label>Show Camera Roll</Label>
+                            </ImageAppend>
+                        </ImageAppendButton>
+                    }
+                    {
+                        imageSource.map((img, i) => (
+                            <View>
+                                <Photo source={{ uri: img.uri }} key="{i}" />
+                                <TouchableOpacity onPress={() => deleteImg(img.id)} hitSlop={{ right: 12, bottom: -90, left: -90, top: 120 }}>
+                                    <ImageDelete width={20} height={20} style={style.delBtn} />
+                                </TouchableOpacity>
+                            </View>
+                        ))
+                    }
+                </ScrollView>
+            </View>
+        }
     </>
     )
 }
@@ -172,14 +169,13 @@ const style = StyleSheet.create({
         backgroundColor: "white",
     },
     containerTitle: {
-        flex: 0.2,
+        flex: 0.3,
         backgroundColor: "white",
         alignItems: 'center',
-        borderBottomWidth: 0.2,
+        justifyContent: 'center',
     },
     titleText: {
         fontSize: 20,
-        marginTop: 15,
         fontWeight: "bold",
 
     },
@@ -187,13 +183,13 @@ const style = StyleSheet.create({
         flex: 0.3,
         backgroundColor: "white",
         flexDirection: 'column',
-        // alignItems: 'center',
-        marginLeft: 15,
+        borderTopWidth: 0.3,
     },
     innerContainerTime: {
         flex: 1,
         flexDirection: 'column',
         marginTop: 20,
+        marginLeft: 15,
     },
     date: {
         fontSize: 15,
@@ -211,6 +207,7 @@ const style = StyleSheet.create({
         paddingRight: 10
     },
     containerState: {
+        height: 77,
         borderBottomWidth: 5,
         borderColor: "#DDDDDD",
         marginBottom: 10,
@@ -225,8 +222,8 @@ const style = StyleSheet.create({
     },
     delBtn: {
         position: "relative",
-        top: -110,
-        left: 110,
+        top: -105,
+        left: 100,
     }
 })
 
