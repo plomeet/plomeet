@@ -448,7 +448,7 @@ PODS:
   - RNVectorIcons (9.1.0):
     - React-Core
   - SocketRocket (0.6.0)
-  - VisionCamera (2.13.2):
+  - VisionCamera (2.13.3):
     - React
     - React-callinvoker
     - React-Core
@@ -778,7 +778,7 @@ SPEC CHECKSUMS:
   RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
-  VisionCamera: 2f06a5a1d2b13657656b36524d6a814f01bea0bf
+  VisionCamera: 420cba086c205b4dc102c3ad1158f72e41ad36c2
   Yoga: 17cd9a50243093b547c1e539c749928dd68152da
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

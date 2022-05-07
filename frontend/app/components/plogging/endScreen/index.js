@@ -169,14 +169,13 @@ const style = StyleSheet.create({
         backgroundColor: "white",
     },
     containerTitle: {
-        flex: 0.2,
+        flex: 0.3,
         backgroundColor: "white",
         alignItems: 'center',
-        borderBottomWidth: 0.2,
+        justifyContent: 'center',
     },
     titleText: {
         fontSize: 20,
-        marginTop: 15,
         fontWeight: "bold",
 
     },
@@ -184,14 +183,13 @@ const style = StyleSheet.create({
         flex: 0.3,
         backgroundColor: "white",
         flexDirection: 'column',
-        borderTopWidth: 0.2,
-        // alignItems: 'center',
-        marginLeft: 15,
+        borderTopWidth: 0.3,
     },
     innerContainerTime: {
         flex: 1,
         flexDirection: 'column',
         marginTop: 20,
+        marginLeft: 15,
     },
     date: {
         fontSize: 15,
@@ -209,7 +207,7 @@ const style = StyleSheet.create({
         paddingRight: 10
     },
     containerState: {
-        flex: 0.25,
+        height: 77,
         borderBottomWidth: 5,
         borderColor: "#DDDDDD",
         marginBottom: 10,

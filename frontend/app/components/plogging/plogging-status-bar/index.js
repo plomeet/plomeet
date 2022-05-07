@@ -155,14 +155,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     alignItems: 'center',
-    borderBottomWidth: 0.2,
+    borderBottomWidth: 0.3,
     flexDirection: "row",
   },
   titleText: {
     fontSize: 20,
     marginLeft: 40,
     fontWeight: "bold",
-    position: "absolute"
+    position: "absolute",
   },
   container: {
     flexDirection: "column",
