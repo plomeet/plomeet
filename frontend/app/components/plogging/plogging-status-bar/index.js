@@ -69,7 +69,6 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
       await weatherApiInstance.get(`/getUltraSrtNcst?serviceKey=${serviceKey}&pageNo=1&numOfRows=10&dataType=JSON&base_date=${dateString}&base_time=${weatherTimeParam}&nx=${weatherLoc[0]}&ny=${weatherLoc[1]}`)
         .then((response) => {
           if (response.status === 200) {
-            console.log(response.data.response.body.items);
             organizeWeatherData(response.data.response.body.items.item, parseInt(timeString));
           } else {
             console.log("FAIL");
