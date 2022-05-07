@@ -13,15 +13,7 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
     const navigation = useNavigation();
     const devices = useCameraDevices();
     const device = devices.back;
-    const curr = new Date();
-    const utc = curr.getTime() + (curr.getTimezoneOffset() * 60 * 1000);
-    const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
-    const kr_curr = new Date(utc + (KR_TIME_DIFF));
     const WEEKDAY = ['(일)', '(월)', '(화)', '(수)', '(목)', '(금)', '(토)'];
-    // const nowDate = moment().format('YYYY/MM/DD');
-    // const nowDay = moment().day();
-    // const nowTime = moment().format('HH:mm');
-
 
     const openCamera = async () => {
         if (Platform.OS === 'ios') {
@@ -61,7 +53,10 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
 
     const onStart = () => {
         handleIsPlogging(true);
-
+        const curr = new Date();
+        const utc = curr.getTime() + (curr.getTimezoneOffset() * 60 * 1000);
+        const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+        const kr_curr = new Date(utc + (KR_TIME_DIFF));
         const year = kr_curr.getFullYear();
         const month = ('0' + (kr_curr.getMonth() + 1)).slice(-2);
         const day = ('0' + kr_curr.getDate()).slice(-2);
