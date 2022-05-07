@@ -7,7 +7,6 @@ import { useSelector } from "react-redux"
 import { launchImageLibrary } from 'react-native-image-picker';
 import styled from "styled-components/native";
 import ImageAppend from '../icons/imageAppend.svg'
-import { SafeAreaView } from 'react-native-safe-area-context';
 import ImageDelete from '../icons/imageDelete.svg';
 
 
@@ -111,7 +110,6 @@ const EndPlogging = ({ ploggingPath, center }) => {
     }
 
     return (<>
-        <SafeAreaView>
             {middle &&
                 <View
                     style={style.container}
@@ -152,7 +150,7 @@ const EndPlogging = ({ ploggingPath, center }) => {
                                 <View>
                                     <Photo source={{ uri: img.uri }} key="{i}" />
                                     <TouchableOpacity onPress={() => deleteImg(img.id)} hitSlop={{ right: 12, bottom: -90, left: -90, top: 120 }}>
-                                        <ImageDelete style={style.delBtn} />
+                                        <ImageDelete width={20} height={20} style={style.delBtn} />
                                     </TouchableOpacity>
                                 </View>
                             ))
@@ -160,7 +158,6 @@ const EndPlogging = ({ ploggingPath, center }) => {
                     </ScrollView>
                 </View>
             }
-        </SafeAreaView>
     </>
     )
 }
@@ -211,6 +208,7 @@ const style = StyleSheet.create({
         paddingRight: 10
     },
     containerState: {
+        flex: 0.3,
         borderBottomWidth: 5,
         borderColor: "#DDDDDD",
         marginBottom: 10,
@@ -225,8 +223,8 @@ const style = StyleSheet.create({
     },
     delBtn: {
         position: "relative",
-        top: -110,
-        left: 110,
+        top: -105,
+        left: 100,
     }
 })
 
