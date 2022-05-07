@@ -23,7 +23,7 @@ const EndPlogging = ({ ploggingPath, center }) => {
     const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
     const kr_curr = new Date(utc + (KR_TIME_DIFF));
     const WEEKDAY = ['(일)', '(월)', '(화)', '(수)', '(목)', '(금)', '(토)'];
-    const [elapsedTime, setElapsedTime] = useState("");
+    // const [elapsedTime, setElapsedTime] = useState("");
     const timeSum = useSelector(state => state.timeSum);
     const [imageSource, setImageSource] = useState([]);
     const nextId = useRef(1);
@@ -65,24 +65,24 @@ const EndPlogging = ({ ploggingPath, center }) => {
         const week = WEEKDAY[kr_curr.getDay()];
         setEndTime([dateString, week, timeString, kr_curr]);
 
-        let TimeTaken = kr_curr.getTime() - startTime[3].getTime();
+        // let TimeTaken = kr_curr.getTime() - startTime[3].getTime();
 
-        const hour = parseInt(TimeTaken / 1000 / 60 / 60);
-        TimeTaken = TimeTaken - (hour * 1000 * 60 * 60);
-        const min = parseInt(TimeTaken / 1000 / 60);
-        TimeTaken = TimeTaken - (min * 1000 * 60);
-        const sec = parseInt(TimeTaken / 1000);
-        let str = "총 ";
-        if (hour > 0)
-            str += hour + "시간 "
-        if (min > 0)
-            str += min + "분 "
-        if (sec > 0)
-            str += sec + "초 "
-        str += "플로깅을 했어요"
+        // const hour = parseInt(TimeTaken / 1000 / 60 / 60);
+        // TimeTaken = TimeTaken - (hour * 1000 * 60 * 60);
+        // const min = parseInt(TimeTaken / 1000 / 60);
+        // TimeTaken = TimeTaken - (min * 1000 * 60);
+        // const sec = parseInt(TimeTaken / 1000);
+        // let str = "총 ";
+        // if (hour > 0)
+        //     str += hour + "시간 "
+        // if (min > 0)
+        //     str += min + "분 "
+        // if (sec > 0)
+        //     str += sec + "초 "
+        // str += "플로깅을 했어요"
 
-        if (elapsedTime === "")
-            setElapsedTime(str);
+        // if (elapsedTime === "")
+        //     setElapsedTime(str);
     }, []);
 
     const showCameraRoll = () => {
@@ -110,54 +110,54 @@ const EndPlogging = ({ ploggingPath, center }) => {
     }
 
     return (<>
-            {middle &&
-                <View
-                    style={style.container}
-                >
-                    <View style={style.containerTitle}>
-                        <Text style={style.titleText}>플로깅 결과</Text>
-                    </View>
-                    <View style={style.containerTime} >
-                        <View style={style.innerContainerTime} >
-                            <Text style={style.date}>{startTime[0]}{startTime[1]}</Text>
-                            <Text style={style.timeStart}>{startTime[2]} ~ {endTime[2]}</Text>
-                        </View>
-                    </View>
-                    <View style={style.containerMap} >
-                        <NaverMapView ref={mapView}
-                            style={style.container}
-                            center={{ ...middle, zoom: 16 }}
-                            useTextureView>
-                            {ploggingPath.length >= 2 &&
-                                <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
-                            }
-                        </NaverMapView>
-                    </View>
-                    <View style={style.containerState} >
-                        <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} timeSumString={timeSum}></PloggingStatusBar>
-                    </View>
-                    <Text style={{ marginLeft: 10, color: "grey" }}>최대 9개 업로드 가능</Text>
-                    <ScrollView horizontal={true} style={style.containerPicture} >
-                        {imageSource.length < 9 &&
-                            <ImageAppendButton>
-                                <ImageAppend onPress={showCameraRoll}>
-                                    <Label>Show Camera Roll</Label>
-                                </ImageAppend>
-                            </ImageAppendButton>
-                        }
-                        {
-                            imageSource.map((img, i) => (
-                                <View>
-                                    <Photo source={{ uri: img.uri }} key="{i}" />
-                                    <TouchableOpacity onPress={() => deleteImg(img.id)} hitSlop={{ right: 12, bottom: -90, left: -90, top: 120 }}>
-                                        <ImageDelete width={20} height={20} style={style.delBtn} />
-                                    </TouchableOpacity>
-                                </View>
-                            ))
-                        }
-                    </ScrollView>
+        {middle &&
+            <View
+                style={style.container}
+            >
+                <View style={style.containerTitle}>
+                    <Text style={style.titleText}>플로깅 결과</Text>
                 </View>
-            }
+                <View style={style.containerTime} >
+                    <View style={style.innerContainerTime} >
+                        <Text style={style.date}>{startTime[0]}{startTime[1]}</Text>
+                        <Text style={style.timeStart}>{startTime[2]} ~ {endTime[2]}</Text>
+                    </View>
+                </View>
+                <View style={style.containerMap} >
+                    <NaverMapView ref={mapView}
+                        style={style.container}
+                        center={{ ...middle, zoom: 16 }}
+                        useTextureView>
+                        {ploggingPath.length >= 2 &&
+                            <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
+                        }
+                    </NaverMapView>
+                </View>
+                <View style={style.containerState} >
+                    <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} timeSumString={timeSum}></PloggingStatusBar>
+                </View>
+                <Text style={{ marginLeft: 10, color: "grey" }}>최대 9개 업로드 가능</Text>
+                <ScrollView horizontal={true} style={style.containerPicture} >
+                    {imageSource.length < 9 &&
+                        <ImageAppendButton>
+                            <ImageAppend onPress={showCameraRoll}>
+                                <Label>Show Camera Roll</Label>
+                            </ImageAppend>
+                        </ImageAppendButton>
+                    }
+                    {
+                        imageSource.map((img, i) => (
+                            <View>
+                                <Photo source={{ uri: img.uri }} key="{i}" />
+                                <TouchableOpacity onPress={() => deleteImg(img.id)} hitSlop={{ right: 12, bottom: -90, left: -90, top: 120 }}>
+                                    <ImageDelete width={20} height={20} style={style.delBtn} />
+                                </TouchableOpacity>
+                            </View>
+                        ))
+                    }
+                </ScrollView>
+            </View>
+        }
     </>
     )
 }
@@ -184,6 +184,7 @@ const style = StyleSheet.create({
         flex: 0.3,
         backgroundColor: "white",
         flexDirection: 'column',
+        borderTopWidth: 0.2,
         // alignItems: 'center',
         marginLeft: 15,
     },
@@ -203,12 +204,12 @@ const style = StyleSheet.create({
     },
 
     containerMap: {
-        flex: 1, 
+        flex: 1,
         paddingLeft: 10,
         paddingRight: 10
     },
     containerState: {
-        flex: 0.3,
+        flex: 0.25,
         borderBottomWidth: 5,
         borderColor: "#DDDDDD",
         marginBottom: 10,

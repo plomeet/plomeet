@@ -112,29 +112,29 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
       <View style={styles.containerTitle}>
         {!isPlogging &&
           <TouchableOpacity onPress={navigation.goBack}>
-          <BackSvg width={20} height={20} fill={"#FFF"} style={{ marginLeft: 5 }}></BackSvg>
+            <BackSvg width={20} height={20} fill={"#FFF"} style={{ marginLeft: 5 }}></BackSvg>
           </TouchableOpacity>
         }
         {!showEndPage &&
           <Text style={styles.titleText}>플로깅</Text>
         }
       </View>
-    <PloggingStatusBarBlock width={layout.width}>
-      <View style={styles.statusView}>
-        <MapSvg width={20} height={20} fill={"#FFF"} />
-        <Text style={styles.statusText}>{distSum}km</Text>
-      </View>
-      <View style={styles.statusView}>
-        <TimeSvg width={20} height={20} fill={"#FFF"} />
-        <Text style={styles.statusText}>{timeSumString}</Text>
-      </View>
-      <View style={styles.statusView}>
-        <Icon name={weather} size={20} color="#292D32" />
-        <Text style={styles.statusText}>{temp}℃</Text>
-      </View>
+      <PloggingStatusBarBlock width={layout.width}>
+        <View style={styles.statusView}>
+          <MapSvg width={20} height={20} fill={"#FFF"} />
+          <Text style={styles.statusText}>{distSum}km</Text>
+        </View>
+        <View style={styles.statusView}>
+          <TimeSvg width={20} height={20} fill={"#FFF"} />
+          <Text style={styles.statusText}>{timeSumString}</Text>
+        </View>
+        <View style={styles.statusView}>
+          <Icon name={weather} size={20} color="#292D32" />
+          <Text style={styles.statusText}>{temp}℃</Text>
+        </View>
 
       </PloggingStatusBarBlock>
-      </View>
+    </View>
   );
 };
 
@@ -157,8 +157,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 0.2,
     flexDirection: "row",
-},
-titleText: {
+  },
+  titleText: {
     fontSize: 20,
     marginLeft: 40,
     fontWeight: "bold",
@@ -168,7 +168,7 @@ titleText: {
     flexDirection: "column",
     height: "15%",
     backgroundColor: "white",
-},
+  },
 })
 
 const PloggingStatusBarBlock = styled.View`
