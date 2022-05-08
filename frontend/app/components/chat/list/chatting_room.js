@@ -17,7 +17,9 @@ import {
     ChattingRoomUnRead,
 } from './styles';
 
+
 const getDateOrTime = (dateTime) => {
+    if(dateTime==null) return null;
     const now = moment().startOf('day')
     const target = moment(dateTime).startOf('day')
     return moment(dateTime).format(now.diff(target, 'days') > 0 ? 'MM/DD' : 'HH:mm');

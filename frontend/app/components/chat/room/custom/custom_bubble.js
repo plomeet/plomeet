@@ -11,7 +11,6 @@ const CustomBubble = (props) => {
     const conUser = props.conUser;
     //const position = props.position=='left'? "flex-end": "flex-start";
     const position = props.position;
-    console.log(props.currentMessage);
 
     const renderTime = (props) => {
         return(

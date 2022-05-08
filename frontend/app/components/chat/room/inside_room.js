@@ -5,18 +5,14 @@ import { color, Container } from '../styles';
 import CustomBubble from './custom/custom_bubble';
 import CustomSend from './custom/custom_send';
 import CustomInputToolbar from './custom/custom_inputtoolbar';
-import msg from './dump_data_msg';
+import firestore from '@react-native-firebase/firestore';
 
 
-const InsideRoom = ({ navigation, route: {params: {item}} }) => {
+const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
     const meeting = item.meeting;
     const chat = item.chatting;
     const title = meeting.meetingName;
-    const user = {
-        _id: "23",
-        name: "신사동호랭이",
-        avatar: "",
-    };
+    const [user, setUser] = useState();
     const [messages, setMessages] = useState([]);
 
     
@@ -52,6 +48,35 @@ const InsideRoom = ({ navigation, route: {params: {item}} }) => {
             <CustomSend {...props} />
         )
     }
+
+    const setMessagesData = async(queryArray) => {
+        const list = [];
+        const promises = queryArray.map(async message => {
+            const messageData = message.data();
+            const userInfo = await getUserInfo(messageData.userId);
+            const messageInfo = {
+                _id: messageData._id,
+                text: messageData.text,
+                createdAt: messageData.createdAt,
+                user: userInfo,
+            };
+            list.push(messageInfo);
+        });
+        await Promise.all(promises);
+
+        setMessages(list);
+    }
+
+    const getUserInfo = async (userId) => {
+        const userInfo = {};
+        await firestore().collection('users')
+            .doc(userId).get().then((doc)=>{
+                userInfo._id = userId;
+                userInfo.name = doc.data().userNickName;
+                userInfo.avatar = doc.data().userProfileImg;
+            });
+        return userInfo;
+    }
     
     
     useEffect(() => {
@@ -61,29 +86,36 @@ const InsideRoom = ({ navigation, route: {params: {item}} }) => {
                 <Icon name="menu" size={20} color={color.black} style={{marginRight: 10}} />
             ),
         });
-        const list = [];
-        msg.forEach(m => {
-            list.push(m);
-        })
-        setMessages(list);
+    }, []);
+
+    useEffect(() => {
+        const subscriber = firestore()
+            .collection('users')
+            .doc(userNum)
+            .onSnapshot(querySnapShot => {
+                const userData = querySnapShot.data();
+                const user = {
+                    _id: userData.userId,
+                    avatar: userData.userProfileImg,
+                    name: userData.userNickName,
+                }
+                setUser(user);
+            });
+        return () => subscriber();
     }, []);
 
     useEffect(() => {
         //console.log(msg);
 
-        // const subscriber = firestore()
-        //     .collection('channels')
-        //     .doc(params.id)
-        //     .collection('messages')
-        //     .orderBy('createdAt', 'desc')
-        //     .onSnapshot(querySnapShot => {
-        //         const list = [];
-        //         querySnapShot.forEach(doc => {
-        //             list.push(doc.data());
-        //         });
-        //     setMessages(list);
-        //     });
-        // return () => subscriber();
+        const subscriber = firestore()
+            .collection('meetings')
+            .doc(meeting.meetingId)
+            .collection('chattings')
+            .orderBy('createdAt', 'desc')
+            .onSnapshot(querySnapShot => {
+                setMessagesData(querySnapShot.docs);
+            });
+        return () => subscriber();
         
     }, []);
     
