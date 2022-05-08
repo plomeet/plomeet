@@ -12,6 +12,7 @@ import OpenMeeting from './components/home/OpenMeeting1';
 import OpenMeeting2 from './components/home/OpenMeeting2';
 import OpenMeeting3 from './components/home/OpenMeeting3';
 import OpenMeeting4 from './components/home/OpenMeeting4';
+import OpenMeeting5 from './components/home/OpenMeeting5';
 
 
 const Stack = createStackNavigator();
@@ -62,10 +63,11 @@ export const RootNavigator = () => {
         // }}>
         <Stack.Navigator>
             <Stack.Screen name="M" component={AppTabComponent} options={{headerShown: false}} Screen={{ Headers }} />
-            <Stack.Screen name="OpenMeeting" component={OpenMeeting} options={{title: '플로깅 모임 생성'}} />
-            <Stack.Screen name="OpenMeeting2" component={OpenMeeting2} options={{title: '플로깅 모임 생성'}} />
-            <Stack.Screen name="OpenMeeting3" component={OpenMeeting3} options={{title: '플로깅 모임 생성'}} />
-            <Stack.Screen name="OpenMeeting4" component={OpenMeeting4} options={{title: '플로깅 모임 생성'}} />
+            <Stack.Screen name="OpenMeeting" component={OpenMeeting} options={{title: '플로깅 모임 생성(1/5)'}} />
+            <Stack.Screen name="OpenMeeting2" component={OpenMeeting2} options={{title: '플로깅 모임 생성(2/5)'}} />
+            <Stack.Screen name="OpenMeeting3" component={OpenMeeting3} options={{title: '플로깅 모임 생성(3/5)'}} />
+            <Stack.Screen name="OpenMeeting4" component={OpenMeeting4} options={{title: '플로깅 모임 생성(4/5)'}} />
+            <Stack.Screen name="OpenMeeting5" component={OpenMeeting5} options={{title: '플로깅 모임 생성(5/5)'}} />
         </Stack.Navigator>
     )
 }

@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Align } from '../plogging/map';
 
+
 LogBox.ignoreAllLogs();
 
 const styles = StyleSheet.create({
@@ -72,7 +73,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: 65,
     height: 65,
-    elevation: 5,
     shadowColor: '#bbbbbb',
   }
 });
