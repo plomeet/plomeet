@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Align } from '../plogging/map';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 
 LogBox.ignoreAllLogs();
@@ -153,25 +154,29 @@ const data = [
   
 ];
 
-const Item = ({ img, title, place, numMember, maxMember, date, index}) => (
-  <View style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles.card, styles.elevation]}>
-    <Image source={{uri: img}} style={styles.img} />
-    <Text style={styles.title}>{title}</Text>
-    <View style={styles.row}>
-      <Icon name='person-outline' size={14} color='#292D32' />
-      <Text style={styles.content}>{numMember}/{maxMember}</Text>
-      <Icon style={{marginLeft:15}} name='location' size={14} color='#292D32' />
-      <Text style={styles.content}>{place}</Text>
-    </View>
-    <View style={styles.row}>
-    <Icon name='md-calendar-sharp' size={14} color='#292D32' />
-      <Text style={styles.content}>{date}</Text>
-    </View>    
-  </View>
-);
 
 const Home = () => {
   const navigation = useNavigation();
+
+  const Item = ({ id, img, title, place, numMember, maxMember, date, index}) => (
+    <TouchableOpacity
+    activeOpacity={0.8}
+    onPress={() => navigation.navigate('MeetingDetail')}
+    style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles.card, styles.elevation]}>
+      <Image source={{uri: img}} style={styles.img} />
+      <Text style={styles.title}>{title}</Text>
+      <View style={styles.row } >
+        <Icon name='person-outline' size={14} color='#292D32' />
+        <Text style={styles.content}>{numMember}/{maxMember}</Text>
+        <Icon style={{marginLeft:15}} name='location' size={14} color='#292D32' />
+        <Text style={styles.content}>{place}</Text>
+      </View>
+      <View style={styles.row}>
+      <Icon name='md-calendar-sharp' size={14} color='#292D32' />
+        <Text style={styles.content}>{date}</Text>
+      </View>    
+    </TouchableOpacity>
+  );
   
   const renderItem = ({ item }) => (
     <Item 
@@ -181,6 +186,7 @@ const Home = () => {
     numMember={item.memberCnt}
     maxMember={item.memberMax}
     date={item.meetingDate}
+    id = {item.meetingId}
     index = {item.meetingId} />
   );
 

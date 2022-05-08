@@ -13,6 +13,7 @@ import OpenMeeting2 from './components/home/OpenMeeting2';
 import OpenMeeting3 from './components/home/OpenMeeting3';
 import OpenMeeting4 from './components/home/OpenMeeting4';
 import OpenMeeting5 from './components/home/OpenMeeting5';
+import MeetingDetail from './components/home/MeetingDetail';
 
 
 const Stack = createStackNavigator();
@@ -68,6 +69,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="OpenMeeting3" component={OpenMeeting3} options={{title: '플로깅 모임 생성(3/5)'}} />
             <Stack.Screen name="OpenMeeting4" component={OpenMeeting4} options={{title: '플로깅 모임 생성(4/5)'}} />
             <Stack.Screen name="OpenMeeting5" component={OpenMeeting5} options={{title: '플로깅 모임 생성(5/5)'}} />
+            <Stack.Screen name="MeetingDetail" component={MeetingDetail} options={{title: '모임 상세정보'}} />
         </Stack.Navigator>
     )
 }
