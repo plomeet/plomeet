@@ -6,37 +6,43 @@ import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
-const meetingDetail = () => {
-  const navigation = useNavigation();
+const meetingDetail = ({route}) => {
+  let detail = route.params.detail;
+  let meetingImg = route.params.img;
+  let meetingName = route.params.title;
+  let meetingPlace = route.params.place;
+  let memberMax = route.params.maxMember;
+  let memberCnt = route.params.numMember;
+  let meetingDate = route.params.date;
+
 
     return (
-      <ScrollView style={styles.container}>
-        <Image
-          style={styles.image}
-          source={{ uri :'https://i.postimg.cc/HLpSbynz/test6.jpg'}}
-        />
-        <Text style={styles.title}>모임 제목 블라블라</Text>
-        <Text style={styles.text}>석촌호수 근처에 사시는 분들 날씨도 좋은데 주말에 벚꽃보면서 플로깅해요~~!! 쓰봉은 제가 준비해 가겠습니다. 몸만 오세여~~! 점심 먹고 오셔야해요 따로 점심 안 먹습니다! {"\n"}{"\n"}준비물 : 편한 운동화, 석촌호수 한바퀴 뛸 수 있는 체력</Text>
-        <View style={styles.row}>
-          <Icon name='location' size={25} color='#313333' />
-          <Text style={styles.subtitle}>장소</Text>
-          <Text style={styles.subtext}>석촌호수</Text>
+      <ScrollView>
+        <View style={styles.container}>
+          <Image
+            style={styles.image}
+            source={{ uri : meetingImg}}
+          />
+          <Text style={styles.title}>{meetingName}</Text>
+          <Text style={styles.text}>{detail}</Text>
+          <View style={styles.row}>
+            <Icon name='location-outline' size={20} color='#313333' />
+            <Text style={styles.subtitle}>장소</Text>
+            <Text style={styles.subtext}>{meetingPlace}</Text>
+          </View>
+          <View style={styles.row}>
+            <Icon name='person-outline' size={20} color='#313333' />
+            <Text style={styles.subtitle}>모집인원</Text>
+            <Text style={styles.subtext}>{memberCnt} / {memberMax}</Text>
+          </View>
+          <View style={styles.row}>
+            <Icon name='ios-calendar-sharp' size={20} color='#313333' />
+            <Text style={styles.subtitle}>날짜</Text>
+            <Text style={styles.subtext}>{meetingDate}</Text>
+          </View>
+          <View style={styles.tempMap}><Text>지도</Text></View>
         </View>
-        <View style={styles.row}>
-          <Icon name='location' size={25} color='#313333' />
-          <Text style={styles.subtitle}>모집인원</Text>
-          <Text style={styles.subtext}>4 / 5</Text>
-        </View>
-        <View style={styles.row}>
-          <Icon name='location' size={25} color='#313333' />
-          <Text style={styles.subtitle}>날짜</Text>
-          <Text style={styles.subtext}>5월 12일(목) 18:00</Text>
-        </View>
-
-        <View style={styles.tempMap}><Text>지도</Text></View>
-
-
-        <View style={{flex:1}}/>
+        
       </ScrollView>
     );
 };
@@ -59,19 +65,23 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   subtitle: {
-    width:70,
-    fontSize: 16,
+    width:65,
+    fontSize: 15,
     color: '#313333',
     fontWeight: 'bold',
-    marginLeft: 5,
+    marginLeft: 10,
   },
   subtext: {
-    fontSize: 15,
+    fontSize: 14,
     marginLeft: 50,
     color: "#545454"
   },
   button: {
-    height: 55,
+    position: 'absolute',
+    flex: 1,
+    right: 0,
+    bottom: 0,
+    height: 155,
     backgroundColor: "#1BE58D",
     justifyContent: "center",
     alignItems: "center"
@@ -79,6 +89,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 15,
     marginTop: 15,
+    lineHeight : 22,
     marginBottom: 15,
     color: "#313333"
   },
@@ -92,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'center',
     height : 200,
-    marginTop: 30,
+    marginTop: 40,
   }
 });
 

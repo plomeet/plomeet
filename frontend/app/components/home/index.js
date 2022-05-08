@@ -86,6 +86,7 @@ const data = [
     meetingPlace: '석촌호수',
     memberMax: 4,
     memberCnt: 2,
+    detail: "석촌호수 근처에 사시는 분들 날씨도 좋은데 주말에 벚꽃보면서 플로깅해요~~!! 쓰봉은 제가 준비해 가겠습니다. 몸만 오세여~~! 점심 먹고 오셔야해요 따로 점심 안 먹습니다! \n \n준비물 : 편한 운동화, 석촌호수 한바퀴 뛸 수 있는 체력",
     meetingDate: '4월 28일(목) 14:00',
   },
   {
@@ -95,6 +96,7 @@ const data = [
     meetingPlace: '석촌호수',
     memberMax: 6,
     memberCnt: 2,
+    detail: "주말에 플로깅 하실 분 구합니다~~~! 밥은 먹고 모여요!!!!",
     meetingDate: '4월 30일(토) 15:00',
   },
   {
@@ -105,6 +107,7 @@ const data = [
     memberMax: 5,
     memberCnt: 4,
     meetingDate: '4월 29일(금) 19:00',
+    detail: "불금에 야경보면서 쓰줍하실 분 구합니당 \n혹시라도 비오면 취소됩니다~~!",
   },
   {
     meetingId: 4,
@@ -114,6 +117,7 @@ const data = [
     memberMax: 5,
     memberCnt: 5,
     meetingDate: '5월 1일(일) 13:00',
+    detail : "요즘 제가 석촌호수 걸으면서 운동을 하고 있는데요 \n쓰레기가 많이 보이더라구요... \n같이 쓰레기 주우면서 운동하실 분 구합니다!!!! \n근데 요즘 석촌호수에 사람 엄청 많아서... 영 아니다 싶으면 근처 다른 장소로 바뀔 수도 있어요 채팅방에서 이야기 해봐요~~",
   },
   {
     meetingId: 5,
@@ -123,6 +127,7 @@ const data = [
     memberMax: 5,
     memberCnt: 1,
     meetingDate: '4월 29일(금) 15:00',
+    detail : "쓰레기도 줍고 벚꽃 구경도 하고^^ \n같이 벚꽃 구경할 친구 없는 사람 모여라",
   },
   {
     meetingId: 6,
@@ -132,6 +137,7 @@ const data = [
     memberMax: 7,
     memberCnt: 7,
     meetingDate: '4월 29일(금) 16:00',
+    detail : "저희집 강아지가 진짜 귀여운데요.... 웰시코기인데요..... 진짜 짱인데요..... 이름은 절미구요...... 같이 강아지 산책시키면서 쓰레기 주우실 분...... 강아지랑 같이 나오셔도 돼요......",
   },
   {
     meetingId: 7,
@@ -141,6 +147,7 @@ const data = [
     memberMax: 5,
     memberCnt: 4,
     meetingDate: '4월 29일(금) 19:00',
+    detail : "얍",
   },
   {
     meetingId: 8,
@@ -150,6 +157,7 @@ const data = [
     memberMax: 5,
     memberCnt: 4,
     meetingDate: '4월 29일(금) 19:00',
+    detail : "얍",
   },
   
 ];
@@ -158,10 +166,10 @@ const data = [
 const Home = () => {
   const navigation = useNavigation();
 
-  const Item = ({ id, img, title, place, numMember, maxMember, date, index}) => (
+  const Item = ({ id, detail, img, title, place, numMember, maxMember, date, index}) => (
     <TouchableOpacity
     activeOpacity={0.8}
-    onPress={() => navigation.navigate('MeetingDetail')}
+    onPress={() => navigation.navigate('MeetingDetail', {img:img, title:title, place:place, numMember:numMember, maxMember:maxMember, date:date, detail:detail})}
     style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles.card, styles.elevation]}>
       <Image source={{uri: img}} style={styles.img} />
       <Text style={styles.title}>{title}</Text>
@@ -187,6 +195,7 @@ const Home = () => {
     maxMember={item.memberMax}
     date={item.meetingDate}
     id = {item.meetingId}
+    detail = {item.detail}
     index = {item.meetingId} />
   );
 
