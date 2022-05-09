@@ -8,12 +8,32 @@ import SaveBtn from '../icons/saveBtn.svg';
 import RequestCameraBtn from '../icons/requestCameraBtn.svg';
 import { useCameraDevices, Camera, LoadingView } from 'react-native-vision-camera';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import AWS from 'aws-sdk';
+import Config from 'react-native-config'
+
 
 const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage, setStart }) => {
     const navigation = useNavigation();
     const devices = useCameraDevices();
     const device = devices.back;
     const WEEKDAY = ['(일)', '(월)', '(화)', '(수)', '(목)', '(금)', '(토)'];
+    const images = useSelector(state => state.images)
+
+    // const nowDate = moment().format('YYYY/MM/DD');
+    // const nowDay = moment().day();
+    // const nowTime = moment().format('HH:mm');
+
+    var s3 = new AWS.S3({
+        apiVersion: '2006-03-01',
+    });
+    
+    AWS.config.update({
+        region: 'ap-northeast-2', // 리전이 서울이면 이거랑 같게
+        credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: Config.IDENTITYPOOLID,
+        })
+    })
 
     const openCamera = async () => {
         if (Platform.OS === 'ios') {
@@ -69,6 +89,38 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
         const week = WEEKDAY[kr_curr.getDay()];
         setStart([dateString, week, timeString, kr_curr]);
     }
+    
+
+    const saveButtonClick = async() => {
+        await upload();
+        await handleShowEndPage(false);
+    }
+
+    const upload = async () => {
+
+        const promises = images.map(async (img) => {
+            const response1 = await fetch(img.uri)
+            const blob = await response1.blob()
+            // var albumPhotosKey = encodeURIComponent(albumName) + '//';
+            // var photoKey = albumPhotosKey + fileName;
+            var photoKey = "photos/" + img.id + "_" + img.fileName;
+
+            var params = { Bucket: 'plomeet-image', Key: photoKey, Body: blob }
+            await s3.upload(params, function (err, data) {
+                if (err) {
+                    alert('There was an error uploading your photo: ', err.message);
+                }
+                // data.Location
+                // https://plomeet-image.s3.ap-northeast-2.amazonaws.com/photos/1_3C369038-4102-4887-A8DB-43C42E706340.jpg
+                // data.Key
+                // photos/1_3C369038-4102-4887-A8DB-43C42E706340.jpg
+                console.log(data)
+            });
+        });
+
+        await Promise.all(promises)
+    }
+
 
     if (!isPlogging && !showPloggingEndPage) { //시작중이 아니면 시작으로 처리
         return (
@@ -99,7 +151,7 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
     } else { //종료하고 기록 화면 보여줄때
         return (
             <View style={styles.saveBtn} >
-                <TouchableOpacity style={styles.elevation} onPress={() => { handleShowEndPage(false); }}>
+                <TouchableOpacity style={styles.elevation} onPress={() => { saveButtonClick() }}>
                     <SaveBtn />
                 </TouchableOpacity>
             </View>

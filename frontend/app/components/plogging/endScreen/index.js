@@ -11,7 +11,7 @@ import ImageDelete from '../icons/imageDelete.svg';
 
 
 
-const EndPlogging = ({ ploggingPath, center }) => {
+const EndPlogging = ({ ploggingPath, center, setImages }) => {
     const mapView = useRef(null);
     const [middle, setMiddle] = useState();
     const distSum = useSelector(state => state.distSum);
@@ -92,9 +92,11 @@ const EndPlogging = ({ ploggingPath, center }) => {
             }
             else {
                 if (!response.didCancel) {
+                    console.log(response.assets[0])
                     const newImg = {
                         id: nextId.current,
-                        uri: response.assets[0].uri
+                        uri: response.assets[0].uri,
+                        fileName: response.assets[0].fileName,
                     }
                     setImageSource(imageSource => [newImg, ...imageSource]);
                     console.log(nextId.current)
@@ -108,6 +110,10 @@ const EndPlogging = ({ ploggingPath, center }) => {
         // console.log(id)
         setImageSource(imageSource.filter(img => img.id !== id));
     }
+
+    useEffect(() => {
+        setImages(imageSource)
+    }, [imageSource]);
 
     return (<>
         {middle &&
@@ -148,7 +154,7 @@ const EndPlogging = ({ ploggingPath, center }) => {
                     {
                         imageSource.map((img, i) => (
                             <View>
-                                <Photo source={{ uri: img.uri }} key="{i}" />
+                                <Photo source={{ uri: img.uri }} key={{ i }} />
                                 <TouchableOpacity onPress={() => deleteImg(img.id)} hitSlop={{ right: 12, bottom: -90, left: -90, top: 120 }}>
                                     <ImageDelete width={20} height={20} style={style.delBtn} />
                                 </TouchableOpacity>
