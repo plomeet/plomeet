@@ -1,14 +1,18 @@
 package com.ssafy.PloMeet.model.entity;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @DynamicInsert
+@NoArgsConstructor
 public class Meeting {
 
     @Id
@@ -42,15 +46,30 @@ public class Meeting {
     @Column(columnDefinition = "tinyInt(1) default true")
     private Boolean isActivate;
 
-    private Timestamp meetingDate;
+    private String  meetingDate;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp registerDate;
+    private LocalDateTime  registerDate;
 
     @Column(nullable = false, length = 10)
     private String item;
 
-    @Column(nullable = false, columnDefinition = "INTEGER(3) DEFAULT 1")
+    @ColumnDefault("1")
+    @Column(nullable = false, columnDefinition = "INTEGER(3)")
     private int memberCnt;
+
+    @Builder
+    public Meeting(String meetingImg, String meetingName, String meetingDesc, String meetingPlace, String meetingPlaceDetail, Double lat, Double lng, int memberMax, String meetingDate, String item) {
+        this.meetingImg = meetingImg;
+        this.meetingName = meetingName;
+        this.meetingDesc = meetingDesc;
+        this.meetingPlace = meetingPlace;
+        this.meetingPlaceDetail = meetingPlaceDetail;
+        this.lat = lat;
+        this.lng = lng;
+        this.memberMax = memberMax;
+        this.meetingDate = meetingDate;
+        this.item = item;
+    }
 
 }
