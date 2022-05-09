@@ -11,7 +11,7 @@ import ImageDelete from '../icons/imageDelete.svg';
 
 
 
-const EndPlogging = ({ ploggingPath, center }) => {
+const EndPlogging = ({ ploggingPath, center, setImages }) => {
     const mapView = useRef(null);
     const [middle, setMiddle] = useState();
     const distSum = useSelector(state => state.distSum);
@@ -92,9 +92,11 @@ const EndPlogging = ({ ploggingPath, center }) => {
             }
             else {
                 if (!response.didCancel) {
+                    console.log(response.assets[0])
                     const newImg = {
                         id: nextId.current,
-                        uri: response.assets[0].uri
+                        uri: response.assets[0].uri,
+                        fileName: response.assets[0].fileName,
                     }
                     setImageSource(imageSource => [newImg, ...imageSource]);
                     console.log(nextId.current)
@@ -108,6 +110,10 @@ const EndPlogging = ({ ploggingPath, center }) => {
         // console.log(id)
         setImageSource(imageSource.filter(img => img.id !== id));
     }
+
+    useEffect(() => {
+        setImages(imageSource)
+    }, [imageSource]);
 
     return (<>
         {middle &&
@@ -148,7 +154,7 @@ const EndPlogging = ({ ploggingPath, center }) => {
                     {
                         imageSource.map((img, i) => (
                             <View>
-                                <Photo source={{ uri: img.uri }} key="{i}" />
+                                <Photo source={{ uri: img.uri }} key={{ i }} />
                                 <TouchableOpacity onPress={() => deleteImg(img.id)} hitSlop={{ right: 12, bottom: -90, left: -90, top: 120 }}>
                                     <ImageDelete width={20} height={20} style={style.delBtn} />
                                 </TouchableOpacity>
@@ -169,14 +175,13 @@ const style = StyleSheet.create({
         backgroundColor: "white",
     },
     containerTitle: {
-        flex: 0.2,
+        flex: 0.3,
         backgroundColor: "white",
         alignItems: 'center',
-        borderBottomWidth: 0.2,
+        justifyContent: 'center',
     },
     titleText: {
         fontSize: 20,
-        marginTop: 15,
         fontWeight: "bold",
 
     },
@@ -184,14 +189,13 @@ const style = StyleSheet.create({
         flex: 0.3,
         backgroundColor: "white",
         flexDirection: 'column',
-        borderTopWidth: 0.2,
-        // alignItems: 'center',
-        marginLeft: 15,
+        borderTopWidth: 0.3,
     },
     innerContainerTime: {
         flex: 1,
         flexDirection: 'column',
         marginTop: 20,
+        marginLeft: 15,
     },
     date: {
         fontSize: 15,
@@ -209,7 +213,7 @@ const style = StyleSheet.create({
         paddingRight: 10
     },
     containerState: {
-        flex: 0.25,
+        height: 77,
         borderBottomWidth: 5,
         borderColor: "#DDDDDD",
         marginBottom: 10,

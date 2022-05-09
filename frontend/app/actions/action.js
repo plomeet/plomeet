@@ -27,3 +27,8 @@ export const setTimeSum = (time) => ({
   type: "SET_TIMESUM",
   payload: time
 })
+
+export const setImages = (images) => ({
+  type: "SET_IMAGES",
+  payload: images
+})
