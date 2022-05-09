@@ -41,4 +41,12 @@ public class MeetingService {
                 .map(MeetingRes::new)
                 .collect(Collectors.toList());
     }
+
+    //모임 수정
+    @Transactional
+    public void updateMeeting(Long meetingId, MeetingReq meetingReq) {
+        Meeting meeting = meetingRepository.findById(meetingId).orElseThrow(() -> new IllegalArgumentException("[존재하지 않는 모임]"));
+        meeting.updateMeeting(meetingReq);
+    }
+
 }

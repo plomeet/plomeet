@@ -53,4 +53,17 @@ public class MeetingController {
         return ResponseEntity.status(HttpStatus.OK).body(meetings);
     }
 
+    //모임 수정
+    @PutMapping("/{meetingId}")
+    public ResponseEntity updateMeeting(@PathVariable("meetingId") Long meetingId, @RequestBody MeetingReq meetingReq) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            meetingService.updateMeeting(meetingId, meetingReq);
+        } catch (IllegalArgumentException e) {
+            responseMap.put("errorMsg", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMap);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+    }
+
 }

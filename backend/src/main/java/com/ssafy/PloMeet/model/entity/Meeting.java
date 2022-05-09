@@ -1,5 +1,6 @@
 package com.ssafy.PloMeet.model.entity;
 
+import com.ssafy.PloMeet.api.request.MeetingReq;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -72,4 +73,16 @@ public class Meeting {
         this.item = item;
     }
 
+    public void updateMeeting(MeetingReq meetingReq) {
+        this.meetingImg = meetingReq.getMeetingImg();
+        this.meetingName = meetingReq.getMeetingName();
+        this.meetingDesc = meetingReq.getMeetingDesc();
+        this.meetingPlace = meetingReq.getMeetingPlace();
+        this.meetingPlaceDetail = meetingReq.getMeetingPlaceDetail();
+        this.lat = meetingReq.getLat();
+        this.lng = meetingReq.getLng();
+        this.memberMax = meetingReq.getMemberMax();
+        this.meetingDate = meetingReq.getMeetingDate();
+        this.item = meetingReq.getItem();
+    }
 }
