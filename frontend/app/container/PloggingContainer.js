@@ -11,6 +11,7 @@ const mapDispatchToProps = dispatch => {
         setStart: startTime => dispatch(actions.setStart(startTime)),
         setWeatherLoc: weatherLoc => dispatch(actions.setWeatherLoc(weatherLoc)),
         setTimeSum: timeSum => dispatch(actions.setTimeSum(timeSum)),
+        setImages: images => dispatch(actions.setImages(images)),
     }
 }
 
@@ -22,6 +23,7 @@ const mapStateToProps = state => {
         startTime: state.startTime,
         weatherLoc: state.weatherLoc,
         timeSum: state.timeSum,
+        images: state.images,
     }
 }
 
