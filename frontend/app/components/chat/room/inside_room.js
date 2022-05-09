@@ -6,6 +6,7 @@ import CustomBubble from './custom/custom_bubble';
 import CustomSend from './custom/custom_send';
 import CustomInputToolbar from './custom/custom_inputtoolbar';
 import firestore from '@react-native-firebase/firestore';
+import { saveChatting } from '../../../../utils/firestore';
 
 
 const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
@@ -17,14 +18,12 @@ const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
 
     
     const _handleMessageSend = async messageList => {
-        /*
         const newMessage = messageList[0];
         try{
-            await createMessage({ channelId: params.id, message: newMessage});
+            await saveChatting({ meetingId: meeting.meetingId, message: newMessage});
         }catch(e){
             Alert.alert('Send Message Error', e.message);
         }
-        */
     };
 
     const renderBubble = (props) => {
