@@ -9,20 +9,8 @@ import RequestCameraBtn from '../icons/requestCameraBtn.svg';
 import { useCameraDevices, Camera, LoadingView } from 'react-native-vision-camera';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { IDENTITYPOOLID } from "@env"
 import AWS from 'aws-sdk';
-
-
-var s3 = new AWS.S3({
-    apiVersion: '2006-03-01',
-});
-
-AWS.config.update({
-    region: 'ap-northeast-2', // 리전이 서울이면 이거랑 같게
-    credentials: new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: IDENTITYPOOLID,
-    })
-})
+import Config from 'react-native-config'
 
 
 const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage, setStart }) => {
@@ -36,6 +24,16 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
     // const nowDay = moment().day();
     // const nowTime = moment().format('HH:mm');
 
+    var s3 = new AWS.S3({
+        apiVersion: '2006-03-01',
+    });
+    
+    AWS.config.update({
+        region: 'ap-northeast-2', // 리전이 서울이면 이거랑 같게
+        credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: Config.IDENTITYPOOLID,
+        })
+    })
 
     const openCamera = async () => {
         if (Platform.OS === 'ios') {
