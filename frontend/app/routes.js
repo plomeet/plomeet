@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 //Screens
 import Home from './components/home/index';
 import Record from './components/record/index';
-import Plogging from './components/plogging/index';
+import Plogging from './container/PloggingContainer';
 import Chat from './components/chat/index';
 import MyPage from './components/my/index';
 
