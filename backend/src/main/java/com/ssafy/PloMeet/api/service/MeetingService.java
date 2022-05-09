@@ -8,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -28,5 +31,14 @@ public class MeetingService {
     public MeetingRes findMeetingById(Long meetingId) {
         Meeting meeting = meetingRepository.findById(meetingId).orElseThrow(() -> new NoSuchElementException("[존재하지 않는 모임] MeetingId : " + meetingId));
         return new MeetingRes(meeting);
+    }
+
+    //모임 전체 조회
+    public List<MeetingRes> findAllMeeting() {
+        List<Meeting> meetings = new ArrayList<>();
+        meetings = meetingRepository.findAll();
+        return meetings.stream()
+                .map(MeetingRes::new)
+                .collect(Collectors.toList());
     }
 }

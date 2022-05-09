@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -44,5 +45,12 @@ public class MeetingController {
         }
     }
 
+    //모임 전체 조회
+    @GetMapping("/all")
+    public ResponseEntity<Object> findAllMeeting() {
+        List<MeetingRes> meetings = meetingService.findAllMeeting();
+        if (meetings.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body(meetings);
+    }
 
 }
