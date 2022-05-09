@@ -1,10 +1,6 @@
 package com.ssafy.PloMeet.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import springfox.documentation.spring.web.json.Json;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,21 +9,28 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 public class PloggingLog {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long plogId;
-    private long userId;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
     @Column
     private float plogDist;
     @Column
     private int plogTime;
+
+    @Column(length = 20)
     @Enumerated(EnumType.STRING)
-    @Column
     private Weather plogWeather;
+
     @Column
+    @Temporal(TemporalType.TIMESTAMP)
     private Date plogDate;
-    private Json imgs;
-    private Json route;
+
+    @Column(columnDefinition = "json")
+    private String route;
 }
