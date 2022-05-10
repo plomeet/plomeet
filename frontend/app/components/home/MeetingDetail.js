@@ -25,59 +25,65 @@ const meetingDetail = ({route}) => {
   const P2 = {latitude: 37.565383, longitude: 126.976292};
 
     return (
-      <ScrollView>
-        <View style={styles.container}>
-          <Image
-            style={styles.image}
-            source={{ uri : meetingImg}}
-          />
-          <Text style={styles.title}>{meetingName}</Text>
-          <Text style={styles.text}>{detail}</Text>
-          <View style={styles.row}>
-            <Icon name='location-outline' size={20} color='#313333' />
-            <Text style={styles.subtitle}>장소</Text>
-            <Text style={styles.subtext}>{meetingPlace}</Text>
-          </View>
-          <View style={styles.row}>
-            <Icon name='person-outline' size={20} color='#313333' />
-            <Text style={styles.subtitle}>모집인원</Text>
-            <Text style={styles.subtext}>{memberCnt} / {memberMax}</Text>
-          </View>
-          <View style={styles.row}>
-            <Icon name='ios-calendar-sharp' size={20} color='#313333' />
-            <Text style={styles.subtitle}>날짜</Text>
-            <Text style={styles.subtext}>{meetingDate}</Text>
-          </View>
+      <View>
+        <ScrollView>
+          <View style={styles.container}>
+            <Image
+              style={styles.image}
+              source={{ uri : meetingImg}}
+            />
+            <View style={{marginHorizontal:25}}>
+              <Text style={styles.title}>{meetingName}</Text>
+              <Text style={styles.text}>{detail}</Text>
+              <View style={styles.row}>
+                <Icon name='location-outline' size={20} color='#313333' />
+                <Text style={styles.subtitle}>장소</Text>
+                <Text style={styles.subtext}>{meetingPlace}</Text>
+              </View>
+              <View style={styles.row}>
+                <Icon name='person-outline' size={20} color='#313333' />
+                <Text style={styles.subtitle}>모집인원</Text>
+                <Text style={styles.subtext}>{memberCnt} / {memberMax}</Text>
+              </View>
+              <View style={styles.row}>
+                <Icon name='ios-calendar-sharp' size={20} color='#313333' />
+                <Text style={styles.subtitle}>날짜</Text>
+                <Text style={styles.subtext}>{meetingDate}</Text>
+              </View>
 
-          <View style={styles.tempMap}>
-          <NaverMapView
-              style={{width: '100%', height: '100%'}} 
-              showsMyLocationButton={true}
-              center={{...location, zoom: 15}}>
-              <Marker coordinate={location} pinColor="green"/>
-          </NaverMapView>
+              <View style={styles.tempMap}>
+              <NaverMapView
+                  style={{width: '100%', height: '100%'}} 
+                  showsMyLocationButton={true}
+                  center={{...location, zoom: 15}}>
+                  <Marker coordinate={location} pinColor="green"/>
+              </NaverMapView>
+              </View>
+            </View>
+            {/* <View style={[styles.row, {marginBottom:50}]}>
+              <Text style={[{color: '#313333'},{fontWeight: 'bold'}, {marginRight:20}]}>상세주소</Text>
+              <Text>{placeDetail}</Text>
+            </View> */}
+
           </View>
+        </ScrollView>
 
-          {/* <View style={[styles.row, {marginBottom:50}]}>
-            <Text style={[{color: '#313333'},{fontWeight: 'bold'}, {marginRight:20}]}>상세주소</Text>
-            <Text>{placeDetail}</Text>
-          </View> */}
-
-        </View>
-        
-      </ScrollView>
+        <TouchableOpacity activeOpacity={0.8} style={styles.button} >
+          <Text style={styles.buttonText}>모임 가입하기</Text>
+        </TouchableOpacity>
+      </View>
     );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 30,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    paddingBottom:50
   },
   title: {
     fontSize: 20,
-    marginTop: 30,
+    marginTop: 25,
     color: '#313333',
     fontWeight: 'bold',
   },
@@ -100,13 +106,17 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    flex: 1,
     right: 0,
     bottom: 0,
-    height: 155,
+    width: "100%",
+    height: 55,
     backgroundColor: "#1BE58D",
     justifyContent: "center",
     alignItems: "center"
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "#fff"
   },
   text: {
     fontSize: 15,
@@ -116,9 +126,7 @@ const styles = StyleSheet.create({
     color: "#313333"
   },
   image: {
-    height : 180,
-    marginTop: 20,
-    borderRadius: 10,
+    height : 220,
   },
   tempMap: {
     alignItems:'center',
@@ -126,7 +134,7 @@ const styles = StyleSheet.create({
     height : 220,
     marginTop: 40,
     marginBottom:50
-  }
+  },
 });
 
 export default meetingDetail;
