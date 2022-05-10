@@ -3,6 +3,8 @@ import 'react-native-gesture-handler';
 import { StyleSheet, Text, View, TextInput, Button, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import Geolocation from 'react-native-geolocation-service';
+import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
 import { ScrollView } from 'react-native-gesture-handler';
 
 
@@ -14,7 +16,13 @@ const meetingDetail = ({route}) => {
   let memberMax = route.params.maxMember;
   let memberCnt = route.params.numMember;
   let meetingDate = route.params.date;
+  let placeDetail = route.params.placeDetail;
+  let lat = route.params.lat;
+  let lng = route.params.lng;
 
+  const location = {latitude: lat, longitude: lng};
+  const P1 = {latitude: 37.565051, longitude: 126.978567};
+  const P2 = {latitude: 37.565383, longitude: 126.976292};
 
     return (
       <ScrollView>
@@ -40,7 +48,21 @@ const meetingDetail = ({route}) => {
             <Text style={styles.subtitle}>날짜</Text>
             <Text style={styles.subtext}>{meetingDate}</Text>
           </View>
-          <View style={styles.tempMap}><Text>지도</Text></View>
+
+          <View style={styles.tempMap}>
+          <NaverMapView
+              style={{width: '100%', height: '100%'}} 
+              showsMyLocationButton={true}
+              center={{...location, zoom: 15}}>
+              <Marker coordinate={location} pinColor="green"/>
+          </NaverMapView>
+          </View>
+
+          {/* <View style={[styles.row, {marginBottom:50}]}>
+            <Text style={[{color: '#313333'},{fontWeight: 'bold'}, {marginRight:20}]}>상세주소</Text>
+            <Text>{placeDetail}</Text>
+          </View> */}
+
         </View>
         
       </ScrollView>
@@ -99,11 +121,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   tempMap: {
-    borderWidth: 1,
     alignItems:'center',
     justifyContent:'center',
-    height : 200,
+    height : 220,
     marginTop: 40,
+    marginBottom:50
   }
 });
 
