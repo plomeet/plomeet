@@ -1,4 +1,8 @@
 package com.ssafy.PloMeet.model.repository;
 
-public interface UserRepository {
+import com.ssafy.PloMeet.model.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+
 }
