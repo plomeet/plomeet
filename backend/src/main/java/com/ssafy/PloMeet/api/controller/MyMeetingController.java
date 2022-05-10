@@ -30,7 +30,7 @@ public class MyMeetingController {
             responseMap.put("myMeetingId", myMeetingService.joinMeeting(myMeetingReq));
         } catch (IllegalArgumentException e) {
             responseMap.put("errorMsg", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMap);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseMap);
         }
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }

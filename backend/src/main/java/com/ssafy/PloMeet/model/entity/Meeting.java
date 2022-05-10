@@ -42,7 +42,7 @@ public class Meeting {
     private Double lng;
 
     @Column(nullable = false, columnDefinition = "INTEGER(2)")
-    private int memberMax;
+    private Integer memberMax;
 
     @Column(columnDefinition = "tinyInt(1) default true")
     private Boolean isActivate;
@@ -52,15 +52,14 @@ public class Meeting {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime  registerDate;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 100)
     private String item;
 
-    @ColumnDefault("1")
-    @Column(nullable = false, columnDefinition = "INTEGER(3)")
-    private int memberCnt;
+    @Column(columnDefinition = "INTEGER(3) DEFAULT 1")
+    private Integer memberCnt;
 
     @Builder
-    public Meeting(String meetingImg, String meetingName, String meetingDesc, String meetingPlace, String meetingPlaceDetail, Double lat, Double lng, int memberMax, String meetingDate, String item) {
+    public Meeting(String meetingImg, String meetingName, String meetingDesc, String meetingPlace, String meetingPlaceDetail, Double lat, Double lng, Integer memberMax, String meetingDate, String item, Boolean isActivate, LocalDateTime registerDate, Integer memberCnt) {
         this.meetingImg = meetingImg;
         this.meetingName = meetingName;
         this.meetingDesc = meetingDesc;

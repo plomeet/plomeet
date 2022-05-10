@@ -17,17 +17,17 @@ public class MeetingReq {
     private String meetingPlaceDetail;
     private Double lat;
     private Double lng;
-    private int memberMax;
+    private Integer memberMax;
     private Boolean isActivate;
 
     private String  meetingDate;
     private LocalDateTime  registerDate;
     private String item;
-    private int memberCnt;
+    private Integer memberCnt;
 
 
     @Builder
-    public MeetingReq(String meetingImg, String meetingName, String meetingDesc, String meetingPlace, String meetingPlaceDetail, Double lat, Double lng, int memberMax, String meetingDate, String item) {
+    public MeetingReq(String meetingImg, String meetingName, String meetingDesc, String meetingPlace, String meetingPlaceDetail, Double lat, Double lng, Integer memberMax, String meetingDate, String item, Boolean isActivate, LocalDateTime registerDate, Integer memberCnt) {
         this.meetingImg = meetingImg;
         this.meetingName = meetingName;
         this.meetingDesc = meetingDesc;

@@ -29,7 +29,7 @@ public class MeetingController {
             responseMap.put("meetingId", meetingService.createMeeting(meetingReq));
         } catch (IllegalArgumentException e) {
             responseMap.put("errorMsg", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMap);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseMap);
         }
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
@@ -61,7 +61,7 @@ public class MeetingController {
             meetingService.updateMeeting(meetingId, meetingReq);
         } catch (IllegalArgumentException e) {
             responseMap.put("errorMsg", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMap);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseMap);
         }
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
