@@ -36,6 +36,16 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
     // const nowDay = moment().day();
     // const nowTime = moment().format('HH:mm');
 
+    var s3 = new AWS.S3({
+        apiVersion: '2006-03-01',
+    });
+
+    AWS.config.update({
+        region: 'ap-northeast-2', // 리전이 서울이면 이거랑 같게
+        credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: Config.IDENTITYPOOLID,
+        })
+    })
 
     const openCamera = async () => {
         if (Platform.OS === 'ios') {
