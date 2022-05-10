@@ -12,6 +12,7 @@ import { ThemeConsumer } from 'styled-components';
 const ChattingList = () => {
     const navigation = useNavigation();
     const userNum="1";
+    const [user, setUser] = useState();
     const [meetings, setMeetings] = useState([]);
     const [chatRooms, setChatRooms] = useState([]);
 
@@ -32,7 +33,9 @@ const ChattingList = () => {
     const setChatRoomData = async (queryArray) => {
         const list = [];
         const promises = queryArray.map(async meeting => {
+            console.log(meeting.data());
             const meetingId = meeting.data().meetingId;
+            console.log(meetingId);
             const meetingDocRef = firestore()
                             .collection('meetings').doc(meetingId);
             const lastReadChat= await getLastReadChatId(meetingDocRef);
@@ -50,7 +53,7 @@ const ChattingList = () => {
             }else{
                 chat = await getLastChatInfo(meetingDocRef, lastReadChatTime);
             }
-            //console.log(chat);
+            console.log(chat);
 
             const chatRoom = {
                 meeting:{
@@ -59,12 +62,13 @@ const ChattingList = () => {
                     meetingImg: meetings_data[meetingId].meetingImg,
                     memberCnt: meetings_data[meetingId].memberCnt,
                     memberMax: meetings_data[meetingId].memberMax,
-                    meetingDate: meetings_data[meetingId].meetingData,
+                    meetingDate: meetings_data[meetingId].meetingDate,
                     meetingPlace: meetings_data[meetingId].meetingPlace,
                     item: meetings_data[meetingId].item,
                 },
                 chatting: chat,
             }
+            console.log(chatRoom);
             list.push(chatRoom);
         });
         await Promise.all(promises);
@@ -133,16 +137,33 @@ const ChattingList = () => {
         const meetingIds = meetings_data.list.meetingIds;
         console.log(meetingIds);
         
-        const subscriber = firestore()
+        const subscriber = async () => {
+            const subscriberMeetings = await firestore()
+                .collection('meetings')
+                .where('meetingId', 'in', meetingIds)
+                .orderBy('lastChatTime', 'desc')
+                .onSnapshot(querySnapShot => {
+                    if(querySnapShot != null){
+                        setChatRoomData(querySnapShot.docs);
+                        console.log(chatRooms);
+                    }
+                });
+                return () => subscriberMeetings();
+        }
+        //subscriber();
+
+        const subscriberMeetings = firestore()
             .collection('meetings')
             .where('meetingId', 'in', meetingIds)
-            .orderBy('lastChatTime', 'asc')
+            .orderBy('lastChatTime', 'desc')
             .onSnapshot(querySnapShot => {
                 if(querySnapShot != null){
                     setChatRoomData(querySnapShot.docs);
+                    console.log(chatRooms);
                 }
             });
-            return () => subscriber();
+        return () => subscriberMeetings();
+        //return () => subscriberMeetings();
     }, []);
 
 

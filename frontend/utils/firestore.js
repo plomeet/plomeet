@@ -1,6 +1,14 @@
 import firestore from '@react-native-firebase/firestore';
 
 
+export const updateLastChatTime = async ({meetingId, lastChatTime}) => {
+    const chattingsRef = firestore()
+        .collection('meetings').doc(meetingId);
+    await chattingsRef.update({
+        lastChatTime: lastChatTime,
+    });
+}
+
 export const saveChatting = async ({meetingId, message}) => {
     const chattingsRef = firestore()
         .collection('meetings').doc(meetingId)
@@ -8,12 +16,12 @@ export const saveChatting = async ({meetingId, message}) => {
     const newMessageRef = chattingsRef.doc();
     const newMessageId = newMessageRef.id;
 
-    const createDate = new Date(Date.now()).toISOString();
+    //const createDate = new Date(Date.now()).toISOString();
+    //const createDate = Date.now();
     const newChatting = {
         _id: newMessageId,
-        text: message.text,
-        createdAt: createDate,
-        userId: message.user._id.toString(),
+        ...message,
     };
     await chattingsRef.doc(newMessageRef.id).set(newChatting);
+    await updateLastChatTime(meetingId, message.createdAt);
 }

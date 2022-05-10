@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 import { GiftedChat  } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/Entypo'
 import { color, Container } from '../styles';
@@ -14,13 +15,19 @@ const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
     const chat = item.chatting;
     const title = meeting.meetingName;
     const [user, setUser] = useState();
+    const [members, setMembers] = useState();
     const [messages, setMessages] = useState([]);
 
     
     const _handleMessageSend = async messageList => {
         const newMessage = messageList[0];
+        const message = {
+            text: newMessage.text,
+            createdAt: Date.now(),
+            userId: newMessage.user._id,
+        };
         try{
-            await saveChatting({ meetingId: meeting.meetingId, message: newMessage});
+            await saveChatting({ meetingId: meeting.meetingId, message});
         }catch(e){
             Alert.alert('Send Message Error', e.message);
         }
@@ -52,12 +59,17 @@ const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
         const list = [];
         const promises = queryArray.map(async message => {
             const messageData = message.data();
-            const userInfo = await getUserInfo(messageData.userId);
+            var userInfo = {};
+            if(messageData.userId != userNum) userInfo = {"_id": userNum};
+                userInfo = await getUserInfo(messageData.userId);
+            //var userInfo = members[messageData.userId];
+            //if(userInfo == undefined) userInfo = await getUserInfo(messageData.userId);
             const messageInfo = {
                 _id: messageData._id,
                 text: messageData.text,
                 createdAt: messageData.createdAt,
                 user: userInfo,
+                //user: members[messageData.userId],
             };
             list.push(messageInfo);
         });
@@ -77,7 +89,6 @@ const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
         return userInfo;
     }
     
-    
     useEffect(() => {
         navigation.setOptions({
             headerTitle: title,
@@ -88,25 +99,67 @@ const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
     }, []);
 
     useEffect(() => {
-        const subscriber = firestore()
+        const subscriberUser = firestore()
             .collection('users')
             .doc(userNum)
             .onSnapshot(querySnapShot => {
                 const userData = querySnapShot.data();
-                const user = {
-                    _id: userData.userId,
+                const userInfo = {
+                    _id: userData.userId.toString(),
                     avatar: userData.userProfileImg,
                     name: userData.userNickName,
                 }
-                setUser(user);
+                setUser(userInfo);
             });
-        return () => subscriber();
+        
+        console.log("meetingId::"+ meeting.meetingId);
+        /*   
+        const subscriberMember = firestore()
+            .collection('meetings')
+            .doc(meeting.meetingId)
+            .collection('members')
+            .onSnapshot(querySnapShot => {
+                const memberInfos = {};
+                querySnapShot.forEach(async (member) => {
+                    const memberData = member.data();
+                    const memberId = memberData.userId;
+                    const userInfo = await getUserInfo(memberId);
+                    memberInfos[memberData.userId] = userInfo;
+                });
+                setMembers(memberInfos);
+            });
+        */
+        return () => {
+            subscriberUser();
+            //subscriberMember();
+        }
     }, []);
 
+    /*
     useEffect(() => {
-        //console.log(msg);
-
-        const subscriber = firestore()
+        console.log("meetingId::"+ meeting.meetingId);        
+        const subscriberMember = firestore()
+            .collection('meetings')
+            .doc(meeting.meetingId)
+            .collection('members')
+            .onSnapshot(querySnapShot => {
+                const memberInfos = {};
+                querySnapShot.forEach(async (member) => {
+                    const memberData = member.data();
+                    const memberId = memberData.userId;
+                    const userInfo = await getUserInfo(memberId);
+                    memberInfos[memberData.userId] = userInfo;
+                });
+                setMembers(memberInfos);
+                console.log("memberInfos");
+                console.log(memberInfos);
+            });
+        return () => subscriberMember();
+    }, []);
+    */
+    
+    useEffect(() => {
+        const subscriberChatting = firestore()
             .collection('meetings')
             .doc(meeting.meetingId)
             .collection('chattings')
@@ -114,9 +167,8 @@ const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
             .onSnapshot(querySnapShot => {
                 setMessagesData(querySnapShot.docs);
             });
-        return () => subscriber();
-        
-    }, []);
+        return () => subscriberChatting();
+    }, [members]);
     
 
     return (
