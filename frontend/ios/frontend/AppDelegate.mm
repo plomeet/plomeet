@@ -1,3 +1,4 @@
+#import <Firebase.h>
 #import "AppDelegate.h"
 
 #import <React/RCTBridge.h>
@@ -16,6 +17,8 @@
 
 #import <react/config/ReactNativeConfig.h>
 
+@import FirebaseCore;
+
 @interface AppDelegate () <RCTCxxBridgeDelegate, RCTTurboModuleManagerDelegate> {
   RCTTurboModuleManager *_turboModuleManager;
   RCTSurfacePresenterBridgeAdapter *_bridgeAdapter;
@@ -29,6 +32,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [FIRApp configure];
+//  if([FIRApp defaultApp] == nil){
+//    [FIRApp configure];
+//  }
   RCTAppSetupPrepareApp(application);
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
