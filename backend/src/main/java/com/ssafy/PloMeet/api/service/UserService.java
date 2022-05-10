@@ -1,5 +1,6 @@
 package com.ssafy.PloMeet.api.service;
 
+import com.ssafy.PloMeet.api.request.UserRegisterReq;
 import com.ssafy.PloMeet.api.response.UserRes;
 import com.ssafy.PloMeet.model.entity.User;
 import com.ssafy.PloMeet.model.repository.UserRepository;
@@ -22,4 +23,10 @@ public class UserService {
         return new UserRes(user);
     }
 
+    //회원 가입
+    @Transactional
+    public Long signUp(UserRegisterReq userRegisterReq) {
+        User user = userRegisterReq.toEntity();
+        return userRepository.save(user).getUserId();
+    }
 }

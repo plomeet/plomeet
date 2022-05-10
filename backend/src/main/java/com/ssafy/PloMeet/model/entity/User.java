@@ -22,7 +22,7 @@ public class User {
     @Column(nullable = false, length = 10)
     String userNickName;
 
-    @Column(length = 100, columnDefinition = "boolean default 'https://i.postimg.cc/G23gPzdy/profile-default.png'")
+    @Column(length = 100, columnDefinition = "varchar(100) default 'https://i.postimg.cc/G23gPzdy/profile-default.png'")
     String userProfileImg;
 
     @Column(columnDefinition = "boolean default false")
