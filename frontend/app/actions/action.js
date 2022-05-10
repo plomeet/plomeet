@@ -32,3 +32,8 @@ export const setImages = (images) => ({
   type: "SET_IMAGES",
   payload: images
 })
+
+export const setIsSave = (isSave) => ({
+  type: "SET_IS_SAVE",
+  payload: isSave
+})

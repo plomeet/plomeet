@@ -6,6 +6,7 @@ const initialState = {
     weatherLoc: [],
     timeSum: "0 : 00",
     images: [],
+    isSave: false,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -23,7 +24,9 @@ const rootReducer = (state = initialState, action) => {
         case "SET_TIMESUM":
             return { ...state, timeSum: action.payload }
         case "SET_IMAGES":
-            return { ...state, images:action.payload }
+            return { ...state, images: action.payload }
+        case "SET_IS_SAVE":
+            return { ...state, isSave: action.payload }
         default:
             return state;
     }

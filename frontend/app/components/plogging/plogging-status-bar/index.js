@@ -13,7 +13,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 //나중에 환경변수 처리
 const serviceKey = "Yw3zPCyzMoX2VB0yMPfZgip2qIHGaFLGT5RuJ9gtVFGvzjbuNNZa5qB5DFUm%2BNMe%2B0kHhUWAYIH1j0BK%2Fdj6MQ%3D%3D";
 
-const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString }) => {
+const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString, setIsSave }) => {
   const layout = useWindowDimensions();
   const countInterval = useRef(null);
   const [minutes, setMinutes] = useState(parseInt(mm));
@@ -28,6 +28,7 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
   const [weather, setWeather] = useState("weather-sunny");
   const navigation = useNavigation();
   const showEndPage = useSelector(state => state.showPloggingEndPage);
+  const isSave = useSelector(state => state.isSave);
 
   useEffect(() => {
     countInterval.current = setInterval(() => {
@@ -77,6 +78,39 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
     }
     getWeatherInfo();
   }, [weatherLoc, currWeatherTime]);
+
+  useEffect(() => {
+    if (isSave) {
+      makeSaveFalse();
+      let timeStr = "" + minutes;
+      timeStr += seconds;
+      async function saveLog() {
+        try {
+          await axiosInstance.post("/ploggings", {
+            userId: 1, // 차후 유저 정보로 수정
+            plogDist: distSum,
+            plogTime: timeStr,
+            plogWeather: weather,
+            route: "여기 해야지.."
+          })
+            .then((response) => {
+              if (response.status === 200) {
+                setTrashcanList(response.data.data);
+                console.log("get Trashcans SUCCESS");
+              } else {
+                console.log("get Trashcans FAIL");
+              }
+            })
+            .catch((response) => { console.log(response); });
+        } catch (err) { console.log(err); }
+      };
+      saveLog();
+    }
+  }, [isSave])
+
+  const makeSaveFalse = () => {
+    setIsSave(false);
+  }
 
   const organizeWeatherData = (data, time) => {//0 맑음 1 쏘쏘 2 흐림 3 비 4 눈/비 5 눈
     const PTY = data[0].obsrValue;
