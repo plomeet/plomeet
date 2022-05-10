@@ -17,7 +17,7 @@ const ChattingList = () => {
     const [chatRooms, setChatRooms] = useState([]);
 
     const _handleChattingRoomPress = ( item ) => {
-        navigation.navigate('InChatRoom', {item, userNum});
+        navigation.navigate('InChatRoom', {meeting: item.meeting, userNum});
     }
 
     const renderChattingRoom = ({ item }) => {
@@ -33,27 +33,29 @@ const ChattingList = () => {
     const setChatRoomData = async (queryArray) => {
         const list = [];
         const promises = queryArray.map(async meeting => {
-            console.log(meeting.data());
             const meetingId = meeting.data().meetingId;
             console.log(meetingId);
+            console.log(meeting.data());
             const meetingDocRef = firestore()
                             .collection('meetings').doc(meetingId);
-            const lastReadChat= await getLastReadChatId(meetingDocRef);
-            //console.log("마지막으로 읽은 채팅ID:: "+lastReadChat);
-            
+            const lastReadChat= await getLastReadChat(meetingDocRef);
+            //console.log("마지막으로 읽은 채팅ID:: "+lastReadChat.id);
+            //console.log("마지막으로 읽은 채팅Time:: "+lastReadChat.time);
+            /*
             var lastReadChatTime = 0;
             if(lastReadChat != 0){
                 lastReadChatTime = await getLastReadChatTime(meetingDocRef, lastReadChat);
             }
             //console.log("마지막으로 읽은 채팅시간:: "+lastReadChatTime);
+            */
 
             var chat;
-            if(lastReadChatTime == 0){
+            if(lastReadChat.id == 0){
                 chat = await getLastChatInfoAll(meetingDocRef);
             }else{
-                chat = await getLastChatInfo(meetingDocRef, lastReadChatTime);
+                chat = await getLastChatInfo(meetingDocRef, lastReadChat.time);
             }
-            console.log(chat);
+            //console.log(chat);
 
             const chatRoom = {
                 meeting:{
@@ -67,8 +69,14 @@ const ChattingList = () => {
                     item: meetings_data[meetingId].item,
                 },
                 chatting: chat,
+                /*
+                chatting:{
+                    lastTime: meeting.data().lastChatTime,
+                    lastMsg:chat.lastMsg,
+                    unReadCnt: chat.unReadCnt,
+                }
+                */
             }
-            console.log(chatRoom);
             list.push(chatRoom);
         });
         await Promise.all(promises);
@@ -76,24 +84,17 @@ const ChattingList = () => {
         setChatRooms(list);
     }
 
-    const getLastReadChatId = async (docRef) => {
-        var lastReadChatId = '';
+    const getLastReadChat = async (docRef) => {
+        var lastReadChat = null;
         await docRef
             .collection('members').doc(userNum)
             .get().then((doc) => {
-                lastReadChatId= doc.data().lastChatId;
+                lastReadChat = {
+                    id: doc.data().lastChatId,
+                    time: doc.data().lastChatTime,
+                }
             })
-        return lastReadChatId;
-    };
-
-    const getLastReadChatTime = async (docRef, chatId) => {
-        var lastReadChatTime = '';
-        await docRef
-            .collection('chattings').doc(chatId)
-            .get().then((doc) => {
-                lastReadChatTime= doc.data().createdAt;
-            })
-        return lastReadChatTime;
+        return lastReadChat;
     };
 
     const getLastChatInfoAll = async (docRef) => {
@@ -122,13 +123,14 @@ const ChattingList = () => {
         await docRef
             .collection('chattings')
             .orderBy('createdAt', 'desc')
-            .where('createdAt', '>', lastReadChatTime)
+            .where('createdAt', '>=', lastReadChatTime)
             .get().then((docs) => {
                 const chatDocs = docs.docs;
                 lastChatInfo.unReadCnt=chatDocs.length;
-                const lastChat = chatDocs[0];
-                lastChatInfo.lastTime=lastChat.data().createdAt;
-                lastChatInfo.lastMsg=lastChat.data().text;
+                const lastChatData = chatDocs[0].data();
+                lastChatInfo.lastTime=lastChatData.createdAt;
+                lastChatInfo.lastMsg=lastChatData.text;
+                if(lastChatInfo.unReadCnt==1&& lastReadChatTime==lastChatInfo.lastTime) lastChatInfo.unReadCnt=0;
             });
         return lastChatInfo;
     }
@@ -136,21 +138,6 @@ const ChattingList = () => {
     useEffect(() => {
         const meetingIds = meetings_data.list.meetingIds;
         console.log(meetingIds);
-        
-        const subscriber = async () => {
-            const subscriberMeetings = await firestore()
-                .collection('meetings')
-                .where('meetingId', 'in', meetingIds)
-                .orderBy('lastChatTime', 'desc')
-                .onSnapshot(querySnapShot => {
-                    if(querySnapShot != null){
-                        setChatRoomData(querySnapShot.docs);
-                        console.log(chatRooms);
-                    }
-                });
-                return () => subscriberMeetings();
-        }
-        //subscriber();
 
         const subscriberMeetings = firestore()
             .collection('meetings')
@@ -159,12 +146,18 @@ const ChattingList = () => {
             .onSnapshot(querySnapShot => {
                 if(querySnapShot != null){
                     setChatRoomData(querySnapShot.docs);
-                    console.log(chatRooms);
                 }
             });
         return () => subscriberMeetings();
         //return () => subscriberMeetings();
     }, []);
+
+    /*
+    useEffect(() => {
+        console.log("chatRooms이 바뀌었다..!");
+        console.log(chatRooms);
+    }, [chatRooms]);
+    */
 
 
     return (

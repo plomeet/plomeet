@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
 import { GiftedChat  } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/Entypo'
 import { color, Container } from '../styles';
@@ -7,23 +6,24 @@ import CustomBubble from './custom/custom_bubble';
 import CustomSend from './custom/custom_send';
 import CustomInputToolbar from './custom/custom_inputtoolbar';
 import firestore from '@react-native-firebase/firestore';
-import { saveChatting } from '../../../../utils/firestore';
+import { saveChatting, updateUserLastReadChatTime } from '../../../../utils/firestore';
 
 
-const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
-    const meeting = item.meeting;
-    const chat = item.chatting;
+const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
     const title = meeting.meetingName;
     const [user, setUser] = useState();
-    const [members, setMembers] = useState();
+    //const [members, setMembers] = useState();
     const [messages, setMessages] = useState([]);
+    const [lastMessage, setLastMessage] = useState();
+    var lastMessageTemp = "";
 
     
     const _handleMessageSend = async messageList => {
         const newMessage = messageList[0];
+        const koreaTimeDiff = 9*60*60*1000;
         const message = {
             text: newMessage.text,
-            createdAt: Date.now(),
+            createdAt: Date.now()+koreaTimeDiff,
             userId: newMessage.user._id,
         };
         try{
@@ -41,27 +41,27 @@ const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
         return(
             <CustomBubble {...bubbleProps} />
         )
-    }
+    };
 
     const renderInputToolbar = props => {
         return(
             <CustomInputToolbar {...props} />
         )
-    }
+    };
 
     const renderSend = (props) => {
         return(
             <CustomSend {...props} />
         )
-    }
+    };
 
     const setMessagesData = async(queryArray) => {
         const list = [];
         const promises = queryArray.map(async message => {
             const messageData = message.data();
             var userInfo = {};
-            if(messageData.userId != userNum) userInfo = {"_id": userNum};
-                userInfo = await getUserInfo(messageData.userId);
+            if(messageData.userId == userNum) userInfo = {"_id": userNum};
+            else userInfo = await getUserInfo(messageData.userId);
             //var userInfo = members[messageData.userId];
             //if(userInfo == undefined) userInfo = await getUserInfo(messageData.userId);
             const messageInfo = {
@@ -76,7 +76,9 @@ const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
         await Promise.all(promises);
 
         setMessages(list);
-    }
+        //setLastMessage(() => list[0]);
+        //() => {setLastMessage(list[0])};
+    };
 
     const getUserInfo = async (userId) => {
         const userInfo = {};
@@ -87,7 +89,8 @@ const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
                 userInfo.avatar = doc.data().userProfileImg;
             });
         return userInfo;
-    }
+    };
+    
     
     useEffect(() => {
         navigation.setOptions({
@@ -97,7 +100,8 @@ const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
             ),
         });
     }, []);
-
+    
+    
     useEffect(() => {
         const subscriberUser = firestore()
             .collection('users')
@@ -113,25 +117,29 @@ const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
             });
         
         console.log("meetingId::"+ meeting.meetingId);
-        /*   
-        const subscriberMember = firestore()
+        const subscriberChatting = firestore()
             .collection('meetings')
             .doc(meeting.meetingId)
-            .collection('members')
+            .collection('chattings')
+            .orderBy('createdAt', 'desc')
             .onSnapshot(querySnapShot => {
-                const memberInfos = {};
-                querySnapShot.forEach(async (member) => {
-                    const memberData = member.data();
-                    const memberId = memberData.userId;
-                    const userInfo = await getUserInfo(memberId);
-                    memberInfos[memberData.userId] = userInfo;
-                });
-                setMembers(memberInfos);
+                setMessagesData(querySnapShot.docs);
             });
-        */
+        
+        setLastMessage(messages[0]);
         return () => {
             subscriberUser();
-            //subscriberMember();
+            subscriberChatting();
+            console.log("나갈 때");
+            console.log(lastMessage);
+            console.log(lastMessageTemp);
+            // const updateUserLastReadChatTimeData = {
+            //     meetingId: meeting.meetingId,
+            //     userId: userNum,
+            //     lastChatId: lastMessage._id,
+            //     lastChatTime: lastMessage.createdAt,
+            // }
+            // updateUserLastReadChatTime({...updateUserLastReadChatTimeData});
         }
     }, []);
 
@@ -151,24 +159,21 @@ const InsideRoom = ({ navigation, route: {params: {item, userNum}} }) => {
                     memberInfos[memberData.userId] = userInfo;
                 });
                 setMembers(memberInfos);
-                console.log("memberInfos");
-                console.log(memberInfos);
             });
         return () => subscriberMember();
     }, []);
     */
-    
+
+    /*
     useEffect(() => {
-        const subscriberChatting = firestore()
-            .collection('meetings')
-            .doc(meeting.meetingId)
-            .collection('chattings')
-            .orderBy('createdAt', 'desc')
-            .onSnapshot(querySnapShot => {
-                setMessagesData(querySnapShot.docs);
-            });
-        return () => subscriberChatting();
-    }, [members]);
+        
+    }, [messages]);
+    /*
+    useEffect(() => {
+        console.log("마지막 메세지가 바뀌었다..!");
+        console.log(lastMessage);
+    }, [lastMessage]);
+    */
     
 
     return (

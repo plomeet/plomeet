@@ -19,11 +19,10 @@ import {
 
 
 const getDateOrTime = (dateTime) => {
-    console.log(dateTime);
     if(dateTime==null) return null;
     const now = moment().add(9, 'hours').startOf('day');
-    const target = moment(dateTime).add(9, 'hours').startOf('day');
-    return moment(dateTime).add(9, 'hours').format(now.diff(target, 'days') > 0 ? 'MM/DD' : 'HH:mm');
+    const target = moment(dateTime).startOf('day');
+    return moment(dateTime).format(now.diff(target, 'days') > 0 ? 'MM/DD' : 'HH:mm');
 };
 
 
