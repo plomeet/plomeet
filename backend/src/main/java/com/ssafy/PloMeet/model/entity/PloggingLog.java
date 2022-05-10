@@ -27,9 +27,8 @@ public class PloggingLog {
     @Enumerated(EnumType.STRING)
     private Weather plogWeather;
 
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date plogDate;
+    @Column(length = 25)
+    private String plogDate;
 
     @Column(columnDefinition = "json")
     private String route;

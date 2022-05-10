@@ -18,6 +18,6 @@ public class PloggingLogReq {
     private float plogDist;
     private int plogTime;
     private String plogWeather;
-    private Date plogDate;
+    private String plogDate;
     private List<Coord> route;
 }

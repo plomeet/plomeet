@@ -37,3 +37,12 @@ export const setIsSave = (isSave) => ({
   type: "SET_IS_SAVE",
   payload: isSave
 })
+
+export const setPloggingPath = (ploggingPath) => ({
+  type: "SET_PLOGGINGPATH",
+  payload: ploggingPath
+})
+
+export const resetPloggingPath = () => ({
+  type: "RESET_PLOGGINGPATH"
+})

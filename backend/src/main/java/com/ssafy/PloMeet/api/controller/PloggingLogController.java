@@ -47,7 +47,7 @@ public class PloggingLogController {
                 }
                 PloggingLog saveLog = ploggingService.insertPloggingLog(PloggingLog.builder()
                         .user(user.get()).plogDist(insertLog.getPlogDist())
-                        .plogTime(insertLog.getPlogTime()).plogDate(new Date())
+                        .plogTime(insertLog.getPlogTime()).plogDate(insertLog.getPlogDate())
                         .plogWeather(weather).route(routeJson).build());
                 if(saveLog == null )
                     return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseResponseBody.of(204, "저장 실패"));
