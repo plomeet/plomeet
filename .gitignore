@@ -2,6 +2,11 @@
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,intellij,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,intellij,visualstudiocode
 
+# 2022-05-09 추가 by 수림
+node_modules/
+.idea
+.vscode
+
 ### Eclipse ###
 .metadata
 bin/
