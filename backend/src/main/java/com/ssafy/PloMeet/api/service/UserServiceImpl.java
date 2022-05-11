@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
         User user = userRegisterReq.toEntity();
         return userRepository.save(user).getUserId();
     }
-    
+
     @Override
     public Optional<User> getUserInfo(Long userId) throws Exception {
         return userRepository.findById(userId);
