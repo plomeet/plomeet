@@ -11,11 +11,14 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import LogoImage from '../../../assets/imgs/6881.png';
 import LinearGradient from 'react-native-linear-gradient';
 
 const NicknameRegister = () => {
+  const navigation = useNavigation();
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -34,13 +37,17 @@ const NicknameRegister = () => {
             keyboardType="default"
             autoFocus
             maxLength={10}
-            autoCapitalize="none"></TextInput>
+            autoCapitalize="none">
+            {/* onChangeText={this.onChangeInput} */}
+          </TextInput>
         </View>
-        <View style={styles.button}>
-          <TouchableOpacity style={styles.button2}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Home')}>
+          <View style={styles.button2}>
             <Text style={styles.title2}>회원가입</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
         <View style={styles.logo}>
           <Image
             source={LogoImage}

@@ -10,10 +10,12 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@actbase/react-kakaosdk": "^0.9.19",
     "@actbase/react-native-kakao-login": "^2.0.20",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-firebase/app": "^14.9.1",
     "@react-native-firebase/firestore": "^14.9.1",
+    "@react-native-seoul/kakao-login": "^4.0.0",
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/stack": "^6.2.1",

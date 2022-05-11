@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 //Screens
-import Splash from './components/auth/Splash';
+import Splash from './components/auth/SignUp';
 import SignUp from './components/auth/SignUp';
 import Home from './components/home/index';
 import Record from './components/record/index';
@@ -70,6 +70,7 @@ export const RootNavigator = () => {
       <Stack.Screen
         name="SignUp"
         component={SignUp}
+        options={{headerShown: false}}
         options={() => ({gestureEnabled: false})}
       />
       <Stack.Screen

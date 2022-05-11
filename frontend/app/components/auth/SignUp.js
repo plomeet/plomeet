@@ -9,10 +9,13 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
+// import * as KakaoLogins from '@react-native-seoul/kakao-login';
 
 import LogoImage from '../../../assets/imgs/6881.png';
 import KakaoLogo from '../../../assets/imgs/kakao1.png';
 import LinearGradient from 'react-native-linear-gradient';
+
+const kakaoHelper = require('./KakaoHelper.js');
 
 const SignUp = () => {
   BackHandler.addEventListener('hardwareBackPress', () => {
@@ -31,15 +34,16 @@ const SignUp = () => {
           함께 즐거운 플로깅을 {'\n'}시작해 볼까요?
         </Text>
       </View>
-      <View style={styles.button}>
-        <TouchableOpacity style={styles.button2}>
+      <TouchableOpacity style={styles.button} onPress={kakaoHelper.login}>
+        <View style={styles.button2}>
           <Image
             source={KakaoLogo}
             resizeMode={'contain'}
             style={{width: 35, height: 35}}></Image>
           <Text style={styles.title3}>카카오톡으로 시작하기</Text>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
+      <Text onPress={kakaoHelper.logout}>로그아웃</Text>
       <View style={styles.logo}>
         <Image
           source={LogoImage}
