@@ -22,8 +22,10 @@ const Plogging = () => {
 
     //화면에 렌더링되면 권한부터 살피자
     useEffect(() => {
-        if (Platform.OS === 'ios')
-            console.log("여기 ios 위치 권한 활용");
+        if (Platform.OS === 'ios') {
+            Geolocation.requestAuthorization('whenInUse');
+            getRealTimeLoc();
+        }
         if (Platform.OS === 'android')
             if (requestLocationPermission())//권한 활용에 동의한 상태라면 처음 위치를 가져와서 지도 중심으로 잡는다. ios도 동일하게 해줘야한다
                 getRealTimeLoc();           // 이거 안하면 사용자 입장에서 시작시 좌표 중심이 바로 바뀐다.

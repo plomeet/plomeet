@@ -16,6 +16,10 @@ import OpenMeeting5 from './components/home/OpenMeeting5';
 import MeetingDetail from './components/home/MeetingDetail';
 
 
+//Chatting
+import InsideRoom from './components/chat/room/inside_room';
+
+
 const Stack = createStackNavigator();
 const MainScreenTab = createBottomTabNavigator();
 
@@ -32,7 +36,7 @@ const AppTabComponent = () => {
                         iconName = focused ? 'calendar' : 'calendar-outline';
                     } else if (route.name === '플로깅') {
                         iconName = focused ? 'alert-circle' : 'alert-circle-outline';
-                    } else if (route.name === '채팅') {
+                    } else if (route.name === '채팅 목록') {
                         iconName = focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline';
                     } else if (route.name === 'MY') {
                         iconName = focused ? 'person-circle' : 'person-circle-outline';
@@ -50,7 +54,7 @@ const AppTabComponent = () => {
             <MainScreenTab.Screen name="홈" component={Home} options={{title: '플로밋!'}} />
             <MainScreenTab.Screen name="기록" component={Record} />
             <MainScreenTab.Screen name="플로깅" component={Plogging} />
-            <MainScreenTab.Screen name="채팅" component={Chat} />
+            <MainScreenTab.Screen name="채팅 목록" component={Chat} />
             <MainScreenTab.Screen name="MY" component={MyPage} />
         </MainScreenTab.Navigator>
     )
@@ -58,12 +62,16 @@ const AppTabComponent = () => {
 
 export const RootNavigator = () => {
     return (
-        // <Stack.Navigator
-        // screenOptions={{
-        //   headerShown: false
-        // }}>
-        <Stack.Navigator>
-            <Stack.Screen name="M" component={AppTabComponent} options={{headerShown: false}} Screen={{ Headers }} />
+        <Stack.Navigator
+            //screenOptions={{
+            //    headerShown: false
+            //}}
+        >
+            <Stack.Screen name="M" component={AppTabComponent} 
+                options={{ headerShown: false }}
+                Screen={{ Headers }}
+            />
+            <Stack.Screen name="InChatRoom" component={InsideRoom} />
             <Stack.Screen name="OpenMeeting" component={OpenMeeting} options={{title: '플로깅 모임 생성(1/5)'}} />
             <Stack.Screen name="OpenMeeting2" component={OpenMeeting2} options={{title: '플로깅 모임 생성(2/5)'}} />
             <Stack.Screen name="OpenMeeting3" component={OpenMeeting3} options={{title: '플로깅 모임 생성(3/5)'}} />

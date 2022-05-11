@@ -1,4 +1,4 @@
-package com.frontend.newarchitecture.components;
+package com.nom.plomeet.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;
