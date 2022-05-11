@@ -16,7 +16,7 @@ public class User {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     Long userId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 20)
     Long kakaoUserId;
 
     @Column(nullable = false, length = 10)
