@@ -1,24 +1,40 @@
 package com.ssafy.PloMeet.api.request;
 
-public class UserRegisterReq {
-//    @Getter
-//    @Setter
-//    @ApiModel("UserResgisterRequest")
-//    public class UserRegisterReq {
-//        @ApiModelProperty(name="유저 닉네임", required = false)
-//        String email;
-//        @ApiModelProperty(name="유저 비밀번호", required = false)
-//        String password;
-//        @ApiModelProperty(name="유저 닉네임", required = false)
-//        String nickname;
-//        @ApiModelProperty(name="유저 프로필", required = false)
-//        int profilePic;
-//        @ApiModelProperty(name="유저 위치정보", required = false)
-//        String location;
-//        @ApiModelProperty(name="위치정보 위도")
-//        Double latitude;
-//        @ApiModelProperty(name="위치정보 경도")
-//        Double longitude;
-//    }
+import com.ssafy.PloMeet.model.entity.User;
+import lombok.Builder;
 
+public class UserRegisterReq {
+
+    private Long userId;
+
+    private Long kakaoUserId;
+
+    private String userNickName;
+
+    private String userProfileImg;
+
+    private String userName;
+
+    private String userEmail;
+
+    private Boolean idDelete;
+
+    @Builder
+    public UserRegisterReq(Long kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail) {
+        this.kakaoUserId = kakaoUserId;
+        this.userNickName = userNickName;
+        this.userProfileImg = userProfileImg;
+        this.userName = userName;
+        this.userEmail = userEmail;
+    }
+
+    public User toEntity() {
+        return User.builder()
+                .kakaoUserId(kakaoUserId)
+                .userNickName(userNickName)
+                .userProfileImg(userProfileImg)
+                .userName(userName)
+                .userEmail(userEmail)
+                .build();
+    }
 }
