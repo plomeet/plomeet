@@ -13,40 +13,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
-@Service
-public class MeetingService {
+public interface MeetingService {
 
-    private final MeetingRepository meetingRepository;
-
-    //모임 개설
-    @Transactional
-    public Long createMeeting(MeetingReq meetingReq) {
-        Meeting meeting = meetingReq.toEntity();
-        return meetingRepository.save(meeting).getMeetingId();
-    }
-
-    //모임 상세정보 조회
-    @Transactional
-    public MeetingRes findMeetingById(Long meetingId) {
-        Meeting meeting = meetingRepository.findById(meetingId).orElseThrow(() -> new NoSuchElementException("[존재하지 않는 모임] MeetingId : " + meetingId));
-        return new MeetingRes(meeting);
-    }
-
-    //모임 전체 조회
-    public List<MeetingRes> findAllMeeting() {
-        List<Meeting> meetings = new ArrayList<>();
-        meetings = meetingRepository.findAll();
-        return meetings.stream()
-                .map(MeetingRes::new)
-                .collect(Collectors.toList());
-    }
-
-    //모임 수정
-    @Transactional
-    public void updateMeeting(Long meetingId, MeetingReq meetingReq) {
-        Meeting meeting = meetingRepository.findById(meetingId).orElseThrow(() -> new IllegalArgumentException("[존재하지 않는 모임]"));
-        meeting.updateMeeting(meetingReq);
-    }
+    Long createMeeting(MeetingReq meetingReq);
+    MeetingRes findMeetingById(Long meetingId);
+    List<MeetingRes> findAllMeeting();
+    void updateMeeting(Long meetingId, MeetingReq meetingReq);
 
 }
