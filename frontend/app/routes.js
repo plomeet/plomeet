@@ -76,15 +76,8 @@ export const RootNavigator = () => {
     const showPloggingEndPage = useSelector(state => state.showPloggingEndPage);
 
     return (
-        <Stack.Navigator
-        //screenOptions={{
-        //    headerShown: false
-        //}}
-        >
-            <Stack.Screen name="M" component={AppTabComponent}
-                options={{ headerShown: false }}
-                Screen={{ Headers }}
-            />
+        <Stack.Navigator>
+            <Stack.Screen name="M" component={AppTabComponent} options={{ title: ' ', headerShown: false }} />
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: false, gestureEnabled: false }} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
             <Stack.Screen name="InChatRoom" component={InsideRoom} />
