@@ -84,8 +84,8 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, 
             {
                 enableHighAccuracy: true,
                 distanceFilter: 0,
-                interval: 10000,
-                fastestInterval: 5000,
+                interval: 3000,
+                fastestInterval: 2000,
             },
         );
 

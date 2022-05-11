@@ -29,31 +29,16 @@ public class PloggingLogController {
     @Autowired
     UserServiceImpl userService;
     @Autowired
-    RouteJsonParser rjp;
-    @Autowired
     PloggingServiceImpl ploggingService;
 
 
     @PostMapping("/ploggings")
     public ResponseEntity<? extends BaseResponseBody> getTrashcans( @RequestBody PloggingLogReq insertLog ) {
         try {
-            String routeJson = rjp.getArrayToJsonString(insertLog.getRoute());
             Optional<User> user = userService.getUserInfo(insertLog.getUserId());
-            if(user.isPresent()){
-                Weather weather = null;
-                for(Weather w : Weather.values()){
-                    if(w.getDesc().equals(insertLog.getPlogWeather()))
-                        weather = w;
-                }
-                PloggingLog saveLog = ploggingService.insertPloggingLog(PloggingLog.builder()
-                        .user(user.get()).plogDist(insertLog.getPlogDist())
-                        .plogTime(insertLog.getPlogTime()).plogDate(insertLog.getPlogDate())
-                        .plogWeather(weather).route(routeJson).build());
-                if(saveLog == null )
-                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseResponseBody.of(204, "저장 실패"));
-            }else{
-                System.out.println("해당 회원이 없습니다.");
-            }
+            PloggingLog saveLog = ploggingService.insertPloggingLog(user, insertLog);
+            if(saveLog == null )
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseResponseBody.of(204, "저장 실패"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(BaseResponseBody.of(503, "..."));
         }

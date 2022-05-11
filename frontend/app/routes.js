@@ -63,7 +63,7 @@ const AppTabComponent = () => {
             }}
         >
             <MainScreenTab.Screen name="홈" component={Home} />
-            <MainScreenTab.Screen name="기록" component={Record} />
+            <MainScreenTab.Screen name="기록" component={Record} options={{ headerShown: false }} />
             <MainScreenTab.Screen name="플로깅" component={Plogging} />
             <MainScreenTab.Screen name="채팅 목록" component={Chat} />
             <MainScreenTab.Screen name="MY" component={MyPage} />
