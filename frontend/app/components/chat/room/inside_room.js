@@ -65,8 +65,9 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
         const promises = queryArray.map(async message => {
             const messageData = message.data();
             var userInfo = {};
-            if(messageData.userId == userNum) userInfo = {"_id": userNum};
-            else userInfo = await getUserInfo(messageData.userId);
+            //if(messageData.userId == userNum) userInfo = {"_id": userNum};
+            //else userInfo = await getUserInfo(messageData.userId);
+            userInfo = await getUserInfo(messageData.userId);
             //var userInfo = members[messageData.userId];
             //if(userInfo == undefined) userInfo = await getUserInfo(messageData.userId);
             const messageInfo = {

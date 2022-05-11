@@ -4,28 +4,27 @@ import ChattingRoom from './chatting_room';
 import { FlatList } from 'react-native-gesture-handler';
 import { Container } from '../styles';
 import firestore from '@react-native-firebase/firestore';
-//import data from '../dump_data';
 import meetings_data from '../dump_data_meetings';
-import { ThemeConsumer } from 'styled-components';
 
 
 const ChattingList = () => {
     const navigation = useNavigation();
     const userNum="1";
-    const [user, setUser] = useState();
     const [meetings, setMeetings] = useState([]);
     const [chatRooms, setChatRooms] = useState([]);
 
-    const _handleChattingRoomPress = ( item ) => {
+    const _handleChattingRoomPress = ( item, index ) => {
         navigation.navigate('InChatRoom', {meeting: item.meeting, userNum});
+        console.log(chatRooms[index].chatting.unReadCnt);
+        chatRooms[index].chatting.unReadCnt = 0;
     }
 
-    const renderChattingRoom = ({ item }) => {
+    const renderChattingRoom = ({ item, index }) => {
         return(
             <ChattingRoom 
                 meeting={item.meeting}
                 chatting={item.chatting}
-                onPress = {()=> _handleChattingRoomPress(item)}
+                onPress = {()=> _handleChattingRoomPress(item, index)}
             />
         )
     }
@@ -55,7 +54,6 @@ const ChattingList = () => {
             }else{
                 chat = await getLastChatInfo(meetingDocRef, lastReadChat.time);
             }
-            //console.log(chat);
 
             const chatRoom = {
                 meeting:{
@@ -126,11 +124,11 @@ const ChattingList = () => {
             .where('createdAt', '>=', lastReadChatTime)
             .get().then((docs) => {
                 const chatDocs = docs.docs;
-                lastChatInfo.unReadCnt=chatDocs.length;
+                lastChatInfo.unReadCnt=chatDocs.length-1;
                 const lastChatData = chatDocs[0].data();
                 lastChatInfo.lastTime=lastChatData.createdAt;
                 lastChatInfo.lastMsg=lastChatData.text;
-                if(lastChatInfo.unReadCnt==1&& lastReadChatTime==lastChatInfo.lastTime) lastChatInfo.unReadCnt=0;
+                //if(lastChatInfo.unReadCnt==1&& lastReadChatTime==lastChatInfo.lastTime) lastChatInfo.unReadCnt=0;
             });
         return lastChatInfo;
     }
@@ -144,21 +142,22 @@ const ChattingList = () => {
             .where('meetingId', 'in', meetingIds)
             .orderBy('lastChatTime', 'desc')
             .onSnapshot(querySnapShot => {
-                if(querySnapShot != null){
-                    setChatRoomData(querySnapShot.docs);
-                }
+                console.log(querySnapShot);
+                setChatRoomData(querySnapShot.docs);
+            }, error => {
+                console.log(error);
             });
-        return () => subscriberMeetings();
+        return () => {
+            console.log("사라진다......");
+            subscriberMeetings();
+        }
         //return () => subscriberMeetings();
     }, []);
 
-    /*
     useEffect(() => {
-        console.log("chatRooms이 바뀌었다..!");
+        console.log("채팅방 정보가 바뀌었다...!");
         console.log(chatRooms);
     }, [chatRooms]);
-    */
-
 
     return (
         <Container>

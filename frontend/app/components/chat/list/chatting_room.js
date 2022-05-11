@@ -20,7 +20,8 @@ import {
 
 const getDateOrTime = (dateTime) => {
     if(dateTime==null) return null;
-    const now = moment().add(9, 'hours').startOf('day');
+    //const now = moment().add(9, 'hours').startOf('day');
+    const now = moment().startOf('day');
     const target = moment(dateTime).startOf('day');
     return moment(dateTime).format(now.diff(target, 'days') > 0 ? 'MM/DD' : 'HH:mm');
 };
@@ -29,11 +30,13 @@ const getDateOrTime = (dateTime) => {
 const ChattingRoom = ( props ) => {
     const meeting = props.meeting;
     const chatting = props.chatting;
-    const [lastTime, setLastTime] = useState("");
+    const [lastTime, setLastTime] = useState();
+    const [unReadCnt, setUnReadCnt] = useState();
 
     useEffect(() => {
         setLastTime(getDateOrTime(chatting.lastTime));
-    }, []);
+        setUnReadCnt(chatting.unReadCnt);
+    }, [chatting]);
 
     return(
         <ChattingRoomComp onPress={props.onPress}>
@@ -50,7 +53,7 @@ const ChattingRoom = ( props ) => {
             </ChattingRoomInfoComp>
             <ChattingRoomInfoAddComp>
                 <ChattingRoomLastTime>{lastTime}</ChattingRoomLastTime>
-                { chatting.unReadCnt==0
+                { unReadCnt==0
                 ? null :
                     <ChattingRoomUnReadBadge>
                         <ChattingRoomUnRead>{chatting.unReadCnt}</ChattingRoomUnRead>
