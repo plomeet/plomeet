@@ -211,12 +211,10 @@ fabric.properties
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,intellij,visualstudiocode
-<<<<<<< HEAD
 .idea/S06P31A205.iml
 .idea/modules.xml
 .idea/inspectionProfiles/Project_Default.xml
-=======
 
 #firebase
 frontend/android/app/google-services.json
->>>>>>> 6df184b2354ed6ea3d3568f1395b88f66063457d
+frontend/android/app/src/google-services.json

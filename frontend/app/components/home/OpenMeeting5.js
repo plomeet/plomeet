@@ -10,7 +10,7 @@ const openMeeting5 = () => {
       <View style={styles.container}>
         <Text>입력한 정보 마지막으로 확인하는 부분</Text>
         <View style={{flex:1}}/>
-        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={console.log("모임 생성하기")}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => navigation.popToTop()}>
           <Text style={styles.text}>모임 생성하기</Text>
         </TouchableOpacity>
       </View>

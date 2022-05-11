@@ -31,7 +31,7 @@ const openMeeting1 = () => {
           autoCapitalize='none'
         />
         <View style={{flex:1}}/>
-        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => navigation.navigate('OpenMeeting2')}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => navigation.push('OpenMeeting2')}>
           <Text style={styles.text}>다음</Text>
         </TouchableOpacity>
       </View>

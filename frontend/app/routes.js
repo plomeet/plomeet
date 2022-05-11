@@ -73,11 +73,11 @@ export const RootNavigator = () => {
             />
             <Stack.Screen name="InChatRoom" component={InsideRoom} />
             <Stack.Screen name="OpenMeeting" component={OpenMeeting} options={{title: '플로깅 모임 생성(1/5)'}} />
-            <Stack.Screen name="OpenMeeting2" component={OpenMeeting2} options={{title: '플로깅 모임 생성(2/5)'}} />
-            <Stack.Screen name="OpenMeeting3" component={OpenMeeting3} options={{title: '플로깅 모임 생성(3/5)'}} />
-            <Stack.Screen name="OpenMeeting4" component={OpenMeeting4} options={{title: '플로깅 모임 생성(4/5)'}} />
-            <Stack.Screen name="OpenMeeting5" component={OpenMeeting5} options={{title: '플로깅 모임 생성(5/5)'}} />
-            <Stack.Screen name="MeetingDetail" component={MeetingDetail} options={{title: '모임 상세정보'}} />
+            <Stack.Screen name="OpenMeeting2" component={OpenMeeting2} options={{animationEnabled: false, title: '플로깅 모임 생성(2/5)'}} />
+            <Stack.Screen name="OpenMeeting3" component={OpenMeeting3} options={{animationEnabled: false, title: '플로깅 모임 생성(3/5)'}} />
+            <Stack.Screen name="OpenMeeting4" component={OpenMeeting4} options={{animationEnabled: false, title: '플로깅 모임 생성(4/5)'}} />
+            <Stack.Screen name="OpenMeeting5" component={OpenMeeting5} options={{animationEnabled: false, title: '플로깅 모임 생성(5/5)'}} />
+            <Stack.Screen name="MeetingDetail" component={MeetingDetail} options={{animationEnabled: false, title: '모임 상세정보'}} />
         </Stack.Navigator>
     )
 }
