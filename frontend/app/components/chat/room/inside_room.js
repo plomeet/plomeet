@@ -14,16 +14,12 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
     const [user, setUser] = useState();
     //const [members, setMembers] = useState();
     const [messages, setMessages] = useState([]);
-    const [lastMessage, setLastMessage] = useState();
-    var lastMessageTemp = "";
 
     
     const _handleMessageSend = async messageList => {
         const newMessage = messageList[0];
-        const koreaTimeDiff = 9*60*60*1000;
         const message = {
             text: newMessage.text,
-            //createdAt: Date.now()+koreaTimeDiff,
             createdAt: Date.now(),
             userId: newMessage.user._id,
         };
@@ -75,15 +71,12 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
                 text: messageData.text,
                 createdAt: messageData.createdAt,
                 user: userInfo,
-                //user: members[messageData.userId],
             };
             list.push(messageInfo);
         });
         await Promise.all(promises);
 
         setMessages(list);
-        //setLastMessage(() => list[0]);
-        //() => {setLastMessage(list[0])};
     };
 
     const getUserInfo = async (userId) => {
@@ -132,19 +125,9 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
                 setMessagesData(querySnapShot.docs);
             });
         
-        //setLastMessage(messages[0]);
         return () => {
             subscriberUser();
             subscriberChatting();
-            //console.log(lastMessage);
-            //console.log(lastMessageTemp);
-            // const updateUserLastReadChatTimeData = {
-            //     meetingId: meeting.meetingId,
-            //     userId: userNum,
-            //     lastChatId: lastMessage._id,
-            //     lastChatTime: lastMessage.createdAt,
-            // }
-            // updateUserLastReadChatTime({...updateUserLastReadChatTimeData});
         }
     }, []);
 
@@ -181,12 +164,6 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
             _handleMessageUpdate(updateUserLastReadChatTimeData);
         }    
     }, [messages]);
-    /*
-    useEffect(() => {
-        console.log("마지막 메세지가 바뀌었다..!");
-        console.log(lastMessage);
-    }, [lastMessage]);
-    */
     
 
     return (
