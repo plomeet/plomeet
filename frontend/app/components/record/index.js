@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     },
     MonthListText: {
         marginTop: 10,
-        marginBottom: 3,
+        marginBottom: 2,
         fontSize: 18,
         marginLeft: 20,
         fontWeight: "bold",

@@ -6,21 +6,27 @@ import Config from 'react-native-config'
 import DetailArrow from '../icon/detailArrow.svg';
 
 const PloggingList = () => {
+    const navigation = useNavigation();
 
     return (
-        <View style={styles.container}>
-            <View style={styles.dateContainer}>
-                <Text style={styles.weekText}>THU</Text>
-                <Text style={styles.dateText}>13</Text>
+        <TouchableOpacity
+            onPress={
+                () => navigation.navigate('logDetail', { msg: "show logDetail" })
+            }>
+            <View style={styles.container}>
+                <View style={styles.dateContainer}>
+                    <Text style={styles.weekText}>THU</Text>
+                    <Text style={styles.dateText}>13</Text>
+                </View>
+                <View style={styles.infoContainer}>
+                    <Text style={styles.countInfo}>5월 5번째 플로깅</Text>
+                    <Text style={styles.timeInfo}>00.0km / 00:00</Text>
+                </View>
+                <View style={styles.detailButtonContainer}>
+                    <DetailArrow></DetailArrow>
+                </View>
             </View>
-            <View style={styles.infoContainer}>
-                <Text style={styles.countInfo}>5월 5번째 플로깅</Text>
-                <Text style={styles.timeInfo}>00.0km / 00:00</Text>
-            </View>
-            <View style={styles.detailButtonContainer}>
-                <DetailArrow></DetailArrow>
-            </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
