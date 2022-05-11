@@ -12,25 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-@RequiredArgsConstructor
-@Service
-public class MyMeetingService {
+public interface MyMeetingService {
 
-    private final MyMeetingRepository myMeetingRepository;
+    Long joinMeeting(MyMeetingReq myMeetingReq);
 
-    private final UserRepository userRepository;
-
-    private final MeetingRepository meetingRepository;
-
-    @Transactional
-    public Long joinMeeting(MyMeetingReq myMeetingReq) {
-        User userId = userRepository.findById(myMeetingReq.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 존재하지 않습니다. UserId = " + myMeetingReq.getUserId()));
-        Meeting meetingId = meetingRepository.findById(myMeetingReq.getMeetingId())
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 모임이 존재하지 않습니다. MeetingId = " + myMeetingReq.getMeetingId()));
-        MyMeeting myMeeting = myMeetingReq.toEntity();
-        myMeeting.mapUser(userId);
-        myMeeting.mapMeeting(meetingId);
-        return myMeetingRepository.save(myMeeting).getMyMeetingId();
-    }
 }
