@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @ToString
@@ -15,12 +17,13 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    Long userId;
+    private long userId;
     @Column(nullable = false, length = 10)
-    String userName;
+    private String userName;
     @Column(nullable = false, length = 100, unique = true)
-    String userEmail;
-    @Column(columnDefinition = "boolean default false")
-    boolean idDelete;
-    
+    private String userEmail;
+    @Column(columnDefinition = "tinyInt(1) default false")
+    private boolean idDelete;
+    @OneToMany(mappedBy = "user")
+    private List<PloggingLog> logs = new ArrayList<>();
 }

@@ -12,6 +12,9 @@ const mapDispatchToProps = dispatch => {
         setWeatherLoc: weatherLoc => dispatch(actions.setWeatherLoc(weatherLoc)),
         setTimeSum: timeSum => dispatch(actions.setTimeSum(timeSum)),
         setImages: images => dispatch(actions.setImages(images)),
+        setIsSave: isSave => dispatch(actions.setIsSave(isSave)),
+        setPloggingPath: ploggingPath => dispatch(actions.setPloggingPath(ploggingPath)),
+        resetPloggingPath: () => dispatch(actions.resetPloggingPath()),
     }
 }
 

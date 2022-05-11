@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "./map";
 import { ImageBackground, PermissionsAndroid, Platform, ScrollView, Text, TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { LayerGroup } from './map/index';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { useSelector } from "react-redux"
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Geolocation from 'react-native-geolocation-service';
 import axiosInstance from "../../../utils/API";
@@ -19,11 +19,11 @@ const P2 = { latitude: 37.565383, longitude: 126.976292 };
 const P4 = { latitude: 37.564834, longitude: 126.977218 };
 const P5 = { latitude: 37.562834, longitude: 126.976218 };
 
-const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, setImages }) => {
+const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, setImages, setPloggingPath }) => {
     const mapView = useRef(null);
     const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
     // const [location, setLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); //ios 테스트용 - 지우지마세여 ㅠㅠㅠ 넹!!
-    const [ploggingPath, setPloggingPath] = useState([]);
+    //const [ploggingPath, setPloggingPath] = useState([]);
     //const [enableLayerGroup, setEnableLayerGroup] = useState(true);
     const [center, setCenter] = useState();
     const [trashcanList, setTrashcanList] = useState([]);
@@ -34,7 +34,7 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, 
     const [showThisNum, setShowThisNum] = useState(-2);
     const [showInfoDetail, setShowInfoDetail] = useState(false);
     const [trashInfoDetail, setTrashInfoDetail] = useState();
-
+    const ploggingPath = useSelector(state => state.ploggingPath);
     //화면에 렌더링되면 권한부터 살피자
     useEffect(() => {
 
@@ -49,17 +49,15 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, 
 
     //시작시 쓰레기통 전부를 가져온다.
     useEffect(() => {
-        console.log("쓰레기통 리렌더링")
         async function getTrashCans() {
             try {
                 await axiosInstance.get("/trashcans")
                     .then((response) => {
                         if (response.status === 200) {
                             setTrashcanList(response.data.data);
-                            console.log("##############" + response.data.data.length);
-                            console.log("SUCCESS");
+                            console.log("get Trashcans SUCCESS");
                         } else {
-                            console.log("FAIL");
+                            console.log("get Trashcans FAIL");
                         }
                     })
                     .catch((response) => { console.log(response); });
@@ -101,7 +99,8 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, 
     // 위치가 갱신되면 플로깅 이동 기록 쌓자
     useEffect(() => {
         if (isPlogging) { //이동 거리 계산
-            setPloggingPath(ploggingPath => [...ploggingPath, location]);
+            //setPloggingPath(ploggingPath => [...ploggingPath, location]);
+            setPloggingPath(location);
             if (prevLocation) {
                 setTotalDist(() => {
                     const prevLatLng = {
@@ -128,7 +127,6 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, 
     }, [location]);
 
     useEffect(() => {
-        console.log("여긴가?");
         if (trashcanList.length > 0) {
             setShowTrashcans(true);
         }
@@ -163,7 +161,7 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, 
         Geolocation.getCurrentPosition(
             (position) => {
                 const { latitude, longitude } = position.coords;
-                setPloggingPath([]);
+                //setPloggingPath([]);
                 setLocation({
                     ...location,
                     latitude,
@@ -337,7 +335,7 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, 
         */}
                 </>
                 :
-                <EndPlogging ploggingPath={ploggingPath} center={center} setImages={setImages}  />
+                <EndPlogging ploggingPath={ploggingPath} center={center} setImages={setImages} />
         }
     </>
 };
