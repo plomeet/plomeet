@@ -23,7 +23,8 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
         const koreaTimeDiff = 9*60*60*1000;
         const message = {
             text: newMessage.text,
-            createdAt: Date.now()+koreaTimeDiff,
+            //createdAt: Date.now()+koreaTimeDiff,
+            createdAt: Date.now(),
             userId: newMessage.user._id,
         };
         try{
@@ -32,6 +33,10 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
             Alert.alert('Send Message Error', e.message);
         }
     };
+
+    const  _handleMessageUpdate = async(updateUserLastReadChatTimeData) => {
+        await updateUserLastReadChatTime({...updateUserLastReadChatTimeData})
+    }
 
     const renderBubble = (props) => {
         const bubbleProps = {
@@ -126,13 +131,12 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
                 setMessagesData(querySnapShot.docs);
             });
         
-        setLastMessage(messages[0]);
+        //setLastMessage(messages[0]);
         return () => {
             subscriberUser();
             subscriberChatting();
-            console.log("나갈 때");
-            console.log(lastMessage);
-            console.log(lastMessageTemp);
+            //console.log(lastMessage);
+            //console.log(lastMessageTemp);
             // const updateUserLastReadChatTimeData = {
             //     meetingId: meeting.meetingId,
             //     userId: userNum,
@@ -164,9 +168,17 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
     }, []);
     */
 
-    /*
+    
     useEffect(() => {
-        
+        if(messages.length != 0){
+            const updateUserLastReadChatTimeData = {
+                meetingId: meeting.meetingId,
+                userId: userNum,
+                lastChatId: messages[0]._id,
+                lastChatTime: messages[0].createdAt,
+            };
+            _handleMessageUpdate(updateUserLastReadChatTimeData);
+        }    
     }, [messages]);
     /*
     useEffect(() => {
