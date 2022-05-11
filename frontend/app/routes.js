@@ -14,6 +14,10 @@ import Chat from './components/chat/index';
 import MyPage from './components/my/index';
 import CameraPage from './components/plogging/button/CameraPage';
 
+//Chatting
+import InsideRoom from './components/chat/room/inside_room';
+
+
 const Stack = createStackNavigator();
 const MainScreenTab = createBottomTabNavigator();
 
@@ -32,7 +36,7 @@ const AppTabComponent = () => {
                         iconName = focused ? 'home' : 'home-outline';
                     } else if (route.name === '기록') {
                         iconName = focused ? 'calendar' : 'calendar-outline';
-                    } else if (route.name === '채팅') {
+                    } else if (route.name === '채팅 목록') {
                         iconName = focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline';
                     } else if (route.name === 'MY') {
                         iconName = focused ? 'person-circle' : 'person-circle-outline';
@@ -61,7 +65,7 @@ const AppTabComponent = () => {
             <MainScreenTab.Screen name="홈" component={Home} />
             <MainScreenTab.Screen name="기록" component={Record} options={{ headerShown: false }} />
             <MainScreenTab.Screen name="플로깅" component={Plogging} />
-            <MainScreenTab.Screen name="채팅" component={Chat} />
+            <MainScreenTab.Screen name="채팅 목록" component={Chat} />
             <MainScreenTab.Screen name="MY" component={MyPage} />
         </MainScreenTab.Navigator>
     )
@@ -76,6 +80,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="M" component={AppTabComponent} options={{ title: ' ', headerShown: false }} />
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: false, gestureEnabled: false }} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
+            <Stack.Screen name="InChatRoom" component={InsideRoom} />
         </Stack.Navigator>
     )
 }
