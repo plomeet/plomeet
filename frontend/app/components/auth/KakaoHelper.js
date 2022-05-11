@@ -3,6 +3,7 @@ import * as KakaoLogins from '@react-native-seoul/kakao-login';
 var kakaoHelper = {
   login: login,
   logout: logout,
+  getProfile: getProfile,
 };
 
 function login() {
@@ -21,6 +22,12 @@ function login() {
     .catch(err => {
       console.log(`### Login Error : ${JSON.stringify(err)}`);
     });
+}
+
+function getProfile() {
+  KakaoLogins.getProfile().then(result => {
+    console.log(`### Profile Result : ${JSON.stringify(result)}`);
+  });
 }
 
 function logout() {

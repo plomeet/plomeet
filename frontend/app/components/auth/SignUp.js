@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState, Component} from 'react';
 import {
   View,
   Image,
@@ -9,18 +9,53 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
-// import * as KakaoLogins from '@react-native-seoul/kakao-login';
+import axios from 'axios';
+import * as KakaoLogins from '@react-native-seoul/kakao-login';
 
 import LogoImage from '../../../assets/imgs/6881.png';
 import KakaoLogo from '../../../assets/imgs/kakao1.png';
 import LinearGradient from 'react-native-linear-gradient';
+import {useNavigation} from '@react-navigation/native';
 
-const kakaoHelper = require('./KakaoHelper.js');
+// const kakaoHelper = require('./KakaoHelper.js');
 
 const SignUp = () => {
+  const navigation = useNavigation();
+
+  function login() {
+    KakaoLogins.login()
+      .then(result => {
+        console.log(`### Login Result : ${JSON.stringify(result)}`);
+        KakaoLogins.getProfile()
+          .then(result => {
+            console.log(`### Profile Result : ${JSON.stringify(result)}`);
+            const res = result;
+            console.log(res);
+            console.log('------------------');
+          })
+          .catch(err => {
+            console.log(`### Profile Error : ${JSON.stringify(err)}`);
+          });
+      })
+      .catch(err => {
+        console.log(`### Login Error : ${JSON.stringify(err)}`);
+      });
+  }
+
+  function logout() {
+    KakaoLogins.logout()
+      .then(result => {
+        console.log(`### Logout Result : ${JSON.stringify(result)}`);
+      })
+      .catch(err => {
+        console.log(`### Logout Error : ${JSON.stringify(err)}`);
+      });
+  }
+
   BackHandler.addEventListener('hardwareBackPress', () => {
     return true;
   });
+
   return (
     <LinearGradient
       start={{x: 0, y: 0}}
@@ -34,7 +69,7 @@ const SignUp = () => {
           함께 즐거운 플로깅을 {'\n'}시작해 볼까요?
         </Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={kakaoHelper.login}>
+      <TouchableOpacity style={styles.button} onPress={login}>
         <View style={styles.button2}>
           <Image
             source={KakaoLogo}
@@ -43,7 +78,7 @@ const SignUp = () => {
           <Text style={styles.title3}>카카오톡으로 시작하기</Text>
         </View>
       </TouchableOpacity>
-      <Text onPress={kakaoHelper.logout}>로그아웃</Text>
+      <Text onPress={logout}>로그아웃</Text>
       <View style={styles.logo}>
         <Image
           source={LogoImage}

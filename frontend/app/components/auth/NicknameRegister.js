@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {
   View,
   Image,
@@ -12,12 +12,48 @@ import {
   BackHandler,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import * as KakaoLogins from '@react-native-seoul/kakao-login';
 
 import LogoImage from '../../../assets/imgs/6881.png';
 import LinearGradient from 'react-native-linear-gradient';
 
+const kakaoHelper = require('./KakaoHelper.js');
+
 const NicknameRegister = () => {
   const navigation = useNavigation();
+  const [value, onChangeText] = useState("");
+  var id = '';
+  var nickname = value;
+  var img = '';
+  var name = '';
+  var email = '';
+  console.log(value);
+  
+  // kakaoHelper.getProfile();
+    KakaoLogins.getProfile().then(result => {
+      id = result.id;
+      img = result.profileImageUrl;
+      name = result.nickname;
+      email = result.email;
+    });
+
+  // setTimeout(() => {console.log(img)},100);
+  // setTimeout() 걸어줄것
+  
+  // setTimeout(() => {},100);
+  const Register = async () => {
+    axios.post('http://127.0.0.1:8080/user', {
+      kakaoUserId: id,
+      userNickName: nickname, // 입력받은값으로 변경
+      userProfileImg: img,
+      userName: name,
+      userEmail: email,
+    }).then((response) => {
+      console.log(response);
+    }).then((error) => {
+      console.log(error);
+    }); 
+  };
 
   return (
     <KeyboardAvoidingView
@@ -37,13 +73,15 @@ const NicknameRegister = () => {
             keyboardType="default"
             autoFocus
             maxLength={10}
-            autoCapitalize="none">
-            {/* onChangeText={this.onChangeInput} */}
+            autoCapitalize="none"
+            onChangeText={text => onChangeText(text)}
+            value={value}>
           </TextInput>
         </View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('Home')}>
+          onPress={() => { Register
+          }}>
           <View style={styles.button2}>
             <Text style={styles.title2}>회원가입</Text>
           </View>
@@ -85,10 +123,10 @@ const styles = StyleSheet.create({
   button: {
     ...Platform.select({
       ios: {
-        marginTop: 180,
+        marginTop: 10,
       },
       android: {
-        marginTop: 180,
+        marginTop: 10,
         marginBottom: 10,
       },
     }),
@@ -109,7 +147,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     alignItems: 'center',
-    marginTop: 80,
+    marginTop: 250,
   },
 });
 
