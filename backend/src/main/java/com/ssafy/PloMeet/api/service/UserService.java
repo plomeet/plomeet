@@ -14,4 +14,10 @@ public interface UserService {
     UserRes findUserByKakaoUserId(Long kakaoUserId);
     Long signUp(UserRegisterReq userRegisterReq);
 
+import com.ssafy.PloMeet.model.entity.User;
+
+import java.util.Optional;
+
+public interface UserService {
+    Optional<User> getUserInfo(Long userId) throws Exception;
 }

@@ -9,11 +9,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BackSvg from '../icons/back.svg'
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import axiosInstance from "../../../../utils/API";
+import Config from 'react-native-config'
 
-//나중에 환경변수 처리
-const serviceKey = "Yw3zPCyzMoX2VB0yMPfZgip2qIHGaFLGT5RuJ9gtVFGvzjbuNNZa5qB5DFUm%2BNMe%2B0kHhUWAYIH1j0BK%2Fdj6MQ%3D%3D";
-
-const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString }) => {
+const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString, setIsSave, resetPloggingPath, setDistSum }) => {
   const layout = useWindowDimensions();
   const countInterval = useRef(null);
   const [minutes, setMinutes] = useState(parseInt(mm));
@@ -28,6 +27,9 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
   const [weather, setWeather] = useState("weather-sunny");
   const navigation = useNavigation();
   const showEndPage = useSelector(state => state.showPloggingEndPage);
+  const isSave = useSelector(state => state.isSave);
+  const ploggingPath = useSelector(state => state.ploggingPath);
+  const startTime = useSelector(state => state.startTime);
 
   useEffect(() => {
     countInterval.current = setInterval(() => {
@@ -65,10 +67,8 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
     if (parseInt(minutes) <= 40)  // 매시간 40분 후에 api가 제공됨..하..
       weatherTimeParam = (parseInt(hours) - 1) + "" + 50;
 
-    console.log(weatherTimeParam);
-
     async function getWeatherInfo() {
-      await weatherApiInstance.get(`/getUltraSrtNcst?serviceKey=${serviceKey}&pageNo=1&numOfRows=10&dataType=JSON&base_date=${dateString}&base_time=${weatherTimeParam}&nx=${weatherLoc[0]}&ny=${weatherLoc[1]}`)
+      await weatherApiInstance.get(`/getUltraSrtNcst?serviceKey=${Config.SERVICEKEY_WEATHER}&pageNo=1&numOfRows=10&dataType=JSON&base_date=${dateString}&base_time=${weatherTimeParam}&nx=${weatherLoc[0]}&ny=${weatherLoc[1]}`)
         .then((response) => {
           if (response.status === 200) {
             organizeWeatherData(response.data.response.body.items.item, parseInt(timeString));
@@ -79,6 +79,45 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
     }
     getWeatherInfo();
   }, [weatherLoc, currWeatherTime]);
+
+  useEffect(() => {
+    if (isSave) {
+      makeSaveFalse();
+      let timeStr = "" + minutes;
+      timeStr += seconds;
+      async function saveLog() {
+        try {
+          await axiosInstance.post("/ploggings", {
+            userId: 1, // 차후 유저 정보로 수정
+            plogDist: distSum,
+            plogTime: timeStr,
+            plogWeather: weather,
+            route: ploggingPath,
+            plogDate: (startTime[0] + startTime[1] + "-" + startTime[2]),
+          })
+            .then((response) => {
+              if (response.status === 200) {
+                console.log("log insert SUCCESS");
+              } else {
+                console.log("log insert FAIL " + response.status);
+              }
+            })
+            .catch((response) => { console.log(response); });
+        } catch (err) { console.log(err); }
+      };
+      saveLog();
+      setMinutes(0);
+      setSeconds(0);
+      setTimeSum(minutes + " : " + 0 + seconds)
+      setDistSum(0);
+      resetPloggingPath();
+      navigation.navigate('기록');
+    }
+  }, [isSave])
+
+  const makeSaveFalse = () => {
+    setIsSave(false);
+  }
 
   const organizeWeatherData = (data, time) => {//0 맑음 1 쏘쏘 2 흐림 3 비 4 눈/비 5 눈
     const PTY = data[0].obsrValue;
