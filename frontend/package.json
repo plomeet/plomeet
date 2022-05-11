@@ -21,8 +21,6 @@
     "axios": "^0.26.1",
     "fbjs": "^3.0.4",
     "haversine": "^1.1.1",
-    "multer": "^1.4.4",
-    "multer-s3": "^2.10.0",
     "moment": "^2.29.3",
     "react": "17.0.2",
     "react-native": "0.68.1",

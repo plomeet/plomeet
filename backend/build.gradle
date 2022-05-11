@@ -73,11 +73,12 @@ project.ext.set("build.date", buildTime())
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-websocket")
-	//implementation("org.springframework.boot:spring-boot-starter-security")
+
+//	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.plugin:spring-plugin-core:2.0.0.RELEASE")
-	//testImplementation("org.springframework.security:spring-security-test")
+//	testImplementation("org.springframework.security:spring-security-test")
 	annotationProcessor("org.springframework.boot:spring-boot-starter-data-jpa")
 	runtimeOnly("mysql:mysql-connector-java")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -124,4 +125,13 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+bootJar {
+	mainClassName = 'com.ssafy.PloMeet.PloMeetApplication'
+}
+
+bootRun {
+	String activeProfile = System.properties['spring.profiles.active']
+	systemProperty "spring.profiles.active", activeProfile
 }
