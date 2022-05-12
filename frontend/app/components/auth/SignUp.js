@@ -22,9 +22,29 @@ import {useNavigation} from '@react-navigation/native';
 const SignUp = () => {
   const navigation = useNavigation();
 
-  // const isSignedUp = async () => {
-  //   axios.get('http://k6a205.p.ssafy.io:8000/user/${}')
-  // }
+  var kakaoUserId = '';
+
+  KakaoLogins.getProfile().then(result => {
+    kakaoUserId = result.id;
+    // console.log('@@@@@@@ ' + result.id);
+  });
+
+  // setTimeout(() => {console.log('##### ' + kakaoUserId)}, 500 );
+  // console.log('##### ' + kakaoUserId);
+  const isSignedUp = async (params) => {
+    axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
+     .then((response) => {
+       console.log(response.status);
+       if(response.status == 200){ //홈으로, 저장
+        navigation.navigate('M');
+       }else{ // 진행시켜
+        login();
+        navigation.navigate('NickNameRegister');
+       }
+    }).catch((error) => {
+      console.log(error); 
+    });
+  };
 
   function login() {
     KakaoLogins.login()
@@ -47,15 +67,15 @@ const SignUp = () => {
       navigation.navigate('NicknameRegister');
   }
 
-  function logout() {
-    KakaoLogins.logout()
-      .then(result => {
-        console.log(`### Logout Result : ${JSON.stringify(result)}`);
-      })
-      .catch(err => {
-        console.log(`### Logout Error : ${JSON.stringify(err)}`);
-      });
-  }
+  // function logout() {
+  //   KakaoLogins.logout()
+  //     .then(result => {
+  //       console.log(`### Logout Result : ${JSON.stringify(result)}`);
+  //     })
+  //     .catch(err => {
+  //       console.log(`### Logout Error : ${JSON.stringify(err)}`);
+  //     });
+  // }
 
   BackHandler.addEventListener('hardwareBackPress', () => {
     return true;
@@ -74,7 +94,7 @@ const SignUp = () => {
           함께 즐거운 플로깅을 {'\n'}시작해 볼까요?
         </Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={login}>
+      <TouchableOpacity style={styles.button} onPress={isSignedUp}>
         <View style={styles.button2}>
           <Image
             source={KakaoLogo}
@@ -83,7 +103,7 @@ const SignUp = () => {
           <Text style={styles.title3}>카카오톡으로 시작하기</Text>
         </View>
       </TouchableOpacity>
-      <Text onPress={logout}>로그아웃</Text>
+      {/* <Text onPress={logout}>로그아웃</Text> */}
       <View style={styles.logo}>
         <Image
           source={LogoImage}
