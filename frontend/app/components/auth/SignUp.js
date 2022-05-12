@@ -10,6 +10,7 @@ import {
   BackHandler,
 } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as KakaoLogins from '@react-native-seoul/kakao-login';
 
 import LogoImage from '../../../assets/imgs/6881.png';
@@ -26,16 +27,13 @@ const SignUp = () => {
 
   KakaoLogins.getProfile().then(result => {
     kakaoUserId = result.id;
-    // console.log('@@@@@@@ ' + result.id);
   });
 
-  // setTimeout(() => {console.log('##### ' + kakaoUserId)}, 500 );
-  // console.log('##### ' + kakaoUserId);
   const isSignedUp = async (params) => {
     axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
      .then((response) => {
        console.log(response.status);
-       if(response.status == 200){ //홈으로, 저장
+       if(response.status == 200){ //홈으로, Redux 저장
         navigation.navigate('M');
        }else{ // 진행시켜
         login();
@@ -50,12 +48,10 @@ const SignUp = () => {
     KakaoLogins.login()
       .then(result => {
         console.log(`### Login Result : ${JSON.stringify(result)}`);
+        AsyncStorage.setItem('refreshToken', result.refreshToken);
         KakaoLogins.getProfile()
           .then(result => {
             console.log(`### Profile Result : ${JSON.stringify(result)}`);
-            const res = result;
-            console.log(res);
-            console.log('------------------');
           })
           .catch(err => {
             console.log(`### Profile Error : ${JSON.stringify(err)}`);

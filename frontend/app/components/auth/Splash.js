@@ -8,8 +8,24 @@ import {
 } from 'react-native';
 import AuthLogo from './authLogo';
 import LinearGradient from 'react-native-linear-gradient';
+import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AuthComponent = () => {
+  const navigation = useNavigation();
+
+  setTimeout(() => {
+    AsyncStorage.getItem('refreshToken').then(res => {
+      if(res) {
+        navigation.navigate('M');
+      }else{
+        navigation.navigate('SignUp');
+      }
+    });
+  },2000);
+  
+
+
   return (
     <LinearGradient
       start={{x: 0, y: 0}}
