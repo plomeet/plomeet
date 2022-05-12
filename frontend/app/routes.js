@@ -13,6 +13,7 @@ import Plogging from './container/PloggingContainer';
 import Chat from './components/chat/index';
 import MyPage from './components/my/index';
 import CameraPage from './components/plogging/button/CameraPage';
+import LogDetail from './components/record/plogDetail/index';
 
 //Chatting
 import InsideRoom from './components/chat/room/inside_room';
@@ -81,6 +82,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: false, gestureEnabled: false }} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
             <Stack.Screen name="InChatRoom" component={InsideRoom} />
+            <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '', headerShown: false, gestureEnabled: false }} />
         </Stack.Navigator>
     )
 }
