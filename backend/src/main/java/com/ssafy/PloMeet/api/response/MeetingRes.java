@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class MeetingRes {
 
-    //    private Long meetingId;
+    private Long meetingId;
     private String meetingImg;
     private String meetingName;
     private String meetingDesc;
@@ -29,7 +29,8 @@ public class MeetingRes {
 
 
     @Builder
-    public MeetingRes(String meetingImg, String meetingName, String meetingDesc, String meetingPlace, String meetingPlaceDetail, Double lat, Double lng, int memberMax, String meetingDate, String item) {
+    public MeetingRes(Long meetingId, String meetingImg, String meetingName, String meetingDesc, String meetingPlace, String meetingPlaceDetail, Double lat, Double lng, int memberMax, String meetingDate, String item) {
+        this.meetingId = meetingId;
         this.meetingImg = meetingImg;
         this.meetingName = meetingName;
         this.meetingDesc = meetingDesc;
@@ -43,6 +44,7 @@ public class MeetingRes {
     }
 
     public MeetingRes(Meeting meeting) {
+        this.meetingId = meeting.getMeetingId();
         this.meetingImg = meeting.getMeetingImg();
         this.meetingName = meeting.getMeetingName();
         this.meetingDesc = meeting.getMeetingDesc();
