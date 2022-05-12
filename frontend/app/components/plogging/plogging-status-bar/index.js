@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import axiosInstance from "../../../../utils/API";
 import Config from 'react-native-config'
+import AWS from 'aws-sdk';
 
 const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString, setIsSave, resetPloggingPath, setDistSum }) => {
   const layout = useWindowDimensions();
@@ -30,6 +31,18 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
   const isSave = useSelector(state => state.isSave);
   const ploggingPath = useSelector(state => state.ploggingPath);
   const startTime = useSelector(state => state.startTime);
+  const images = useSelector(state => state.images);
+
+  var s3 = new AWS.S3({
+    apiVersion: '2006-03-01',
+  });
+
+  AWS.config.update({
+    region: 'ap-northeast-2', // 리전이 서울이면 이거랑 같게
+    credentials: new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: Config.IDENTITYPOOLID,
+    })
+  })
 
   useEffect(() => {
     countInterval.current = setInterval(() => {
@@ -98,6 +111,8 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
             .then((response) => {
               if (response.status === 200) {
                 console.log("log insert SUCCESS");
+                console.log(response.data.data); //플로깅 아이디
+                upload(1, response.data.data); //userId + 플로깅아이디
               } else {
                 console.log("log insert FAIL " + response.status);
               }
@@ -114,6 +129,29 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
       navigation.navigate('기록');
     }
   }, [isSave])
+
+  const upload = async (userId, ploggingId) => {
+        const promises = images.map(async (img) => {
+            const response1 = await fetch(img.uri)
+            const blob = await response1.blob()
+            var albumPhotosKey = "ploggingLog/"+userId + '/' + ploggingId + '/'
+            var photoKey = albumPhotosKey + img.fileName;
+
+            var params = { Bucket: 'plomeet-image', Key: photoKey, Body: blob }
+            s3.upload(params, function (err, data) {
+                if (err) {
+                    alert('There was an error uploading your photo: ', err.message);
+                }
+                // data.Location
+                // https://plomeet-image.s3.ap-northeast-2.amazonaws.com/photos/1_3C369038-4102-4887-A8DB-43C42E706340.jpg
+                // data.Key
+                // photos/1_3C369038-4102-4887-A8DB-43C42E706340.jpg
+                console.log(data);
+            });
+        });
+
+        await Promise.all(promises)
+    }
 
   const makeSaveFalse = () => {
     setIsSave(false);

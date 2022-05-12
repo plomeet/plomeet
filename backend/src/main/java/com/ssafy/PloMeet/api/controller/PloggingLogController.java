@@ -39,10 +39,10 @@ public class PloggingLogController {
             PloggingLog saveLog = ploggingService.insertPloggingLog(user, insertLog);
             if(saveLog == null )
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseResponseBody.of(204, "저장 실패"));
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(AdvancedResponseBody.of(200, "저장 성공", saveLog.getPlogId()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(BaseResponseBody.of(503, "..."));
         }
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(BaseResponseBody.of(200, "저장 성공"));
     }
 }

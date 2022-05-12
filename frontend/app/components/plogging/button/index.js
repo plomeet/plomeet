@@ -9,8 +9,6 @@ import RequestCameraBtn from '../icons/requestCameraBtn.svg';
 import { useCameraDevices, Camera, LoadingView } from 'react-native-vision-camera';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import Config from 'react-native-config'
-import AWS from 'aws-sdk';
 
 
 const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage, setStart, setIsSave }) => {
@@ -18,34 +16,7 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
     const devices = useCameraDevices();
     const device = devices.back;
     const WEEKDAY = ['(일)', '(월)', '(화)', '(수)', '(목)', '(금)', '(토)'];
-    const images = useSelector(state => state.images);
 
-
-
-    var s3 = new AWS.S3({
-        apiVersion: '2006-03-01',
-    });
-
-    AWS.config.update({
-        region: 'ap-northeast-2', // 리전이 서울이면 이거랑 같게
-        credentials: new AWS.CognitoIdentityCredentials({
-            IdentityPoolId: Config.IDENTITYPOOLID,
-        })
-    })
-    // const nowDate = moment().format('YYYY/MM/DD');
-    // const nowDay = moment().day();
-    // const nowTime = moment().format('HH:mm');
-
-    var s3 = new AWS.S3({
-        apiVersion: '2006-03-01',
-    });
-
-    AWS.config.update({
-        region: 'ap-northeast-2', // 리전이 서울이면 이거랑 같게
-        credentials: new AWS.CognitoIdentityCredentials({
-            IdentityPoolId: Config.IDENTITYPOOLID,
-        })
-    })
 
     const openCamera = async () => {
         if (Platform.OS === 'ios') {
@@ -104,34 +75,8 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
 
 
     const saveButtonClick = async () => {
-        await upload();
         await handleShowEndPage(false);
         setIsSave(true);
-    }
-
-    const upload = async () => {
-
-        const promises = images.map(async (img) => {
-            const response1 = await fetch(img.uri)
-            const blob = await response1.blob()
-            // var albumPhotosKey = encodeURIComponent(albumName) + '//';
-            // var photoKey = albumPhotosKey + fileName;
-            var photoKey = "photos/" + img.id + "_" + img.fileName;
-
-            var params = { Bucket: 'plomeet-image', Key: photoKey, Body: blob }
-            s3.upload(params, function (err, data) {
-                if (err) {
-                    alert('There was an error uploading your photo: ', err.message);
-                }
-                // data.Location
-                // https://plomeet-image.s3.ap-northeast-2.amazonaws.com/photos/1_3C369038-4102-4887-A8DB-43C42E706340.jpg
-                // data.Key
-                // photos/1_3C369038-4102-4887-A8DB-43C42E706340.jpg
-                console.log(data);
-            });
-        });
-
-        await Promise.all(promises)
     }
 
 
