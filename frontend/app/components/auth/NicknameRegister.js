@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {
   View,
   Image,
@@ -13,21 +13,26 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import * as KakaoLogins from '@react-native-seoul/kakao-login';
-
+import axiosInstanceLocal from "../../../utils/API";
 import LogoImage from '../../../assets/imgs/6881.png';
 import LinearGradient from 'react-native-linear-gradient';
+import axios from 'axios';
 
 const kakaoHelper = require('./KakaoHelper.js');
 
+
 const NicknameRegister = () => {
-  const navigation = useNavigation();
+  
   const [value, onChangeText] = useState("");
+  const navigation = useNavigation();
+
   var id = '';
   var nickname = value;
   var img = '';
   var name = '';
   var email = '';
   console.log(value);
+  
   
   // kakaoHelper.getProfile();
     KakaoLogins.getProfile().then(result => {
@@ -42,17 +47,20 @@ const NicknameRegister = () => {
   
   // setTimeout(() => {},100);
   const Register = async () => {
-    axios.post('http://127.0.0.1:8080/user', {
+    axios.post('http://k6a205.p.ssafy.io:8000/user', {
       kakaoUserId: id,
       userNickName: nickname, // 입력받은값으로 변경
       userProfileImg: img,
       userName: name,
       userEmail: email,
-    }).then((response) => {
+    }, {
+      "Content-Type": "application/json",
+    },).then((response) => {
       console.log(response);
     }).then((error) => {
       console.log(error);
     }); 
+    navigation.navigate('M');
   };
 
   return (
@@ -80,8 +88,7 @@ const NicknameRegister = () => {
         </View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => { Register
-          }}>
+          onPress={() =>  Register()}>
           <View style={styles.button2}>
             <Text style={styles.title2}>회원가입</Text>
           </View>

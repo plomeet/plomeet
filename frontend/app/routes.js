@@ -7,7 +7,7 @@ import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { useSelector } from "react-redux"
 //Screens
-import Splash from './components/auth/NicknameRegister';
+import Splash from './components/auth/SignUp';
 import SignUp from './components/auth/SignUp';
 import NicknameRegister from './components/auth/NicknameRegister';
 import Home from './components/home/index';
@@ -93,7 +93,7 @@ export const RootNavigator = () => {
       <Stack.Screen
         name="NicknameRegister"
         component={NicknameRegister}
-        screenOptions={{headerShown: false}}
+        options={{headerShown: false}}
         options={() => ({gestureEnabled: false})}
       />
             <Stack.Screen name="M" component={AppTabComponent} options={{ title: ' ', headerShown: false }} />

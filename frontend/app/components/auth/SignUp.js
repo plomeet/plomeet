@@ -22,6 +22,10 @@ import {useNavigation} from '@react-navigation/native';
 const SignUp = () => {
   const navigation = useNavigation();
 
+  // const isSignedUp = async () => {
+  //   axios.get('http://k6a205.p.ssafy.io:8000/user/${}')
+  // }
+
   function login() {
     KakaoLogins.login()
       .then(result => {
@@ -40,6 +44,7 @@ const SignUp = () => {
       .catch(err => {
         console.log(`### Login Error : ${JSON.stringify(err)}`);
       });
+      navigation.navigate('NicknameRegister');
   }
 
   function logout() {
