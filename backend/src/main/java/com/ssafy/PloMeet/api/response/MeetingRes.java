@@ -21,7 +21,6 @@ public class MeetingRes {
     private Double lng;
     private int memberMax;
     private Boolean isActivate;
-
     private String  meetingDate;
     private LocalDateTime  registerDate;
     private String item;
@@ -29,7 +28,7 @@ public class MeetingRes {
 
 
     @Builder
-    public MeetingRes(Long meetingId, String meetingImg, String meetingName, String meetingDesc, String meetingPlace, String meetingPlaceDetail, Double lat, Double lng, int memberMax, String meetingDate, String item) {
+    public MeetingRes(Long meetingId, String meetingImg, String meetingName, String meetingDesc, String meetingPlace, String meetingPlaceDetail, Double lat, Double lng, int memberMax, String meetingDate, String item, int memberCnt, LocalDateTime registerDate, Boolean isActivate) {
         this.meetingId = meetingId;
         this.meetingImg = meetingImg;
         this.meetingName = meetingName;
@@ -41,6 +40,9 @@ public class MeetingRes {
         this.memberMax = memberMax;
         this.meetingDate = meetingDate;
         this.item = item;
+        this.memberCnt = memberCnt;
+        this.registerDate = registerDate;
+        this.isActivate = isActivate;
     }
 
     public MeetingRes(Meeting meeting) {
@@ -55,6 +57,9 @@ public class MeetingRes {
         this.memberMax = meeting.getMemberMax();
         this.meetingDate = meeting.getMeetingDate();
         this.item = meeting.getItem();
+        this.memberCnt = meeting.getMemberCnt();
+        this.registerDate = meeting.getRegisterDate();
+        this.isActivate = meeting.getIsActivate();
     }
 
 }

@@ -4,15 +4,67 @@ import { StyleSheet, Text, View, TextInput, Button, Image, Alert, KeyboardAvoidi
 import { useNavigation } from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
+import axios from 'axios';
 
 
 const openMeeting2 = () => {
   const navigation = useNavigation();
+  const [address, setAdress] = useState(''); //상세주소 검색
 
   const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
-  // const [adress, setAdress] = useState();
   const [center, setCenter] = useState();
 
+  // async function searchAddress(address) {
+  //   console.log(address)
+  //   try {
+  //     const response = await new timeoutPromise( 
+  //     fetch(`https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${address}`,
+  //       {
+  //         headers: {
+  //           "Accept" : "application/json",
+  //           "Content-Type" : "application/json",
+  //           "X-NCP-APIGW-API-KEY-ID" : "ndh21004t3",
+  //           "X-NCP-APIGW-API-KEY" : "9n2oMIaYszDviPmDNRZRPiCGcPIcbFqbiDsMarpY"
+  //         },
+  //         method : "GET"
+  //       })
+  //     );
+  //     console.log(response)
+  //     if (!response.ok) {
+  //       throw new Error("실패");
+  //     }
+  //     const resData = await response.json();
+  //     console.log(resData)
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  //   return;
+  // };
+
+  async function searchAddress(address) {
+    console.log(address)
+    const response = await axios.get(
+      'https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=' + address,
+      {
+        headers: {
+          "X-NCP-APIGW-API-KEY-ID" : "ndh21004t3",
+          "X-NCP-APIGW-API-KEY" : "9n2oMIaYszDviPmDNRZRPiCGcPIcbFqbiDsMarpY"
+        },
+      },
+    ).then(res => {
+      return res.data;
+    })
+    .then(data => {
+      if(data.address.length > 1 ) {
+        console.log("주소가 여러개");
+      } else if (data.address.length === 0) {
+        console.log("좌표가 없음");
+      }
+      return [data.addresses[0].x, data.addresses[0].y];
+    });
+    return response;
+  };
+  
   const locationHandler = (e) => { 
     // setCurrentLocation(e.latitude, e.longitude); 
     Alert.alert( 
@@ -85,14 +137,21 @@ const openMeeting2 = () => {
           // onChangeText={this.onChangeInput}
         />
         <Text style={[styles.title, {marginTop:40}]}>상세주소(도로명)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="모임 장소의 상세 주소를 입력해주세요."
-          keyboardType='default'
-          maxLength={500}
-          multiline={true}
-          autoCapitalize='none'
-        />
+
+        <View style={styles.row}>
+          <TextInput
+            style={styles.input}
+            placeholder="모임 장소의 상세 주소를 입력해주세요."
+            keyboardType='default'
+            maxLength={500}
+            multiline={true}
+            onChangeText={newAddress => setAdress(newAddress)}
+            autoCapitalize='none'
+          />
+          <TouchableOpacity activeOpacity={0.8} style={styles.searchButton} onPress={() => searchAddress(address)}>
+            <Text style={styles.text}>검색</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.imageBackground}>
         <NaverMapView
@@ -174,6 +233,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
+  searchButton: {
+    height: 40,
+    backgroundColor: "#1BE58D",
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+    marginLeft: -10,
+    marginBottom: -8,
+    marginRight:30
+  },
   text: {
     fontSize: 18,
     color: "#fff"
@@ -184,6 +253,10 @@ const styles = StyleSheet.create({
     height : 250,
     marginTop: 30,
     marginHorizontal: 30,
+  },
+  row:{
+    flexDirection: 'row',
+    alignItems: 'center',
   }
 });
 

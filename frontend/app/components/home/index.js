@@ -52,8 +52,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   content: {
-    fontSize: 13,
-    marginLeft: 7
+    fontSize: 12,
+    color: '#000000',
+    marginLeft: 7,
+
   },
   row:{
     flexDirection: 'row',
@@ -192,7 +194,7 @@ const Home = () => {
 
   const Item = ({ id, detail, img, title, place, numMember, maxMember, date, index, lat, lng, placeDetail}) => (
     <TouchableOpacity
-    activeOpacity={0.8}
+    activeOpacity={0.7}
     onPress={() => navigation.navigate('MeetingDetail', {img:img, title:title, place:place, numMember:numMember, maxMember:maxMember, date:date, detail:detail, lat:lat, lng:lng, placeDetail:placeDetail})}
     style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles.card, styles.elevation]}>
       <Image source={{uri: img}} style={styles.img} />
