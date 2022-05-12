@@ -247,6 +247,9 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, 
         {
             !showPloggingEndPage ?
                 <>
+                    {trashInfoDetail &&
+                        <TrashcanInfo showInfoDetail={showInfoDetail} setShowInfoDetail={setShowInfoDetail} setShowThisNum={setShowThisNum} trashInfoDetail={trashInfoDetail} />
+                    }
                     {center &&
                         <NaverMapView ref={mapView}
                             style={style.container}
@@ -254,7 +257,7 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, 
                             // onTouch={e => console.warn('onTouch', JSON.stringify(e.nativeEvent))}
                             // onCameraChange={e => console.warn('onCameraChange', JSON.stringify(e))}
                             // onMapClick={e => console.warn('onMapClick', JSON.stringify(e))}
-                            onMapClick={() => setShowThisNum(-1)}
+                            // onMapClick={() => { setShowInfoDetail(false); setShowThisNum(-1) }}
                             useTextureView>
                             <Marker
                                 coordinate={location}
@@ -285,10 +288,9 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, 
                                             width={25}
                                             height={25}
                                             onClick={() => setShowThisNum(parseInt(item.trashcanId) - 1)}
-                                        />
+                                            />
                                     );
                                 })
-
                             }
 
                             {/* <Marker coordinate={P1} pinColor="blue" zIndex={1000} onClick={() => console.warn('onClick! p1')} />
@@ -322,9 +324,6 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, 
                             </View>
                         </TouchableOpacity>
 
-                    }
-                    {trashInfoDetail &&
-                        <TrashcanInfo showInfoDetail={showInfoDetail} setShowInfoDetail={setShowInfoDetail} setShowThisNum={setShowThisNum} trashInfoDetail={trashInfoDetail} />
                     }
                     {/*<TouchableOpacity style={{ position: 'absolute', bottom: '10%', right: 8 }} onPress={() => navigation.navigate('stack')}>
             <View style={{ backgroundColor: 'gray', padding: 4 }}>
