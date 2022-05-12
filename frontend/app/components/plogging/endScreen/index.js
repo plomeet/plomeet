@@ -11,11 +11,9 @@ import ImageDelete from '../icons/imageDelete.svg';
 
 
 
-const EndPlogging = ({ ploggingPath, center, setImages }) => {
+const EndPlogging = ({ ploggingPath, center, setImages, distSum, isPlogging, setTimeSum, timeSumString, setIsSave, resetPloggingPath, setDistSum, handleShowEndPage }) => {
     const mapView = useRef(null);
     const [middle, setMiddle] = useState();
-    const distSum = useSelector(state => state.distSum);
-    const isPlogging = useSelector(state => state.isPlogging);
     const startTime = useSelector(state => state.startTime);
     const [endTime, setEndTime] = useState([]);
     const curr = new Date();
@@ -140,7 +138,7 @@ const EndPlogging = ({ ploggingPath, center, setImages }) => {
                     </NaverMapView>
                 </View>
                 <View style={style.containerState} >
-                    <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} timeSumString={timeSum}></PloggingStatusBar>
+                    <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} setTimeSum={setTimeSum} timeSumString={timeSum} setIsSave={setIsSave} resetPloggingPath={resetPloggingPath} setDistSum={setDistSum} handleShowEndPage={handleShowEndPage}></PloggingStatusBar>
                 </View>
                 <Text style={{ marginLeft: 10, color: "grey" }}>최대 9개 업로드 가능</Text>
                 <ScrollView horizontal={true} style={style.containerPicture} >

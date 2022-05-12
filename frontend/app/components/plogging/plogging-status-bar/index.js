@@ -10,10 +10,11 @@ import BackSvg from '../icons/back.svg'
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import axiosInstance from "../../../../utils/API";
+//import axiosInstance from "../../../../utils/ApiLocal";
 import Config from 'react-native-config'
 import AWS from 'aws-sdk';
 
-const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString, setIsSave, resetPloggingPath, setDistSum }) => {
+const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString, setIsSave, resetPloggingPath, setDistSum, handleShowEndPage }) => {
   const layout = useWindowDimensions();
   const countInterval = useRef(null);
   const [minutes, setMinutes] = useState(parseInt(mm));
@@ -68,42 +69,44 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
   }, [minutes])
 
   useEffect(() => {
-    const year = kr_curr.getFullYear();
-    const month = ('0' + (kr_curr.getMonth() + 1)).slice(-2);
-    const day = ('0' + kr_curr.getDate()).slice(-2);
-    const dateString = year + month + day;
+    if (weatherLoc.length > 1) {
+      const year = kr_curr.getFullYear();
+      const month = ('0' + (kr_curr.getMonth() + 1)).slice(-2);
+      const day = ('0' + kr_curr.getDate()).slice(-2);
+      const dateString = year + month + day;
 
-    const hours = ('0' + kr_curr.getHours()).slice(-2);
-    const minutes = ('0' + kr_curr.getMinutes()).slice(-2);
-    const timeString = hours + minutes;
-    let weatherTimeParam = hours + minutes;
-    if (parseInt(minutes) <= 40)  // 매시간 40분 후에 api가 제공됨..하..
-      weatherTimeParam = (parseInt(hours) - 1) + "" + 50;
+      const hours = ('0' + kr_curr.getHours()).slice(-2);
+      const minutes = ('0' + kr_curr.getMinutes()).slice(-2);
+      const timeString = hours + minutes;
+      let weatherTimeParam = hours + minutes;
+      if (parseInt(minutes) <= 40)  // 매시간 40분 후에 api가 제공됨..하..
+        weatherTimeParam = (parseInt(hours) - 1) + "" + 50;
 
-    async function getWeatherInfo() {
-      await weatherApiInstance.get(`/getUltraSrtNcst?serviceKey=${Config.SERVICEKEY_WEATHER}&pageNo=1&numOfRows=10&dataType=JSON&base_date=${dateString}&base_time=${weatherTimeParam}&nx=${weatherLoc[0]}&ny=${weatherLoc[1]}`)
-        .then((response) => {
-          if (response.status === 200) {
-            organizeWeatherData(response.data.response.body.items.item, parseInt(timeString));
-          } else {
-            console.log("FAIL");
-          }
-        })
+      async function getWeatherInfo() {
+        await weatherApiInstance.get(`/getUltraSrtNcst?serviceKey=${Config.SERVICEKEY_WEATHER}&pageNo=1&numOfRows=10&dataType=JSON&base_date=${dateString}&base_time=${weatherTimeParam}&nx=${weatherLoc[0]}&ny=${weatherLoc[1]}`)
+          .then((response) => {
+            if (response.status === 200) {
+              organizeWeatherData(response.data.response.body.items.item, parseInt(timeString));
+            } else {
+              console.log("FAIL");
+            }
+          })
+      }
+      getWeatherInfo();
     }
-    getWeatherInfo();
   }, [weatherLoc, currWeatherTime]);
 
+  const setStartPage = () => {
+    handleShowEndPage(false);
+  }
   useEffect(() => {
     if (isSave) {
-      makeSaveFalse();
-      let timeStr = "" + minutes;
-      timeStr += seconds;
       async function saveLog() {
         try {
           await axiosInstance.post("/ploggings", {
             userId: 1, // 차후 유저 정보로 수정
             plogDist: distSum,
-            plogTime: timeStr,
+            plogTime: timeSumString,
             plogWeather: weather,
             route: ploggingPath,
             plogDate: (startTime[0] + startTime[1] + "-" + startTime[2]),
@@ -111,6 +114,9 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
             .then((response) => {
               if (response.status === 200) {
                 console.log("log insert SUCCESS");
+                setTimeSum("0 : 00");
+                setDistSum(0);
+                resetPloggingPath();
                 console.log(response.data.data); //플로깅 아이디
                 upload(1, response.data.data); //userId + 플로깅아이디
               } else {
@@ -119,43 +125,41 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
             })
             .catch((response) => { console.log(response); });
         } catch (err) { console.log(err); }
+        goSaveFalse();
+        setStartPage();
+        navigation.navigate('기록');
       };
       saveLog();
-      setMinutes(0);
-      setSeconds(0);
-      setTimeSum(minutes + " : " + 0 + seconds)
-      setDistSum(0);
-      resetPloggingPath();
-      navigation.navigate('기록');
     }
   }, [isSave])
 
-  const upload = async (userId, ploggingId) => {
-        const promises = images.map(async (img) => {
-            const response1 = await fetch(img.uri)
-            const blob = await response1.blob()
-            var albumPhotosKey = "ploggingLog/"+userId + '/' + ploggingId + '/'
-            var photoKey = albumPhotosKey + img.fileName;
-
-            var params = { Bucket: 'plomeet-image', Key: photoKey, Body: blob }
-            s3.upload(params, function (err, data) {
-                if (err) {
-                    alert('There was an error uploading your photo: ', err.message);
-                }
-                // data.Location
-                // https://plomeet-image.s3.ap-northeast-2.amazonaws.com/photos/1_3C369038-4102-4887-A8DB-43C42E706340.jpg
-                // data.Key
-                // photos/1_3C369038-4102-4887-A8DB-43C42E706340.jpg
-                console.log(data);
-            });
-        });
-
-        await Promise.all(promises)
-    }
-
-  const makeSaveFalse = () => {
+  const goSaveFalse = () => {
     setIsSave(false);
   }
+  const upload = async (userId, ploggingId) => {
+    const promises = images.map(async (img) => {
+      const response1 = await fetch(img.uri)
+      const blob = await response1.blob()
+      var albumPhotosKey = "ploggingLog/" + userId + '/' + ploggingId + '/'
+      var photoKey = albumPhotosKey + img.fileName;
+
+      var params = { Bucket: 'plomeet-image', Key: photoKey, Body: blob }
+      s3.upload(params, function (err, data) {
+        if (err) {
+          alert('There was an error uploading your photo: ', err.message);
+        }
+        // data.Location
+        // https://plomeet-image.s3.ap-northeast-2.amazonaws.com/photos/1_3C369038-4102-4887-A8DB-43C42E706340.jpg
+        // data.Key
+        // photos/1_3C369038-4102-4887-A8DB-43C42E706340.jpg
+        console.log(data);
+      });
+    });
+
+    await Promise.all(promises)
+  }
+
+
 
   const organizeWeatherData = (data, time) => {//0 맑음 1 쏘쏘 2 흐림 3 비 4 눈/비 5 눈
     const PTY = data[0].obsrValue;

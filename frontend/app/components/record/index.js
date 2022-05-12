@@ -1,4 +1,4 @@
-import React, { Component, Node, Button } from 'react';
+import React, { Component, Node, Button, useEffect } from 'react';
 import 'react-native-gesture-handler';
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
@@ -20,7 +20,7 @@ const Record = () => {
                     {
                         listCount.map(i => {
                             return (
-                                <PloggingList />
+                                <PloggingList key={i} />
                             )
                         })
                     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, PermissionsAndroid, Platform } from "react-native";
 import 'react-native-gesture-handler';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import StartBtn from '../icons/startBtn.svg';
@@ -75,7 +75,10 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
 
 
     const saveButtonClick = async () => {
-        await handleShowEndPage(false);
+        goSave();
+    }
+
+    const goSave = () => {
         setIsSave(true);
     }
 

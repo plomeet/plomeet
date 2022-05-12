@@ -19,7 +19,7 @@ const P2 = { latitude: 37.565383, longitude: 126.976292 };
 const P4 = { latitude: 37.564834, longitude: 126.977218 };
 const P5 = { latitude: 37.562834, longitude: 126.976218 };
 
-const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, setImages, setPloggingPath }) => {
+const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, setIsSave, showPloggingEndPage, setWeatherLoc, setImages, resetPloggingPath, setPloggingPath, handleShowEndPage }) => {
     const mapView = useRef(null);
     const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
     // const [location, setLocation] = useState({ latitude: 37.33117775, longitude: -122.03072292 }); //ios 테스트용 - 지우지마세여 ㅠㅠㅠ 넹!!
@@ -334,7 +334,7 @@ const Plogging = ({ setDistSum, isPlogging, showPloggingEndPage, setWeatherLoc, 
         */}
                 </>
                 :
-                <EndPlogging ploggingPath={ploggingPath} center={center} setImages={setImages} />
+                <EndPlogging ploggingPath={ploggingPath} center={center} setImages={setImages} distSum={distSum} isPlogging={isPlogging} setTimeSum={setTimeSum} timeSumString={timeSumString} setIsSave={setIsSave} resetPloggingPath={resetPloggingPath} setDistSum={setDistSum} handleShowEndPage={handleShowEndPage} />
         }
     </>
 };
