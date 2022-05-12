@@ -82,7 +82,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: false, gestureEnabled: false }} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
             <Stack.Screen name="InChatRoom" component={InsideRoom} />
-            <Stack.Screen name="logDetail" component={RecordContainer} options={{ title: '', headerShown: false, gestureEnabled: false }} />
+            <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '', headerShown: false, gestureEnabled: false }} />
         </Stack.Navigator>
     )
 }
