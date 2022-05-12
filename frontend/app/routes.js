@@ -8,7 +8,7 @@ import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { useSelector } from "react-redux"
 //Screens
 import Home from './components/home/index';
-import Record from './components/record/index';
+import RecordContainer from './container/LogContainer';
 import Plogging from './container/PloggingContainer';
 import Chat from './components/chat/index';
 import MyPage from './components/my/index';
@@ -64,7 +64,7 @@ const AppTabComponent = () => {
             }}
         >
             <MainScreenTab.Screen name="홈" component={Home} />
-            <MainScreenTab.Screen name="기록" component={Record} options={{ headerShown: false }} />
+            <MainScreenTab.Screen name="기록" component={RecordContainer} />
             <MainScreenTab.Screen name="플로깅" component={Plogging} />
             <MainScreenTab.Screen name="채팅 목록" component={Chat} />
             <MainScreenTab.Screen name="MY" component={MyPage} />
@@ -82,7 +82,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: false, gestureEnabled: false }} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
             <Stack.Screen name="InChatRoom" component={InsideRoom} />
-            <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '', headerShown: false, gestureEnabled: false }} />
+            <Stack.Screen name="logDetail" component={RecordContainer} options={{ title: '', headerShown: false, gestureEnabled: false }} />
         </Stack.Navigator>
     )
 }

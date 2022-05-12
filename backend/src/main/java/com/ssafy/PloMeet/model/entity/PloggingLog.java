@@ -20,8 +20,8 @@ public class PloggingLog {
     private User user;
     @Column
     private float plogDist;
-    @Column
-    private int plogTime;
+    @Column(length = 11)
+    private String plogTime;
 
     @Column(length = 20)
     @Enumerated(EnumType.STRING)

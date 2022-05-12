@@ -5,11 +5,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Config from 'react-native-config'
 import DetailArrow from '../icon/detailArrow.svg';
 
-const PloggingList = () => {
+const PloggingList = (key) => {
     const navigation = useNavigation();
 
     return (
         <TouchableOpacity
+            key={key}
             onPress={
                 () => navigation.navigate('logDetail', { msg: "show logDetail" })
             }>
