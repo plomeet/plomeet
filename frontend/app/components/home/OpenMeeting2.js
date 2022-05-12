@@ -14,6 +14,18 @@ const openMeeting2 = () => {
   const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
   const [center, setCenter] = useState();
 
+  const [titleValid, setTitleValid] = useState(false);
+  const [nextDisable, setNextDisable] = useState(true);
+  const titleChangeHandler = (text) => {
+    if (text.trim().length === 0) {
+      setTitleValid(false);
+      setNextDisable(true);
+    } else {
+      setTitleValid(true);
+      setNextDisable(false);
+    }
+  };
+
   // async function searchAddress(address) {
   //   console.log(address)
   //   try {
@@ -134,6 +146,7 @@ const openMeeting2 = () => {
           maxLength={20}
           autoCapitalize='none'
           returnKeyType='next'
+          onChangeText={(text) => titleChangeHandler(text)}
           // onChangeText={this.onChangeInput}
         />
         <Text style={[styles.title, {marginTop:40}]}>상세주소(도로명)</Text>
@@ -162,10 +175,11 @@ const openMeeting2 = () => {
                   <Marker coordinate={location} pinColor="green"/>
               </NaverMapView>
         </View>
+        <Text style={[{marginLeft:30}, {marginRight:30}]}>현재 지오코더랑 리버스 지오코더가 권한문제로 동작을 안 해서 주소 연동이 안 되며, 실제 모임 위치는 좌표가 찍힌 곳으로 저장됩니다.</Text>
         
 
         <View style={{flex:1}}/>
-        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => navigation.navigate('OpenMeeting3')}>
+        <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => navigation.navigate('OpenMeeting3')}>
           <Text style={styles.text}>다음</Text>
         </TouchableOpacity>
       </View>
@@ -230,6 +244,12 @@ const styles = StyleSheet.create({
   button: {
     height: 55,
     backgroundColor: "#1BE58D",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  disButton: {
+    height: 55,
+    backgroundColor: "#aaaaaa",
     justifyContent: "center",
     alignItems: "center"
   },

@@ -1,4 +1,4 @@
-import React, { Component, Node } from 'react';
+import React, { Component, Node, useState} from 'react';
 import 'react-native-gesture-handler';
 import { StyleSheet, Text, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
 import { useNavigation } from '@react-navigation/native';
@@ -6,6 +6,27 @@ import { useNavigation } from '@react-navigation/native';
 
 const openMeeting1 = () => {
   const navigation = useNavigation();
+  const [titleValid, setTitleValid] = useState(false);
+  const [contentValid, setContentValid] = useState(false);
+  const [nextDisable, setNextDisable] = useState(true);
+  const titleChangeHandler = (text) => {
+    if (text.trim().length === 0) {
+      setTitleValid(false);
+      setNextDisable(true);
+    } else {
+      setTitleValid(true);
+      if(titleValid && contentValid) setNextDisable(false);
+    }
+  };
+  const contentChangeHandler = (text) => {
+    if (text.trim().length === 0) {
+      setContentValid(false);
+      setNextDisable(true);
+    } else {
+      setContentValid(true);
+      if(titleValid && contentValid) setNextDisable(false);
+    }
+  };
 
     return (
       <View style={styles.container}>
@@ -19,7 +40,7 @@ const openMeeting1 = () => {
           maxLength={20}
           autoCapitalize='none'
           returnKeyType='next'
-          // onChangeText={this.onChangeInput}
+          onChangeText={(text) => titleChangeHandler(text)}
         />
         <Text style={[styles.title, {marginTop:40}]}>모임 설명</Text>
         <TextInput
@@ -28,10 +49,11 @@ const openMeeting1 = () => {
           keyboardType='default'
           maxLength={500}
           multiline={true}
+          onChangeText={(text) => contentChangeHandler(text)}
           autoCapitalize='none'
         />
         <View style={{flex:1}}/>
-        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => navigation.push('OpenMeeting2')}>
+        <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => navigation.push('OpenMeeting2')}>
           <Text style={styles.text}>다음</Text>
         </TouchableOpacity>
       </View>
@@ -71,6 +93,12 @@ const styles = StyleSheet.create({
   button: {
     height: 55,
     backgroundColor: "#1BE58D",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  disButton: {
+    height: 55,
+    backgroundColor: "#aaaaaa",
     justifyContent: "center",
     alignItems: "center"
   },

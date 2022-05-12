@@ -1,14 +1,35 @@
-import React, { Component, Node, useState } from 'react';
+import React, { Component, Node, useState, useEffect } from 'react';
 import 'react-native-gesture-handler';
 import { Chip, ToggleButton } from 'react-native-paper';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
 import { StyleSheet, Modal, Text, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 
-
-
 const openMeeting3 = () => {
   const navigation = useNavigation();
+  const [memberMaxValid, setMemberMaxValid] = useState(false);
+  const [nextDisable, setNextDisable] = useState(true);
+
+  const memberMaxChangeHandler = (text) => {
+    console.log(text.length)
+    if (text === '') {
+      console.log("모임 인원 입력해야함!")
+      setMemberMaxValid(false);
+      setNextDisable(true);
+    }
+    else {
+      setMemberMaxValid(true);
+      if(memberMaxValid && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택')){
+        setNextDisable(false);
+      }
+    }
+  };
+  const isDone = () => {
+    console.log("확인");
+    if(memberMaxValid && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택')){
+      setNextDisable(false);
+    }
+  }
 
   // Modal을 표시하거나 숨기기 위한 변수 
   const [visibleCalendar, setVisibleCalendar] = useState(false);
@@ -20,6 +41,7 @@ const openMeeting3 = () => {
   function SelectedTime(time){
     setSelectedTime(time);
     setVisibleTimer(false);
+    isDone();
   }
 
     return (
@@ -32,9 +54,10 @@ const openMeeting3 = () => {
           keyboardType='numeric'
           autoFocus
           maxLength={3}
+          defaultValue=''
           autoCapitalize='none'
           returnKeyType='next'
-          // onChangeText={this.onChangeInput}
+          onChangeText={(data) => memberMaxChangeHandler(data)}
         />
         <Text style={[styles.title, {marginTop:40}]}>모임 날짜</Text>
 
@@ -133,7 +156,7 @@ const openMeeting3 = () => {
           <TouchableOpacity style={styles.chip}><Text style={{color:"#000"}}>도시락</Text></TouchableOpacity>
         </View>
         <View style={{flex:1}}/>
-        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => navigation.navigate('OpenMeeting4')}>
+        <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => navigation.navigate('OpenMeeting4')}>
           <Text style={styles.text}>다음</Text>
         </TouchableOpacity>
       </View>
@@ -180,6 +203,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
+  disButton: {
+    height: 55,
+    backgroundColor: "#aaaaaa",
+    justifyContent: "center",
+    alignItems: "center"
+  },
   closeButton: {
     height: 42,
     borderRadius : 8,
@@ -199,7 +228,9 @@ const styles = StyleSheet.create({
   chip: {
     height: 35,
     paddingHorizontal: 15,
-    backgroundColor: "#E0E0E0",
+    borderWidth:0.3,
+    borderColor:"#999999",
+    backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
     marginRight: 10,
