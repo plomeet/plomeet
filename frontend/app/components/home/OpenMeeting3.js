@@ -1,12 +1,26 @@
-import React, { Component, Node } from 'react';
+import React, { Component, Node, useState } from 'react';
 import 'react-native-gesture-handler';
 import { Chip, ToggleButton } from 'react-native-paper';
-import { StyleSheet, Text, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
+import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
+import { StyleSheet, Modal, Text, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+
 
 
 const openMeeting3 = () => {
   const navigation = useNavigation();
+
+  // Modal을 표시하거나 숨기기 위한 변수 
+  const [visibleCalendar, setVisibleCalendar] = useState(false);
+  const [visibleTimer, setVisibleTimer] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('모임 날짜 선택');
+  const [selectedTime, setSelectedTime] = useState('모임 시간 선택');
+  const current= getToday();
+
+  function SelectedTime(time){
+    setSelectedTime(time);
+    setVisibleTimer(false);
+  }
 
     return (
       <View style={styles.container}>
@@ -23,9 +37,89 @@ const openMeeting3 = () => {
           // onChangeText={this.onChangeInput}
         />
         <Text style={[styles.title, {marginTop:40}]}>모임 날짜</Text>
+
+        <Modal animationType="slide" 
+          transparent={false} 
+          visible={visibleCalendar}> 
+          <View style={{ 
+            flex: 1, 
+            marginHorizontal : 30,
+            justifyContent: 'center', 
+            alignItems: 'center'}}>
+
+            <DatePicker
+            options={{
+              mainColor: '#1BE58D',
+              borderColor: 'rgba(122, 146, 165, 0.1)',
+            }}
+            mode="calendar"
+            configs={{
+              dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
+              monthNames: [
+                "1월",
+                "2월",
+                "3월",
+                "4월",
+                "5월",
+                "6월",
+                "7월",
+                "8월",
+                "9월",
+                "10월",
+                "11월",
+                "12월",
+              ],
+            }}
+            minimumDate= {current}
+            style={{ borderRadius: 10 }}
+            onSelectedChange={date => setSelectedDate(date)}
+            />
+            {/* Modal 다이얼로그 숨기기 */} 
+            <TouchableOpacity activeOpacity={0.8} style={[styles.closeButton, {paddingHorizontal:30}]} onPress={() => setVisibleCalendar(false)}><Text style={styles.text}>선택</Text></TouchableOpacity>
+
+          
+          </View> 
+        </Modal>
+
         <View  style={[styles.row, {marginLeft:30}, {marginBottom:10}, {marginTop:20}]}>
-          <Chip style={{marginRight:10}} icon="clock" mode="outlined" selectedColor='#232732'> 5월 10일 (화)</Chip>
+          <Chip style={{marginRight:10}} onPress={()=> setVisibleCalendar(true)} icon="calendar" mode="outlined" selectedColor='#232732'> {selectedDate}</Chip>
         </View>
+
+        <Text style={[styles.title, {marginTop:40}]}>모임 시간</Text>
+        <View  style={[styles.row, {marginLeft:30}, {marginBottom:10}, {marginTop:20}]}>
+          <Chip style={{marginRight:10}} onPress={()=> setVisibleTimer(true)} icon="clock" mode="outlined" selectedColor='#232732'> {selectedTime}</Chip>
+        </View>
+
+        <Modal animationType="slide" 
+          transparent={false} 
+          visible={visibleTimer}> 
+          <View style={{ 
+            flex: 1, 
+            marginHorizontal : 30,
+            justifyContent: 'center', 
+            alignItems: 'center'}}>
+
+            <DatePicker
+            options={{
+              mainColor: '#1BE58D',
+              borderColor: 'rgba(122, 146, 165, 0.1)',
+            }}
+            mode="time"
+            configs={{
+              hour: '시간',
+              minute: '분',
+              timeSelect: '선택'
+            }}
+            minuteInterval={10}
+            style={{ borderRadius: 30 }}
+            onTimeChange={date => SelectedTime(date)}
+            
+            />
+
+          
+          </View> 
+        </Modal>
+
         <Text style={[styles.title, {marginTop:40}]}>준비물</Text>
         <View style={[styles.row, {marginLeft:30}, {marginBottom:10}, {marginTop:20}]}>
           <TouchableOpacity style={styles.chip}><Text style={{color:"#000"}}>쓰레기 봉투</Text></TouchableOpacity>
@@ -82,6 +176,13 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 55,
+    backgroundColor: "#1BE58D",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  closeButton: {
+    height: 42,
+    borderRadius : 8,
     backgroundColor: "#1BE58D",
     justifyContent: "center",
     alignItems: "center"
