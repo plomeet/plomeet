@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     },
     plogListContainer: {
         flexDirection: "column",
-        backgroundColor: "#DDDDDD",
+        backgroundColor: "#EEEEEE",
         flex: 5,
     },
     MonthListText: {
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     ploggingLists: {
         flex: 0.5,
         flexDirection: "column",
-        backgroundColor: "#DDDDDD",
+        backgroundColor: "#EEEEEE",
     }
 });
 
