@@ -16,7 +16,7 @@ import java.util.Date;
 public class PloggingLogReq {
     private long userId;
     private float plogDist;
-    private int plogTime;
+    private String plogTime;
     private String plogWeather;
     private String plogDate;
     private List<Coord> route;

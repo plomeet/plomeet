@@ -30,6 +30,12 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>k6a205.p.ssafy.io</key>
+            <dict>
+                <key>NSExceptionAllowsInsecureHTTPLoads</key>
+                <true/>
+            </dict>
+
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
