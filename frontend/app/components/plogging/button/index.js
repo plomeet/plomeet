@@ -42,14 +42,14 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
                 );
                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                     console.log('You can use the camera');
-                    return true;
+                    navigation.navigate('CameraPage', { device: device })
                 } else {
                     console.log('Camera permission denied');
-                    return false;
+
                 }
             } catch (err) {
                 console.warn(err);
-                return false;
+
             }
         }
     }

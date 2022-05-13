@@ -9,8 +9,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BackSvg from '../icons/back.svg'
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import axiosInstance from "../../../../utils/API";
-//import axiosInstance from "../../../../utils/ApiLocal";
+//import axiosInstance from "../../../../utils/API";
+import axiosInstance from "../../../../utils/ApiLocal";
 import Config from 'react-native-config'
 import AWS from 'aws-sdk';
 
@@ -96,12 +96,9 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
     }
   }, [weatherLoc, currWeatherTime]);
 
-  const setStartPage = () => {
-    handleShowEndPage(false);
-  }
   useEffect(() => {
     if (isSave) {
-      async function saveLog() {
+      const saveLog = async () => {
         try {
           await axiosInstance.post("/ploggings", {
             userId: 1, // 차후 유저 정보로 수정
@@ -125,17 +122,28 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
             })
             .catch((response) => { console.log(response); });
         } catch (err) { console.log(err); }
-        goSaveFalse();
-        setStartPage();
-        navigation.navigate('기록');
+
       };
       saveLog();
+      cleanAndGoRecordTab();
     }
   }, [isSave])
 
+  const cleanAndGoRecordTab = () => {
+    goSaveFalse();
+    setStartPage();
+    goRecordTab();
+  }
+  const setStartPage = () => {
+    handleShowEndPage(false);
+  }
   const goSaveFalse = () => {
     setIsSave(false);
   }
+  const goRecordTab = () => {
+    navigation.navigate('기록');
+  }
+
   const upload = async (userId, ploggingId) => {
     const promises = images.map(async (img) => {
       const response1 = await fetch(img.uri)

@@ -73,9 +73,6 @@ const AppTabComponent = () => {
 }
 
 export const RootNavigator = () => {
-    const isPlogging = useSelector(state => state.isPlogging);
-    const showPloggingEndPage = useSelector(state => state.showPloggingEndPage);
-
     return (
         <Stack.Navigator>
             <Stack.Screen name="M" component={AppTabComponent} options={{ title: ' ', headerShown: false }} />
