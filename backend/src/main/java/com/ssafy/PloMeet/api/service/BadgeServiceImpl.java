@@ -29,8 +29,8 @@ public class BadgeServiceImpl implements  BadgeService{
 
         List<BadgeRes> badgesRes = new ArrayList<>();
         for(Badge badge : badges){
-            boolean isGetting = myBadgeRepository.existsByUserIdAndBadgeId(user, badge);
-            BadgeRes badgeRes = new BadgeRes(badge, isGetting);
+            boolean isOwned = myBadgeRepository.existsByUserIdAndBadgeId(user, badge);
+            BadgeRes badgeRes = new BadgeRes(badge, isOwned);
             badgesRes.add(badgeRes);
         }
         return badgesRes;

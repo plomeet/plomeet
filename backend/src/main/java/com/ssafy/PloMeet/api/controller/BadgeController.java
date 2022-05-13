@@ -25,10 +25,11 @@ public class BadgeController {
     public ResponseEntity<Object> findBadgesByUserId(@PathVariable("userId") Long userId){
         try{
             List<BadgeRes> badgesRes = badgeService.findBadgesByUserId(userId);
-            if(badgesRes.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             return ResponseEntity.status(HttpStatus.OK).body(badgesRes);
         }catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("errorMsg", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMap);
         }
     }
 

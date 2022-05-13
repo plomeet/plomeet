@@ -12,23 +12,23 @@ public class BadgeRes {
     private String badgeTitle;
     private String badgeInfo;
     private String badgeImg;
-    private boolean isGetting;
+    private Boolean isOwned;
 
     @Builder
-    public BadgeRes(Long badgeId, String badgeTitle, String badgeInfo, String badgeImg, boolean isGetting){
+    public BadgeRes(Long badgeId, String badgeTitle, String badgeInfo, String badgeImg, Boolean isOwned){
         this.badgeId = badgeId;
         this.badgeTitle = badgeTitle;
         this.badgeInfo = badgeInfo;
         this.badgeImg = badgeImg;
-        this.isGetting = isGetting;
+        this.isOwned = isOwned;
     }
 
     @Builder
-    public BadgeRes(Badge badge, boolean isGetting){
+    public BadgeRes(Badge badge, Boolean isOwned){
         this.badgeId = badge.getBadgeId();
         this.badgeTitle = badge.getBadgeTitle();
         this.badgeInfo = badge.getBadgeInfo();
         this.badgeImg = badge.getBadgeImg();
-        this.isGetting = isGetting;
+        this.isOwned = isOwned;
     }
 }
