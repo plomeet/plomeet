@@ -1,8 +1,10 @@
 package com.ssafy.PloMeet.model.repository;
 
 import com.ssafy.PloMeet.model.entity.MyMeeting;
+import com.ssafy.PloMeet.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MyMeetingRepository extends JpaRepository<MyMeeting, Long> {
+import java.util.List;
 
+public interface MyMeetingRepository extends JpaRepository<MyMeeting, Long> {
 }
