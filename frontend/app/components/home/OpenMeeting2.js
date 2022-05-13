@@ -43,6 +43,26 @@ const openMeeting2 = () => {
       setCenter({...center, latitude, longitude});
     })
   };
+
+  async function searchCoords(location) {
+    console.log(location);
+    const response = await axios.get(
+      'https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=' + location.longitude +','+location.latitude + '&orders=addr&output=json',
+      {
+        headers: {
+          "X-NCP-APIGW-API-KEY-ID" : "ndh21004t3",
+          "X-NCP-APIGW-API-KEY" : "9n2oMIaYszDviPmDNRZRPiCGcPIcbFqbiDsMarpY"
+        },
+      },
+    ).then(res => {
+      var map = JSON.parse(res.request.response);
+      var add = map.results[0].region;
+      console.log(add);
+      var address = add.area1.name +" "+ add.area2.name + " " + add.area3.name + " " + add.area4.name;
+      console.log(address);
+      setAdress(String(address));
+    })
+  };
   
   const locationHandler = (e) => { 
     // setCurrentLocation(e.latitude, e.longitude); 
@@ -53,8 +73,8 @@ const openMeeting2 = () => {
         { text: '아니오'}, 
         { text: '네', onPress: () => { 
           setLocation(e);
-
           console.warn('onMapClick', JSON.stringify(e)); 
+          searchCoords(e)
         }} 
       ], 
       { cancelable: false } 
@@ -125,6 +145,7 @@ const openMeeting2 = () => {
             keyboardType='default'
             maxLength={500}
             multiline={true}
+            value = {address}
             onChangeText={newAddress => setAdress(newAddress)}
             autoCapitalize='none'
           />
@@ -142,7 +163,7 @@ const openMeeting2 = () => {
                   <Marker coordinate={location} pinColor="green"/>
               </NaverMapView>
         </View>
-        <Text style={[{marginLeft:30}, {marginRight:30}]}>현재 지오코더랑 리버스 지오코더가 권한문제로 동작을 안 해서 주소 연동이 안 되며, 실제 모임 위치는 좌표가 찍힌 곳으로 저장됩니다.</Text>
+        <Text style={[{marginLeft:25}, {marginRight:30}, {marginTop:10}, {color:"#aaaaaa"}]}> - 지도를 클릭해 정확한 위치에 마커를 찍어주세요!</Text>
         
 
         <View style={{flex:1}}/>
