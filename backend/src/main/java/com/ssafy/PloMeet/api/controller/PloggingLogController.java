@@ -3,6 +3,7 @@ package com.ssafy.PloMeet.api.controller;
 import com.ssafy.PloMeet.api.request.PloggingLogReq;
 import com.ssafy.PloMeet.api.response.AdvancedResponseBody;
 import com.ssafy.PloMeet.api.response.BaseResponseBody;
+import com.ssafy.PloMeet.api.response.PloggingLogRes;
 import com.ssafy.PloMeet.api.response.TrashcanRes;
 import com.ssafy.PloMeet.api.service.PloggingServiceImpl;
 import com.ssafy.PloMeet.api.service.UserServiceImpl;
@@ -33,7 +34,7 @@ public class PloggingLogController {
 
 
     @PostMapping("/ploggings")
-    public ResponseEntity<? extends BaseResponseBody> getTrashcans( @RequestBody PloggingLogReq insertLog ) {
+    public ResponseEntity<? extends BaseResponseBody> insertPloggingLog( @RequestBody PloggingLogReq insertLog ) {
         try {
             Optional<User> user = userService.getUserInfo(insertLog.getUserId());
             PloggingLog saveLog = ploggingService.insertPloggingLog(user, insertLog);
@@ -41,6 +42,20 @@ public class PloggingLogController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseResponseBody.of(204, "저장 실패"));
             return ResponseEntity.status(HttpStatus.OK)
                     .body(AdvancedResponseBody.of(200, "저장 성공", saveLog.getPlogId()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(BaseResponseBody.of(503, "..."));
+        }
+    }
+
+    @GetMapping("/ploggings/{userId}")
+    public ResponseEntity<? extends BaseResponseBody> getPloggingLogs (@PathVariable("userId") Long userId ){
+        try {
+            Optional<User> user = userService.getUserInfo(userId);
+            List<PloggingLog> savedLogs = ploggingService.getPloggingLogs(user);
+            if(savedLogs == null || (savedLogs != null && savedLogs.size() <= 0 ))
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseResponseBody.of(204, "기록이 없어용"));
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new AdvancedResponseBody<List<PloggingLogRes>>(200, "기록 조회 성공", PloggingLogRes.of(savedLogs)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(BaseResponseBody.of(503, "..."));
         }
