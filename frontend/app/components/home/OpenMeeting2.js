@@ -10,7 +10,7 @@ import axios from 'axios';
 const openMeeting2 = () => {
   const navigation = useNavigation();
   const [address, setAdress] = useState(''); //상세주소 검색
-
+  
   const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
   const [center, setCenter] = useState();
 
@@ -26,35 +26,8 @@ const openMeeting2 = () => {
     }
   };
 
-  // async function searchAddress(address) {
-  //   console.log(address)
-  //   try {
-  //     const response = await new timeoutPromise( 
-  //     fetch(`https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${address}`,
-  //       {
-  //         headers: {
-  //           "Accept" : "application/json",
-  //           "Content-Type" : "application/json",
-  //           "X-NCP-APIGW-API-KEY-ID" : "ndh21004t3",
-  //           "X-NCP-APIGW-API-KEY" : "9n2oMIaYszDviPmDNRZRPiCGcPIcbFqbiDsMarpY"
-  //         },
-  //         method : "GET"
-  //       })
-  //     );
-  //     console.log(response)
-  //     if (!response.ok) {
-  //       throw new Error("실패");
-  //     }
-  //     const resData = await response.json();
-  //     console.log(resData)
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  //   return;
-  // };
 
   async function searchAddress(address) {
-    console.log(address)
     const response = await axios.get(
       'https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=' + address,
       {
@@ -64,17 +37,11 @@ const openMeeting2 = () => {
         },
       },
     ).then(res => {
-      return res.data;
+      var longitude = Number(res.data.addresses[0].x)
+      var latitude = Number(res.data.addresses[0].y)
+      setLocation({...location, latitude, longitude });
+      setCenter({...center, latitude, longitude});
     })
-    .then(data => {
-      if(data.address.length > 1 ) {
-        console.log("주소가 여러개");
-      } else if (data.address.length === 0) {
-        console.log("좌표가 없음");
-      }
-      return [data.addresses[0].x, data.addresses[0].y];
-    });
-    return response;
   };
   
   const locationHandler = (e) => { 
