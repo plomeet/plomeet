@@ -9,7 +9,7 @@ import { FlatList } from 'react-native-gesture-handler';
 var albumBucketName = "plomeet-image";
 const DeviceWidth = Dimensions.get('window').width
 
-const DetailPhotos = ({ userId, plogId }) => {
+const DetailPhotos = ({ userId, plogId, headerComponent }) => {
 
     const [imageSource, setImageSource] = useState([]);
     const nextId = useRef(1);
@@ -59,7 +59,10 @@ const DetailPhotos = ({ userId, plogId }) => {
         )
     }
     return (
-        <FlatList data={imageSource} renderItem={renderItem} keyExtractor={(item)=> String(item.index)} style={style.pictureContainer} numColumns={3} horizontal={false}>
+        <FlatList data={imageSource} renderItem={renderItem} keyExtractor={(item) => String(item.index)}
+            style={style.pictureContainer} numColumns={3} 
+            ListHeaderComponent={headerComponent}
+        >
         </FlatList>
     );
 }

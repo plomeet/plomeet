@@ -12,8 +12,8 @@ const LogDetail = ({route}) => {
     const { userId } = route.params;
     const { plogId } = route.params;
 
-    return (
-        <View style={styles.container}>
+    const headerComponent = (
+        <View>
             <View style={styles.containerTitle}>
                 <Text style={styles.titleText}>X월 X번째 플로깅</Text>
                 <View style={styles.innerContainerTime} >
@@ -34,8 +34,10 @@ const LogDetail = ({route}) => {
             <View style={styles.containerState} >
                 <PloggingStatusBar distSum={1.2} isPlogging={false} timeSumString={"01:01"}></PloggingStatusBar>
             </View>
-                <DetailPhotos userId={userId} plogId={plogId}></DetailPhotos>
         </View>
+    )
+    return (
+        <DetailPhotos userId={userId} plogId={plogId} headerComponent={headerComponent}></DetailPhotos>
     );
 };
 
@@ -44,7 +46,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     containerTitle: {
-        flex: 4,
         padding: 10,
         backgroundColor: "white",
         justifyContent: 'center',
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
         color: "#ABABAB",
     },
     containerMap: {
-        flex: 20,
+        height: 250,
         paddingLeft: 10,
         paddingRight: 10
     },
