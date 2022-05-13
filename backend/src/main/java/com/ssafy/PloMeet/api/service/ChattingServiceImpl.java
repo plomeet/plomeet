@@ -30,11 +30,11 @@ public class ChattingServiceImpl implements ChattingService{
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 사용자가 존재하지 않습니다. userId = " + userId));
         List<MyMeeting> myMeetingList = myMeetingRepository.findAllByUserId(user);
 
-        List<Long> meetingIds = new ArrayList<>();
+        List<String> meetingIds = new ArrayList<>();
         HashMap<Long, MeetingRes> meetingInfos = new HashMap<>();
         for(MyMeeting myMeeting:myMeetingList){
             Long meetingId = myMeeting.getMeetingId().getMeetingId();
-            meetingIds.add(meetingId);
+            meetingIds.add(meetingId.toString());
             meetingInfos.put(meetingId, new MeetingRes(myMeeting.getMeetingId()));
         }
         return new ChattingListRes(meetingIds, meetingInfos);

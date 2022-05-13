@@ -9,7 +9,7 @@ import firestore from '@react-native-firebase/firestore';
 import { saveChatting, updateUserLastReadChatTime } from '../../../../utils/firestore';
 
 
-const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
+const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} }) => {
     const title = meeting.meetingName;
     const [user, setUser] = useState();
     //const [members, setMembers] = useState();
@@ -79,11 +79,11 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
         setMessages(list);
     };
 
-    const getUserInfo = async (userId) => {
+    const getUserInfo = async (messageUserId) => {
         const userInfo = {};
         await firestore().collection('users')
-            .doc(userId).get().then((doc)=>{
-                userInfo._id = userId;
+            .doc(messageUserId).get().then((doc)=>{
+                userInfo._id = messageUserId;
                 userInfo.name = doc.data().userNickName;
                 userInfo.avatar = doc.data().userProfileImg;
             });
@@ -104,7 +104,7 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
     useEffect(() => {
         const subscriberUser = firestore()
             .collection('users')
-            .doc(userNum)
+            .doc(userId)
             .onSnapshot(querySnapShot => {
                 const userData = querySnapShot.data();
                 const userInfo = {
@@ -157,7 +157,7 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
         if(messages.length != 0){
             const updateUserLastReadChatTimeData = {
                 meetingId: meeting.meetingId,
-                userId: userNum,
+                userId,
                 lastChatId: messages[0]._id,
                 lastChatTime: messages[0].createdAt,
             };
@@ -195,6 +195,6 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
             />
         </Container>
     );
-}
+});
 
 export default InsideRoom;

@@ -12,11 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 public class ChattingListRes {
 
-    public List<Long> meetingIds;
+    public List<String> meetingIds;
     public HashMap<Long, MeetingRes> meetingInfos;
 
     @Builder
-    public ChattingListRes(List<Long> meetingIds, HashMap<Long, MeetingRes> meetingInfos){
+    public ChattingListRes(List<String> meetingIds, HashMap<Long, MeetingRes> meetingInfos){
         this.meetingIds = meetingIds;
         this.meetingInfos = meetingInfos;
     }

@@ -4,27 +4,25 @@ import ChattingRoom from './chatting_room';
 import { FlatList } from 'react-native-gesture-handler';
 import { Container } from '../styles';
 import firestore from '@react-native-firebase/firestore';
-import meetings_data from '../dump_data_meetings';
+import { axiosInstanceLocal } from '../../../../utils/API';
 
 
-const ChattingList = () => {
+const ChattingList = React.memo(()=> {
     const navigation = useNavigation();
-    const userNum="1";
-    const [meetings, setMeetings] = useState([]);
+    const userId="1";
+    const [meeting, setMeeting] = useState();
     const [chatRooms, setChatRooms] = useState([]);
 
-    const _handleChattingRoomPress = ( item, index ) => {
-        navigation.navigate('InChatRoom', {meeting: item.meeting, userNum});
-        console.log(chatRooms[index].chatting.unReadCnt);
-        chatRooms[index].chatting.unReadCnt = 0;
+    const _handleChattingRoomPress = async ( item ) => {
+        navigation.navigate('InChatRoom', {meeting: item.meeting, userId});
     }
 
-    const renderChattingRoom = ({ item, index }) => {
+    const renderChattingRoom = ({ item }) => {
         return(
             <ChattingRoom 
                 meeting={item.meeting}
                 chatting={item.chatting}
-                onPress = {()=> _handleChattingRoomPress(item, index)}
+                onPress = {()=> _handleChattingRoomPress(item)}
             />
         )
     }
@@ -32,9 +30,9 @@ const ChattingList = () => {
     const setChatRoomData = async (queryArray) => {
         const list = [];
         for(const meeting of queryArray){
-            const meetingId = meeting.data().meetingId;
-            console.log(meetingId);
-            console.log(meeting.data());
+            const meetingId = meeting.data().meetingId.toString();
+            //console.log(meetingId);
+            //console.log(meeting.data());
             const meetingDocRef = firestore()
                             .collection('meetings').doc(meetingId);
             const lastReadChat=  await getLastReadChat(meetingDocRef);
@@ -49,19 +47,23 @@ const ChattingList = () => {
             }
             //console.log(chat);
 
+            const meetingInfo = await getMeetingInfo(meetingId);
+            //console.log(meetingInfo);
+
             const chatRoom = {
                 meeting:{
                     meetingId,
-                    meetingName: meetings_data[meetingId].meetingName,
-                    meetingImg: meetings_data[meetingId].meetingImg,
-                    memberCnt: meetings_data[meetingId].memberCnt,
-                    memberMax: meetings_data[meetingId].memberMax,
-                    meetingDate: meetings_data[meetingId].meetingDate,
-                    meetingPlace: meetings_data[meetingId].meetingPlace,
-                    item: meetings_data[meetingId].item,
+                    meetingName: meetingInfo.meetingName,
+                    meetingImg: meetingInfo.meetingImg,
+                    memberCnt: meetingInfo.memberCnt,
+                    memberMax: meetingInfo.memberMax,
+                    meetingDate: meetingInfo.meetingDate,
+                    meetingPlace: meetingInfo.meetingPlace,
+                    item: meetingInfo.item,
                 },
                 chatting: chat,
             }
+            console.log(chatRoom);
             list.push(chatRoom);
         }
         setChatRooms(list);
@@ -70,11 +72,11 @@ const ChattingList = () => {
     const getLastReadChat = async (docRef) => {
         var lastReadChat = null;
         await docRef
-            .collection('members').doc(userNum)
+            .collection('members').doc(userId)
             .get().then((doc) => {
                 lastReadChat = {
-                    id: doc.data().lastChatId,
-                    time: doc.data().lastChatTime,
+                    id: doc.data().lastReadChatId,
+                    time: doc.data().lastReadChatTime,
                 }
             })
         return lastReadChat;
@@ -109,40 +111,98 @@ const ChattingList = () => {
             .where('createdAt', '>=', lastReadChatTime)
             .get().then((docs) => {
                 const chatDocs = docs.docs;
+                console.log(chatDocs);
                 lastChatInfo.unReadCnt=chatDocs.length-1;
                 const lastChatData = chatDocs[0].data();
                 lastChatInfo.lastTime=lastChatData.createdAt;
                 lastChatInfo.lastMsg=lastChatData.text;
-                //if(lastChatInfo.unReadCnt==1&& lastReadChatTime==lastChatInfo.lastTime) lastChatInfo.unReadCnt=0;
+                if(lastChatInfo.unReadCnt==1&& lastReadChatTime==lastChatInfo.lastTime) lastChatInfo.unReadCnt=0;
             });
         return lastChatInfo;
     }
 
-    useEffect(() => {
-        const meetingIds = meetings_data.list.meetingIds;
-        console.log(meetingIds);
+    /*
+    const getMeetingInfos = async() => {
+        try {
+            await axiosInstanceLocal.get(`/chat/${userId}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        setMeetings(response.data);
+                        console.log(response.data);
+                        //console.log("get Trashcans SUCCESS");
+                    } else {
+                        console.log("error");
+                    }
+                })
+                .catch((response) => { console.log(response); });
+        } catch (err) { console.log(err); }
+    }
+    */
 
-        const subscriberMeetings = firestore()
-            .collection('meetings')
-            .where('meetingId', 'in', meetingIds)
-            .orderBy('lastChatTime', 'desc')
-            .onSnapshot(querySnapShot => {
-                console.log(querySnapShot);
-                setChatRoomData(querySnapShot.docs);
+    const getMeetingInfo = async(meetingId) => {
+        var meetingInfo = {};
+        try {
+            await axiosInstanceLocal.get(`/meetings/${meetingId}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        //setMeeting(response.data);
+                        meetingInfo = response.data;
+                        //console.log("get Trashcans SUCCESS");
+                    } else {
+                        console.log("error");
+                    }
+                })
+                .catch((response) => { console.log(response); });
+        } catch (err) { console.log(err); }
+        return meetingInfo;
+    }
+
+    useEffect(() => {
+        const subscriberMeetingsMember = firestore()
+            .collectionGroup('members')
+            .where('userId', "==", userId.toString())
+            .onSnapshot(querySnapShot => {                  
+                const meetingIds = [];
+                querySnapShot.forEach((docs) => {
+                    meetingIds.push(docs.ref.parent.parent._documentPath._parts[1]);
+                });
+                //console.log(list);
+                const subscriberMeetings = firestore()
+                    .collection('meetings')
+                    .where('meetingId', 'in', meetingIds)
+                    .orderBy('lastChatTime', 'desc')
+                    //.get().then((querySnapShot) => {
+                    .onSnapshot(querySnapShot => {
+                        setChatRoomData(querySnapShot.docs);
+                        //console.log(chatRooms);
+                    }, error => {
+                        console.log(error);
+                    });
+                return() => subscriberMeetings();
             }, error => {
                 console.log(error);
             });
+            
+            /*
+            const subscriberMeetings = await firestore()
+                .collection('meetings')
+                .where('meetingId', 'in', meetingIds)
+                .orderBy('lastChatTime', 'desc')
+                .onSnapshot(querySnapShot => {
+                    setChatRoomData(querySnapShot.docs);
+                }, error => {
+                    console.log(error);
+                });
+            
+            return () => {
+                //subscriberMeetings();
+            }
+            */
         return () => {
-            //console.log("사라진다......");
-            subscriberMeetings();
+            subscriberMeetingsMember();
+            //subscriberMeetings();
         }
-        //return () => subscriberMeetings();
     }, []);
-
-    useEffect(() => {
-        //console.log("채팅방 정보가 바뀌었다...!");
-        //console.log(chatRooms);
-    }, [chatRooms]);
 
     return (
         <Container>
@@ -153,6 +213,6 @@ const ChattingList = () => {
             />
         </Container>
     );
-};
+});
 
 export default ChattingList;
