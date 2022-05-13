@@ -11,7 +11,7 @@ const PloggingList = () => {
     return (
         <TouchableOpacity
             onPress={
-                () => navigation.navigate('logDetail', { msg: "show logDetail" })
+                () => navigation.navigate('logDetail', { msg: "show logDetail", userId:1, plogId:21 }) //추후 수정
             }>
             <View style={styles.container}>
                 <View style={styles.dateContainer}>

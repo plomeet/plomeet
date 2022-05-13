@@ -120,9 +120,6 @@ const EndPlogging = ({ ploggingPath, center, setImages }) => {
             <View
                 style={style.container}
             >
-                <View style={style.containerTitle}>
-                    <Text style={style.titleText}>플로깅 결과</Text>
-                </View>
                 <View style={style.containerTime} >
                     <View style={style.innerContainerTime} >
                         <Text style={style.date}>{startTime[0]}{startTime[1]}</Text>
@@ -186,7 +183,8 @@ const style = StyleSheet.create({
 
     },
     containerTime: {
-        flex: 0.3,
+        justifyContent: "center",
+        flex: 0.2,
         backgroundColor: "white",
         flexDirection: 'column',
         borderTopWidth: 0.3,
@@ -208,7 +206,7 @@ const style = StyleSheet.create({
     },
 
     containerMap: {
-        flex: 1,
+        flex: 0.8,
         paddingLeft: 10,
         paddingRight: 10
     },

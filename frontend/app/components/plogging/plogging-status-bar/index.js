@@ -186,16 +186,6 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
 
   return (
     <View style={styles.container}>
-      <View style={styles.containerTitle}>
-        {!isPlogging &&
-          <TouchableOpacity onPress={navigation.goBack}>
-            <BackSvg width={20} height={20} fill={"#FFF"} style={{ marginLeft: 5 }}></BackSvg>
-          </TouchableOpacity>
-        }
-        {!showEndPage &&
-          <Text style={styles.titleText}>플로깅</Text>
-        }
-      </View>
       <PloggingStatusBarBlock width={layout.width}>
         <View style={styles.statusView}>
           <MapSvg width={20} height={20} fill={"#FFF"} />
@@ -228,22 +218,9 @@ const styles = StyleSheet.create({
   statusText: {
     marginLeft: 10
   },
-  containerTitle: {
-    flex: 1,
-    backgroundColor: "white",
-    alignItems: 'center',
-    borderBottomWidth: 0.3,
-    flexDirection: "row",
-  },
-  titleText: {
-    fontSize: 20,
-    marginLeft: 40,
-    fontWeight: "bold",
-    position: "absolute",
-  },
   container: {
     flexDirection: "column",
-    height: "15%",
+    // height: "15%",
     backgroundColor: "white",
   },
 })
