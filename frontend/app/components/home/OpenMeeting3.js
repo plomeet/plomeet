@@ -46,7 +46,7 @@ const openMeeting3 = () => {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>모임 인원</Text>
+        <Text style={styles.title}>최대 인원</Text>
         <TextInput
           // value={this.state.myTextInput}
           style={styles.input}
@@ -122,6 +122,7 @@ const openMeeting3 = () => {
             justifyContent: 'center', 
             alignItems: 'center'}}>
 
+            <Text style={[{fontSize:20}, {color:"#000"}]}>모임 시간</Text>
             <DatePicker
             options={{
               mainColor: '#1BE58D',
@@ -129,7 +130,7 @@ const openMeeting3 = () => {
             }}
             mode="time"
             configs={{
-              hour: '시간',
+              hour: '시',
               minute: '분',
               timeSelect: '선택'
             }}
