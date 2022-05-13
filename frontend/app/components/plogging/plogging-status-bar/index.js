@@ -9,8 +9,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BackSvg from '../icons/back.svg'
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-//import axiosInstance from "../../../../utils/API";
-import axiosInstance from "../../../../utils/ApiLocal";
+import axiosInstance from "../../../../utils/API";
+// import axiosInstance from "../../../../utils/ApiLocal";
 import Config from 'react-native-config'
 import AWS from 'aws-sdk';
 
