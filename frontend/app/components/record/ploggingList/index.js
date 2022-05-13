@@ -5,13 +5,14 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Config from 'react-native-config'
 import DetailArrow from '../icon/detailArrow.svg';
 
-const PloggingList = () => {
+const PloggingList = (key) => {
     const navigation = useNavigation();
 
     return (
         <TouchableOpacity
+            key={key}
             onPress={
-                () => navigation.navigate('logDetail', { msg: "show logDetail" })
+                () => navigation.navigate('logDetail', { msg: "show logDetail", userId:1, plogId:21 }) //추후 수정
             }>
             <View style={styles.container}>
                 <View style={styles.dateContainer}>
@@ -46,25 +47,27 @@ const styles = StyleSheet.create({
         borderRightWidth: 1,
         borderColor: "#C4C4C4",
         alignItems: "center",
+        justifyContent: "center",
     },
     infoContainer: {
         paddingLeft: 16,
         flex: 8,
+        justifyContent: "center",
     },
     detailButtonContainer: {
         flex: 1,
-        paddingTop: 6,
+        justifyContent: "center",
     },
     weekText: {
         color: "#12D3DD",
     },
     dateText: {
         color: "#12D3DD",
-        fontSize: 23,
+        fontSize: 20,
     },
     countInfo: {
         color: "#000000",
-        fontSize: 20,
+        fontSize: 15,
     },
     timeInfo: {
         color: "#7A7A7A",

@@ -33,13 +33,13 @@ public class PloggingServiceImpl implements PloggingService{
                 if(w.getDesc().equals(insertLog.getPlogWeather()))
                     weather = w;
             }
+            return ploggingRepo.save(PloggingLog.builder()
+                    .user(user.get()).plogDist(insertLog.getPlogDist())
+                    .plogTime(insertLog.getPlogTime()).plogDate(insertLog.getPlogDate())
+                    .plogWeather(weather).route(routeJson).build());
         }else{
             System.out.println("해당 회원이 없습니다.");
             return null;
         }
-        return ploggingRepo.save(PloggingLog.builder()
-                .user(user.get()).plogDist(insertLog.getPlogDist())
-                .plogTime(insertLog.getPlogTime()).plogDate(insertLog.getPlogDate())
-                .plogWeather(weather).route(routeJson).build());
     }
 }
