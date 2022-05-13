@@ -33,7 +33,7 @@ const DetailPhotos = ({ userId, plogId, headerComponent }) => {
         setImageSource([]);
         s3.listObjects({ Prefix: albumPhotosKey }, function(err, data) {
             if (err) {
-                setImageSource([])
+                return alert("다시 시도해주세요")
             }
 
             var href = this.request.httpRequest.endpoint.href;
