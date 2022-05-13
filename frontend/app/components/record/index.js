@@ -15,8 +15,7 @@ const Record = () => {
             <LogCalendar />
 
             <View style={styles.plogListContainer}>
-                <Text style={styles.MonthListText}>이달의 플로깅 목록</Text>
-                <ScrollView style={styles.ploggingLists}>
+                <ScrollView>
                     {
                         listCount.map(i => {
                             return (
@@ -36,23 +35,10 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     plogListContainer: {
-        flexDirection: "column",
-        backgroundColor: "#EEEEEE",
-        flex: 5,
+        flex: 1,
+        paddingBottom: 5
     },
-    MonthListText: {
-        marginTop: 10,
-        marginBottom: 2,
-        fontSize: 18,
-        marginLeft: 20,
-        fontWeight: "bold",
-        flex: 0.1,
-    },
-    ploggingLists: {
-        flex: 0.5,
-        flexDirection: "column",
-        backgroundColor: "#EEEEEE",
-    }
+
 });
 
 export default Record;

@@ -37,7 +37,6 @@ const LogCalendar = () => {
     return (
         <View style={styles.container}>
             <Calendar
-                style={styles.calendar}
                 markingType={'period'}
                 markedDates={markedDates}
                 //onDayPress={day => { setSelectDate(day); }}
@@ -53,10 +52,6 @@ const styles = StyleSheet.create({
 
     container: {
         marginTop: 5,
-        flex: 5,
-    },
-    calendar: {
-        height: "100%",
     },
 })
 
