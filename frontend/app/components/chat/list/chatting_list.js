@@ -4,7 +4,7 @@ import ChattingRoom from './chatting_room';
 import { FlatList } from 'react-native-gesture-handler';
 import { Container } from '../styles';
 import firestore from '@react-native-firebase/firestore';
-import { axiosInstanceLocal } from '../../../../utils/API';
+import { axiosInstance } from '../../../../utils/API';
 
 
 const ChattingList = React.memo(()=> {
@@ -31,13 +31,9 @@ const ChattingList = React.memo(()=> {
         const list = [];
         for(const meeting of queryArray){
             const meetingId = meeting.data().meetingId.toString();
-            //console.log(meetingId);
-            //console.log(meeting.data());
             const meetingDocRef = firestore()
                             .collection('meetings').doc(meetingId);
             const lastReadChat=  await getLastReadChat(meetingDocRef);
-            //console.log("마지막으로 읽은 채팅ID:: "+lastReadChat.id);
-            //console.log("마지막으로 읽은 채팅Time:: "+lastReadChat.time);
 
             var chat;
             if(lastReadChat.id == 0){
@@ -45,10 +41,8 @@ const ChattingList = React.memo(()=> {
             }else{
                 chat = await getLastChatInfo(meetingDocRef, lastReadChat.time);
             }
-            //console.log(chat);
 
             const meetingInfo = await getMeetingInfo(meetingId);
-            //console.log(meetingInfo);
 
             const chatRoom = {
                 meeting:{
@@ -63,7 +57,6 @@ const ChattingList = React.memo(()=> {
                 },
                 chatting: chat,
             }
-            console.log(chatRoom);
             list.push(chatRoom);
         }
         setChatRooms(list);
@@ -111,7 +104,6 @@ const ChattingList = React.memo(()=> {
             .where('createdAt', '>=', lastReadChatTime)
             .get().then((docs) => {
                 const chatDocs = docs.docs;
-                console.log(chatDocs);
                 lastChatInfo.unReadCnt=chatDocs.length-1;
                 const lastChatData = chatDocs[0].data();
                 lastChatInfo.lastTime=lastChatData.createdAt;
@@ -121,33 +113,13 @@ const ChattingList = React.memo(()=> {
         return lastChatInfo;
     }
 
-    /*
-    const getMeetingInfos = async() => {
-        try {
-            await axiosInstanceLocal.get(`/chat/${userId}`)
-                .then((response) => {
-                    if (response.status === 200) {
-                        setMeetings(response.data);
-                        console.log(response.data);
-                        //console.log("get Trashcans SUCCESS");
-                    } else {
-                        console.log("error");
-                    }
-                })
-                .catch((response) => { console.log(response); });
-        } catch (err) { console.log(err); }
-    }
-    */
-
     const getMeetingInfo = async(meetingId) => {
         var meetingInfo = {};
         try {
-            await axiosInstanceLocal.get(`/meetings/${meetingId}`)
+            await axiosInstance.get(`/meetings/${meetingId}`)
                 .then((response) => {
                     if (response.status === 200) {
-                        //setMeeting(response.data);
                         meetingInfo = response.data;
-                        //console.log("get Trashcans SUCCESS");
                     } else {
                         console.log("error");
                     }
@@ -166,7 +138,7 @@ const ChattingList = React.memo(()=> {
                 querySnapShot.forEach((docs) => {
                     meetingIds.push(docs.ref.parent.parent._documentPath._parts[1]);
                 });
-                //console.log(list);
+                
                 const subscriberMeetings = firestore()
                     .collection('meetings')
                     .where('meetingId', 'in', meetingIds)
@@ -174,7 +146,6 @@ const ChattingList = React.memo(()=> {
                     //.get().then((querySnapShot) => {
                     .onSnapshot(querySnapShot => {
                         setChatRoomData(querySnapShot.docs);
-                        //console.log(chatRooms);
                     }, error => {
                         console.log(error);
                     });
@@ -183,25 +154,7 @@ const ChattingList = React.memo(()=> {
                 console.log(error);
             });
             
-            /*
-            const subscriberMeetings = await firestore()
-                .collection('meetings')
-                .where('meetingId', 'in', meetingIds)
-                .orderBy('lastChatTime', 'desc')
-                .onSnapshot(querySnapShot => {
-                    setChatRoomData(querySnapShot.docs);
-                }, error => {
-                    console.log(error);
-                });
-            
-            return () => {
-                //subscriberMeetings();
-            }
-            */
-        return () => {
-            subscriberMeetingsMember();
-            //subscriberMeetings();
-        }
+        return () => subscriberMeetingsMember();
     }, []);
 
     return (

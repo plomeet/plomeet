@@ -12,7 +12,7 @@ import { saveChatting, updateUserLastReadChatTime } from '../../../../utils/fire
 const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} }) => {
     const title = meeting.meetingName;
     const [user, setUser] = useState();
-    //const [members, setMembers] = useState();
+    const members = {};
     const [messages, setMessages] = useState([]);
 
     
@@ -61,11 +61,9 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
         const promises = queryArray.map(async message => {
             const messageData = message.data();
             var userInfo = {};
-            //if(messageData.userId == userNum) userInfo = {"_id": userNum};
-            //else userInfo = await getUserInfo(messageData.userId);
-            userInfo = await getUserInfo(messageData.userId);
-            //var userInfo = members[messageData.userId];
-            //if(userInfo == undefined) userInfo = await getUserInfo(messageData.userId);
+            if(members[userId] == undefined) members[userId] = await getUserInfo(messageData.userId);
+            userInfo = members[userId];
+            //userInfo = await getUserInfo(messageData.userId);
             const messageInfo = {
                 _id: messageData._id,
                 text: messageData.text,
@@ -115,7 +113,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
                 setUser(userInfo);
             });
         
-        console.log("meetingId::"+ meeting.meetingId);
+        //console.log("meetingId::"+ meeting.meetingId);
         const subscriberChatting = firestore()
             .collection('meetings')
             .doc(meeting.meetingId)
