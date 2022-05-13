@@ -19,7 +19,6 @@ const Record = () => {
                     .then((response) => {
                         if (response.status === 200) {
                             console.log(response.data.data[0].plogDist);
-
                         } else if (response.status === 204) {
                             console.log("저장된 기록이 없습니다") // todo 기록없을때 처리
                         }

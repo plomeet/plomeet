@@ -28,9 +28,9 @@ const App = ({ distSum, setDistSum, isPlogging, handleIsPlogging, showPloggingEn
                 <View style={styles.containerResultTitle}>
                     <Text style={styles.resultTitleText}>플로깅 결과</Text>
                 </View>
-                }
+            }
             {(!showPloggingEndPage) && <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} setTimeSum={setTimeSum} timeSumString={timeSum} setIsSave={setIsSave} resetPloggingPath={resetPloggingPath} setDistSum={setDistSum}></PloggingStatusBar>}
-            <Plogging setDistSum={setDistSum} isPlogging={isPlogging} showPloggingEndPage={showPloggingEndPage} setWeatherLoc={setWeatherLoc} setImages={setImages} setPloggingPath={setPloggingPath}></Plogging>
+            <Plogging setDistSum={setDistSum} isPlogging={isPlogging} showPloggingEndPage={showPloggingEndPage} setWeatherLoc={setWeatherLoc} setImages={setImages} setPloggingPath={setPloggingPath} setIsSave={setIsSave} handleShowEndPage={handleShowEndPage}></Plogging>
             <PloggingStartEndButton isPlogging={isPlogging} handleIsPlogging={handleIsPlogging} showPloggingEndPage={showPloggingEndPage} handleShowEndPage={handleShowEndPage} setStart={setStart} setIsSave={setIsSave}></PloggingStartEndButton>
         </SafeAreaView>
     )
