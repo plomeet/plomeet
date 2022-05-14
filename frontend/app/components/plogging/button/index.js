@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, PermissionsAndroid, Platform, Alert } from "react-native";
+import React, { useEffect } from 'react';
+import { View, StyleSheet, PermissionsAndroid, Platform, Alert, BackHandler } from "react-native";
 import 'react-native-gesture-handler';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import StartBtn from '../icons/startBtn.svg';
@@ -13,13 +13,13 @@ import DeletePloggingBtn from '../icons/deletePlogging.svg'
 import { setTimeSum, setDistSum, resetPloggingPath } from '../../../actions/action';
 
 
+
 const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage, setStart, setIsSave }) => {
     const navigation = useNavigation();
     const devices = useCameraDevices();
     const device = devices.back;
     const WEEKDAY = ['(일)', '(월)', '(화)', '(수)', '(목)', '(금)', '(토)'];
     const dispatch = useDispatch();
-
 
     const openCamera = async () => {
         if (Platform.OS === 'ios') {
@@ -85,7 +85,7 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
         setIsSave(true);
     }
 
-    const deleteAlert = () => { 
+    const deleteAlert = () => {
         Alert.alert(
             "플로깅 기록을 삭제하시겠습니까?",
             "",
@@ -95,20 +95,52 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
                     onPress: () => { },
                     style: 'cancel'
                 },
-                { text: "네", onPress: ()=> deletePlogging()}
+                { text: "네", onPress: () => deletePlogging() }
             ],
-            { cancelable: true }
+            { cancelable: false }
         )
     }
 
-    const deletePlogging = () => { 
+    useEffect(() => {
+        if (showPloggingEndPage) {
+            const backAction = () => {
+                Alert.alert("잠시만요!!", "플로깅 기록을 삭제하시겠습니까?", [
+                    {
+                        text: "아니요",
+                        onPress: () => null,
+                    },
+                    { text: "네", onPress: () => deletePlogging() }
+                ]);
+                return true;
+            };
+
+            const backHandler = BackHandler.addEventListener(
+                "hardwareBackPress",
+                backAction
+            );
+
+            return () => backHandler.remove();
+        }
+        else {
+            const handleBackPress = () => {
+                return true;
+            }
+            const backHandler = BackHandler.addEventListener(
+                "hardwareBackPress",
+                handleBackPress
+            );
+            return () => backHandler.remove();
+        }
+    }, [showPloggingEndPage]);
+
+    const deletePlogging = () => {
         try {
             dispatch(setTimeSum("0 : 00"));
             dispatch(setDistSum(0));
             dispatch(resetPloggingPath());
         } finally {
             handleIsPlogging(false);
-            handleShowEndPage(false); 
+            handleShowEndPage(false);
         }
     }
 
@@ -142,13 +174,13 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
     } else { //종료하고 기록 화면 보여줄때
         return (
             <View style={styles.endPageBtn} >
-            <View style={styles.saveBtn} >
-                <TouchableOpacity style={styles.elevation} onPress={() => { saveButtonClick() }}>
-                    <SaveBtn />
-                </TouchableOpacity>
+                <View style={styles.saveBtn} >
+                    <TouchableOpacity style={styles.elevation} onPress={() => { saveButtonClick() }}>
+                        <SaveBtn />
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.deleteBtn}>
-                    <TouchableOpacity style={styles.elevation} onPress={() => { deleteAlert();}}>
+                    <TouchableOpacity style={styles.elevation} onPress={() => { deleteAlert(); }}>
                         <DeletePloggingBtn />
                     </TouchableOpacity>
                 </View>
@@ -197,7 +229,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
         bottom: 80,
-    }, 
+    },
     saveBtn: {
         width: '100%',
         justifyContent: 'center',
