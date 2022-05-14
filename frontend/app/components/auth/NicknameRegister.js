@@ -17,6 +17,8 @@ import axiosInstanceLocal from "../../../utils/API";
 import LogoImage from '../../../assets/imgs/6881.png';
 import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { useSelector } from "react-redux"
 
 import { connect } from 'react-redux';
 import * as actions from '../../actions/userActions';
@@ -28,13 +30,15 @@ const NicknameRegister = () => {
   
   const [value, onChangeText] = useState("");
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const nickname = useSelector(state => state.nickname)
 
-  var id = '';
-  var nickname = value;
-  var img = '';
-  var name = '';
-  var email = '';
-  console.log(value);
+  
+  // console.log(value);
+  const NicknameUpdate = (nickname2) => {
+    dispatch(setNickname(nickname2));
+    console.log(nickname);
+  }
   
   
   // kakaoHelper.getProfile();
@@ -85,7 +89,7 @@ const NicknameRegister = () => {
             autoFocus
             maxLength={10}
             autoCapitalize="none"
-            onChangeText={text => onChangeText(text)}
+            onChangeText={text => NicknameUpdate(text)}
             value={value}>
           </TextInput>
         </View>
@@ -163,13 +167,21 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    
+    id: state.id,
+    nickname: state.nickname,
+    img: state.img,
+    name: state.name,
+    email: state.email,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-
+    setId: id => dispatch(actions.setId(id)),
+    setNickname: nickname => dispatch(actions.setNickname(nickname)),
+    setImg: img => dispatch(actions.setImg(img)),
+    setName: name => dispatch(actions.setName(name)),
+    setEmail: email => dispatch(actions.setEmail(email)),
   }
 }
 

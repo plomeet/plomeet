@@ -7,7 +7,7 @@ import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { useSelector } from "react-redux"
 //Screens
-import Splash from './components/auth/Splash';
+import Splash from './components/auth/NicknameRegister';
 import SignUp from './components/auth/SignUp';
 import NicknameRegister from './components/auth/NicknameRegister';
 import Home from './components/home/index';
