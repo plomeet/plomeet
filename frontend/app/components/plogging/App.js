@@ -30,7 +30,7 @@ const App = ({ distSum, setDistSum, isPlogging, handleIsPlogging, showPloggingEn
                 </View>
                 }
             {(!showPloggingEndPage) && <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} setTimeSum={setTimeSum} timeSumString={timeSum} setIsSave={setIsSave} resetPloggingPath={resetPloggingPath} setDistSum={setDistSum}></PloggingStatusBar>}
-            <Plogging setDistSum={setDistSum} isPlogging={isPlogging} showPloggingEndPage={showPloggingEndPage} setWeatherLoc={setWeatherLoc} setImages={setImages} setPloggingPath={setPloggingPath}></Plogging>
+            <Plogging setDistSum={setDistSum} isPlogging={isPlogging} showPloggingEndPage={showPloggingEndPage} setWeatherLoc={setWeatherLoc} setImages={setImages} setPloggingPath={setPloggingPath} setIsSave={setIsSave} handleShowEndPage={handleShowEndPage} setTimeSum={setTimeSum}></Plogging>
             <PloggingStartEndButton isPlogging={isPlogging} handleIsPlogging={handleIsPlogging} showPloggingEndPage={showPloggingEndPage} handleShowEndPage={handleShowEndPage} setStart={setStart} setIsSave={setIsSave}></PloggingStartEndButton>
         </SafeAreaView>
     )
