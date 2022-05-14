@@ -129,7 +129,7 @@ const Record = ({ saveLogs, setListMonth }) => {
                     {
                         plogLists.map((log, index) => {
                             return (
-                                <PloggingList id={log.plogId} log={log} mm={month} index={index} />
+                                <PloggingList key={log.plogId} id={log.plogId} log={log} mm={month} index={index} />
                             )
                         })
                     }

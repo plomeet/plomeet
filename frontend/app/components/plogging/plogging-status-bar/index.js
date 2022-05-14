@@ -15,7 +15,7 @@ import Config from 'react-native-config'
 import AWS from 'aws-sdk';
 import { resetPloggingPath } from '../../../actions/action';
 
-const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString, setIsSave, setDistSum, handleShowEndPage, saveLogs, islogDetail, logDetailWeather }) => {
+const PloggingStatusBar = ({ mm = 0, ss = 0, isPlogging, setTimeSum, timeSumString, setIsSave, setDistSum, handleShowEndPage, saveLogs, islogDetail, logDetailWeather }) => {
   const layout = useWindowDimensions();
   const countInterval = useRef(null);
   const [minutes, setMinutes] = useState(parseInt(mm));
