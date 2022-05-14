@@ -29,17 +29,16 @@ export const BadgeMoreText = styled.Text`
 export const BadgeComponent = styled.View`
     flex-direction: column;
     align-items: center;
-    margin: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
     width: 80px;
-    height: 100px;
+    height: 120px;
 `;
 
 export const BadgeImage = styled.Image`
-    width: 60px;
-    height: 60px;
-    margin-top: 5px;
+    width: 70px;
+    height: 70px;
     margin-bottom: 5px;
-    border-radius: 50px;
 `;
 
 export const BadgeTitle = styled.Text`
@@ -58,8 +57,8 @@ export const BadgeDescComponent = styled.View`
 `;
 
 export const BadgeDescImg = styled.Image`
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     margin-bottom: 10px;
     border-radius: 50px;
 `;
