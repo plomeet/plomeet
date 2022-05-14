@@ -4,7 +4,7 @@ import ChattingRoom from './chatting_room';
 import { FlatList } from 'react-native-gesture-handler';
 import { Container } from '../styles';
 import firestore from '@react-native-firebase/firestore';
-import { axiosInstance } from '../../../../utils/API';
+import axiosInstance from '../../../../utils/API';
 
 
 const ChattingList = React.memo(()=> {
