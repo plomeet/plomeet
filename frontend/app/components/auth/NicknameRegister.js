@@ -18,6 +18,9 @@ import LogoImage from '../../../assets/imgs/6881.png';
 import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+import * as actions from '../../actions/userActions';
+
 const kakaoHelper = require('./KakaoHelper.js');
 
 
@@ -158,4 +161,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NicknameRegister;
+const mapStateToProps = state => {
+  return {
+    
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NicknameRegister);
