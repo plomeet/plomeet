@@ -18,6 +18,9 @@ import LogDetail from './components/record/plogDetail/index';
 //Chatting
 import InsideRoom from './components/chat/room/inside_room';
 
+//My
+import BadgeList from './components/my/badge/badge_all';
+
 
 const Stack = createStackNavigator();
 const MainScreenTab = createBottomTabNavigator();
@@ -80,6 +83,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
             <Stack.Screen name="InChatRoom" component={InsideRoom} />
             <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '' }} />
+            <Stack.Screen name="BadgeList" component={BadgeList} options={{ title: '배지' }}/>
         </Stack.Navigator>
     )
 }
