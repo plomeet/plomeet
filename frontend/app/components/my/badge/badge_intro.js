@@ -29,7 +29,6 @@ const BadgeIntro = () => {
                 await axiosInstance.get(`/badges/${userId}`)
                     .then((response) => {
                         if (response.status === 200) {
-                            console.log(response.data);
                             setBadges(response.data.slice(0, 5));
                         } else {
                             console.log("error");
@@ -53,7 +52,7 @@ const BadgeIntro = () => {
             <ScrollView horizontal={true}>
                 {   
                     badges.map((badge, idx) => (
-                        <Badge badge={badge}></Badge>
+                        <Badge key={badge.badgeId} badge={badge}></Badge>
                     ))
                 }
                 <Icon name="dots-three-horizontal" size={20} color={color.primaryDark} style={{alignSelf: 'center', marginLeft: 20, marginRight: 20}}/>
