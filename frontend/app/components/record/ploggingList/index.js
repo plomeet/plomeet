@@ -57,25 +57,27 @@ const styles = StyleSheet.create({
         borderRightWidth: 1,
         borderColor: "#C4C4C4",
         alignItems: "center",
+        justifyContent: "center",
     },
     infoContainer: {
         paddingLeft: 16,
         flex: 8,
+        justifyContent: "center",
     },
     detailButtonContainer: {
         flex: 1,
-        paddingTop: 6,
+        justifyContent: "center",
     },
     weekText: {
         color: "#12D3DD",
     },
     dateText: {
         color: "#12D3DD",
-        fontSize: 23,
+        fontSize: 20,
     },
     countInfo: {
         color: "#000000",
-        fontSize: 20,
+        fontSize: 15,
     },
     timeInfo: {
         color: "#7A7A7A",

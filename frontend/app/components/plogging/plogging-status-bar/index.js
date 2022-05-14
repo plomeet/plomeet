@@ -3,7 +3,7 @@ import { useWindowDimensions, Text, View, StyleSheet } from "react-native";
 import styled from "styled-components/native";
 import MapSvg from '../icons/map.svg';
 import TimeSvg from '../icons/timer.svg';
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import weatherApiInstance from "../../../../utils/weatherAPI";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BackSvg from '../icons/back.svg'
@@ -13,8 +13,9 @@ import axiosInstance from "../../../../utils/API";
 //import axiosInstance from "../../../../utils/ApiLocal";
 import Config from 'react-native-config'
 import AWS from 'aws-sdk';
+import { resetPloggingPath } from '../../../actions/action';
 
-const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString, setIsSave, resetPloggingPath, setDistSum, handleShowEndPage, saveLogs, islogDetail, logDetailWeather }) => {
+const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString, setIsSave, setDistSum, handleShowEndPage, saveLogs, islogDetail, logDetailWeather }) => {
   const layout = useWindowDimensions();
   const countInterval = useRef(null);
   const [minutes, setMinutes] = useState(parseInt(mm));
@@ -34,6 +35,8 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
   const startTime = useSelector(state => state.startTime);
   const images = useSelector(state => state.images);
   const userId = 1; //나중에 리덕스 스토어에서 가져오기
+  const distSum = useSelector(state => state.distSum)
+  const dispatch = useDispatch();
 
   var s3 = new AWS.S3({
     apiVersion: '2006-03-01',
@@ -114,7 +117,7 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
                 console.log("log insert SUCCESS");
                 setTimeSum("0 : 00");
                 setDistSum(0);
-                resetPloggingPath();
+                dispatch(resetPloggingPath());
                 console.log(response.data.data); //플로깅 아이디
                 upload(userId, response.data.data); //userId + 플로깅아이디
                 await axiosInstance.get(`/ploggings/${userId}`)  // 성공할때만 정보를 다시 가져오기위해
@@ -130,7 +133,7 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
                     }
                   })
                   .catch((response) => { console.log(response); });
-
+                cleanAndGoRecordTab();
               } else {
                 console.log("log insert FAIL " + response.status);
               }
@@ -140,7 +143,7 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
 
       };
       saveLog();
-      cleanAndGoRecordTab();
+      // cleanAndGoRecordTab();
     }
   }, [isSave])
 

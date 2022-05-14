@@ -47,6 +47,12 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                 getRealTimeLoc();           // 이거 안하면 사용자 입장에서 시작시 좌표 중심이 바로 바뀐다.
     }, []);
 
+    //플로깅 저장 안하고 돌아왔을 때 처리에 필요
+    useEffect(() => { 
+        setTotalDist(0);
+        setPrevLocation({})
+    }, [isPlogging, showPloggingEndPage])
+
     //시작시 쓰레기통 전부를 가져온다.
     useEffect(() => {
         async function getTrashCans() {

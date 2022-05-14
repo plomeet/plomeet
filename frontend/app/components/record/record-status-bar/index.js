@@ -13,9 +13,9 @@ const RecordStatusBar = ({ td, tt, tc }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.containerTitle}>
+            {/* <View style={styles.containerTitle}>
                 <Text style={styles.titleText}>지금까지 누구누구님은</Text>
-            </View>
+            </View> */}
             <RecordStatusBarBlock width={layout.width}>
                 <View style={styles.statusView}>
                     <MapSvg width={27} height={27} fill={"#FFF"} />
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     },
     statusText: {
         marginLeft: 11,
-        fontSize: 17,
+        fontSize: 14,
     },
     containerTitle: {
         display: "flex",
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flexDirection: "column",
-        flex: 1.2,
+        flex: 0.2,
         backgroundColor: "#FFFFFF",
     },
 })
@@ -76,5 +76,5 @@ const RecordStatusBarBlock = styled.View`
       flex: 1;
       width: ${props => props.width}px;
       background-color: #ffffff;
-      padding: 0px 10px 5px 10px;
+      padding: 5px 10px 5px 10px;
     `
