@@ -2,9 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import Record from '.';
 
-const App = () => {
+const App = ({ saveLogs, setListMonth }) => {
     return (
-        <Record></Record>
+        <Record saveLogs={saveLogs} setListMonth={setListMonth}></Record>
     )
 }
 

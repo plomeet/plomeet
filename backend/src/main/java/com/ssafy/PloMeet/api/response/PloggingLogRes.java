@@ -27,7 +27,7 @@ public class PloggingLogRes {
 
         for(PloggingLog p : pl){
             result.add(PloggingLogRes.builder()
-                    .plogId(p.getPlogId())
+                            .plogId(p.getPlogId())
                             .userId(p.getUser().getUserId())
                             .plogDist(p.getPlogDist())
                             .plogTime(p.getPlogTime())

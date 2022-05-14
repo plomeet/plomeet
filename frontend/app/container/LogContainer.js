@@ -5,6 +5,8 @@ import * as actions from '../actions/action'
 
 const mapDispatchToProps = dispatch => {
     return {
+        saveLogs: savedLogs => dispatch(actions.saveLogs(savedLogs)),
+        setListMonth: listMonth => dispatch(actions.setListMonth(listMonth)),
     }
 }
 

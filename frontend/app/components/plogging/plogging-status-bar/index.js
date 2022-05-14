@@ -14,7 +14,7 @@ import axiosInstance from "../../../../utils/ApiLocal";
 import Config from 'react-native-config'
 import AWS from 'aws-sdk';
 
-const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString, setIsSave, resetPloggingPath, setDistSum, handleShowEndPage }) => {
+const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, timeSumString, setIsSave, resetPloggingPath, setDistSum, handleShowEndPage, saveLogs, islogDetail, logDetailWeather }) => {
   const layout = useWindowDimensions();
   const countInterval = useRef(null);
   const [minutes, setMinutes] = useState(parseInt(mm));
@@ -33,6 +33,7 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
   const ploggingPath = useSelector(state => state.ploggingPath);
   const startTime = useSelector(state => state.startTime);
   const images = useSelector(state => state.images);
+  const userId = 1; //나중에 리덕스 스토어에서 가져오기
 
   var s3 = new AWS.S3({
     apiVersion: '2006-03-01',
@@ -108,14 +109,28 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
             route: ploggingPath,
             plogDate: (startTime[0] + startTime[1] + "-" + startTime[2]),
           })
-            .then((response) => {
+            .then(async (response) => {
               if (response.status === 200) {
                 console.log("log insert SUCCESS");
                 setTimeSum("0 : 00");
                 setDistSum(0);
                 resetPloggingPath();
                 console.log(response.data.data); //플로깅 아이디
-                upload(1, response.data.data); //userId + 플로깅아이디
+                upload(userId, response.data.data); //userId + 플로깅아이디
+                await axiosInstance.get(`/ploggings/${userId}`)  // 성공할때만 정보를 다시 가져오기위해
+                  .then((response) => {
+                    if (response.status === 200) {
+                      console.log("저장 후 플로깅 정보 업뎃 성공");
+                      saveLogs(response.data.data);
+                    } else if (response.status === 204) {
+                      console.log("저장된 기록이 없습니다") // todo 기록없을때 처리
+                    }
+                    else {
+                      console.log("log insert FAIL " + response.status);
+                    }
+                  })
+                  .catch((response) => { console.log(response); });
+
               } else {
                 console.log("log insert FAIL " + response.status);
               }
@@ -207,10 +222,17 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, distSum, isPlogging, setTimeSum, ti
           <TimeSvg width={20} height={20} fill={"#FFF"} />
           <Text style={styles.statusText}>{timeSumString}</Text>
         </View>
-        <View style={styles.statusView}>
-          <Icon name={weather} size={20} color="#292D32" />
-          <Text style={styles.statusText}>{temp}℃</Text>
-        </View>
+        {islogDetail ?
+          <View style={styles.statusView}>
+            <Icon name={logDetailWeather} size={20} color="#292D32" />
+          </View>
+          :
+          <View style={styles.statusView}>
+            <Icon name={weather} size={20} color="#292D32" />
+            <Text style={styles.statusText}>{temp}℃</Text>
+          </View>
+        }
+
 
       </PloggingStatusBarBlock>
     </View>
