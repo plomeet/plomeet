@@ -7,17 +7,7 @@ import {
     BadgesContainer,
     BadgeComponentTouchchable
 } from "./styles"
-import axios from "axios";
-
-
-
-const axiosLocal = axios.create({
-    baseURL: 'http://10.0.2.2:8000',
-    timeout: 30000,
-    headers: {
-        "Content-Type": "application/json",
-    },
-});
+import axiosInstance from '../../../../utils/API';
 
 
 const BadgeList = () => {
@@ -42,7 +32,7 @@ const BadgeList = () => {
     useEffect(() => {
         const getBadges = async() => {
             try {
-                await axiosLocal.get(`/badges/${userId}`)
+                await axiosInstance.get(`/badges/${userId}`)
                     .then((response) => {
                         if (response.status === 200) {
                             setBadges(response.data);

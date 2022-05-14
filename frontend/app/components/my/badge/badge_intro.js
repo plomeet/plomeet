@@ -12,17 +12,7 @@ import {
     BadgeMoreText
 } from "./styles";
 import axiosInstance from '../../../../utils/API';
-import axios from "axios";
 
-
-
-const axiosLocal = axios.create({
-    baseURL: 'http://10.0.2.2:8000',
-    timeout: 30000,
-    headers: {
-        "Content-Type": "application/json",
-    },
-});
 
 const BadgeIntro = () => {
     const navigation = useNavigation();
@@ -36,7 +26,7 @@ const BadgeIntro = () => {
     useEffect(() => {
         const getBadges = async() => {
             try {
-                await axiosLocal.get(`/badges/${userId}`)
+                await axiosInstance.get(`/badges/${userId}`)
                     .then((response) => {
                         if (response.status === 200) {
                             console.log(response.data);
