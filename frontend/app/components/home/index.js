@@ -212,10 +212,10 @@ const Home = () => {
   };
 
 
-  const Item = ({ id, meetingDesc, img, title, place, numMember, maxMember, date, index, lat, lng, placeDetail}) => (
+  const Item = ({ meetingId, meetingDesc, img, title, place, numMember, maxMember, date, index, lat, lng, placeDetail}) => (
     <TouchableOpacity
     activeOpacity={0.7}
-    onPress={() => navigation.navigate('MeetingDetail', {img:img, title:title, place:place, numMember:numMember, maxMember:maxMember, date:date, meetingDesc:meetingDesc, lat:lat, lng:lng, placeDetail:placeDetail})}
+    onPress={() => navigation.navigate('MeetingDetail', {meetingId:meetingId})}
     // style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles.card, styles.elevation]}>
     style={[styles.card, styles.elevation]}>
       <Image source={{uri: img}} style={styles.img} />
@@ -244,7 +244,7 @@ const Home = () => {
     lng = {item.lng}
     placeDetail = {item.meetingPlaceDetail}
     date={item.meetingDate}
-    id = {item.meetingId}
+    meetingId = {item.meetingId}
     meetingDesc = {item.meetingDesc}
     index = {item.meetingId} />
   );

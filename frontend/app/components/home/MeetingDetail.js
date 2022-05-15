@@ -1,28 +1,73 @@
-import React, { Component, Node } from 'react';
+import React, { Component, Node, useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import { StyleSheet, Text, View, TextInput, Button, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
 import { ScrollView } from 'react-native-gesture-handler';
+import axiosInstance from '../../../utils/API';
 
 
 const meetingDetail = ({route}) => {
-  let meetingDesc = route.params.meetingDesc;
-  let meetingImg = route.params.img;
-  let meetingName = route.params.title;
-  let meetingPlace = route.params.place;
-  let memberMax = route.params.maxMember;
-  let memberCnt = route.params.numMember;
-  let meetingDate = route.params.date;
-  let placeDetail = route.params.placeDetail;
-  let lat = route.params.lat;
-  let lng = route.params.lng;
+  const isFocused = useIsFocused();
+  
+  const meetingId = route.params.meetingId;
+  const [meetingDesc, setMeetingDesc] = useState("");
+  const [meetingImg, setMeetingImg] = useState("");
+  const [meetingName, setMeetingName] = useState("");
+  const [meetingPlace, setMeetingPlace] = useState("");
+  const [memberMax, setMemberMax] = useState(0);
+  const [memberCnt, setMemberCnt] = useState(0);
+  const [meetingDate, setMeetingDate] = useState("");
+  const [placeDetail, setPlaceDetail] = useState("");
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
+  var loc = {latitude: lat, longitude: lng};
 
-  const location = {latitude: lat, longitude: lng};
+  // let meetingDesc = route.params.meetingDesc;
+  // let meetingImg = route.params.img;
+  // let meetingName = route.params.title;
+  // let meetingPlace = route.params.place;
+  // let memberMax = route.params.maxMember;
+  // let memberCnt = route.params.numMember;
+  // let meetingDate = route.params.date;
+  // let placeDetail = route.params.placeDetail;
+  // let lat = route.params.lat;
+  // let lng = route.params.lng;
   const P1 = {latitude: 37.565051, longitude: 126.978567};
   const P2 = {latitude: 37.565383, longitude: 126.976292};
+
+  //모임 정보 세팅
+  useEffect(() => {
+    getMeetingById(meetingId);
+  }, [isFocused]);
+
+  async function getMeetingById(meetingId) {
+    try {
+        await axiosInstance.get("/meetings/"+meetingId)
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log("[모임 정보 조회 성공] : "+meetingId);
+                    console.log(response.data);
+                    setMeetingDesc(response.data.meetingDesc);
+                    setMeetingImg(response.data.meetingImg);
+                    setMeetingName(response.data.meetingName);
+                    setMeetingPlace(response.data.meetingPlace);
+                    setMemberMax(response.data.memberMax);
+                    setMemberCnt(response.data.memberCnt);
+                    setMeetingDate(response.data.meetingDate);
+                    setPlaceDetail(response.data.placeDetail);
+                    setLat(response.data.lat);
+                    setLng(response.data.lng);
+                } else {
+                    console.log("[모임 정보 조회 실패] : "+meetingId);
+                }
+            })
+            .catch((response) => { console.log(response); });
+    } catch (err) { console.log(err); }
+  };
+
 
     return (
       <View>
@@ -55,8 +100,8 @@ const meetingDetail = ({route}) => {
               <NaverMapView
                   style={{width: '100%', height: '100%'}} 
                   showsMyLocationButton={true}
-                  center={{...location, zoom: 15}}>
-                  <Marker coordinate={location} pinColor="green"/>
+                  center={{...loc, zoom: 15}}>
+                  <Marker coordinate={loc} pinColor="green"/>
               </NaverMapView>
               </View>
             </View>
