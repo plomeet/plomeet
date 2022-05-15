@@ -1,12 +1,15 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { useSelector } from "react-redux"
 //Screens
+import Splash from './components/auth/Splash';
+import SignUp from './components/auth/SignUp';
+import NicknameRegister from './components/auth/NicknameRegister';
 import Home from './components/home/index';
 import RecordContainer from './container/LogContainer';
 import Plogging from './container/PloggingContainer';
@@ -17,7 +20,6 @@ import LogDetail from './components/record/plogDetail/index';
 
 //Chatting
 import InsideRoom from './components/chat/room/inside_room';
-
 
 const Stack = createStackNavigator();
 const MainScreenTab = createBottomTabNavigator();
@@ -75,6 +77,21 @@ const AppTabComponent = () => {
 export const RootNavigator = () => {
     return (
         <Stack.Navigator>
+          <Stack.Screen
+        name="Splash"
+        component={Splash}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+                name="SignUp"
+                component={SignUp}
+                options={{ headerShown: false, gestureEnabled: false }}
+      />
+      <Stack.Screen
+        name="NicknameRegister"
+        component={NicknameRegister}
+        options={{headerShown: false, gestureEnabled: false}}
+      />
             <Stack.Screen name="M" component={AppTabComponent} options={{ title: ' ', headerShown: false }} />
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: false, gestureEnabled: false }} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
