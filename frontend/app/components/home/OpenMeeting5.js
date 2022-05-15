@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
+import axiosInstance from '../../../utils/API';
 
 const openMeeting5 = () => {
   const navigation = useNavigation();
@@ -17,6 +18,31 @@ const openMeeting5 = () => {
   // const [memberCnt, setMemberCnt] = useState(1);
   const [meetingDate, setMeetingDate] = useState("");
   const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
+
+  const creatMeeting = async () => {
+    try {
+      await axiosInstance.post("/meetings/host", {
+        meetingName: meetingName,
+        meetingDesc: detail,
+        meetingPlace: meetingPlace,
+        meetingPlaceDetail: "주소", //필요하면 수정
+        lat: location.latitude,
+        lng: location.longitude,
+        memberMax: memberMax,
+        meetingDate: meetingDate,
+        item: "쓰레기봉투"
+      })
+        .then(async (response) => {
+          if (response.status === 200) {
+            console.log(response); 
+            navigation.popToTop()
+          } else {
+            console.log(response);
+          }
+        })
+        .catch((response) => { console.log(response); });
+    } catch (err) { console.log(err); }
+  };
 
   useEffect(() => {
     AsyncStorage.getItem('meetingName', (err, result) => {
@@ -95,7 +121,7 @@ const openMeeting5 = () => {
             </View>
           </View>
         </ScrollView>
-        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => navigation.popToTop()}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => creatMeeting()}>
           <Text style={styles.buttonText}>모임 생성하기</Text>
         </TouchableOpacity>
       </View>
