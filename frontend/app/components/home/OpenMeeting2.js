@@ -17,6 +17,7 @@ const openMeeting2 = () => {
   const [meetingPlace, setMeetingPlace] = useState("");
 
   const [titleValid, setTitleValid] = useState(false);
+  const [addressValid, setAddressValid] = useState(false);
   const [nextDisable, setNextDisable] = useState(true);
 
   function goNext() {
@@ -42,7 +43,9 @@ const openMeeting2 = () => {
       setNextDisable(true);
     } else {
       setTitleValid(true);
-      setNextDisable(false);
+      if(addressValid){
+        setNextDisable(false);
+      }
     }
   };
 
@@ -61,6 +64,8 @@ const openMeeting2 = () => {
       var latitude = Number(res.data.addresses[0].y)
       setLocation({...location, latitude, longitude });
       setCenter({...center, latitude, longitude});
+      setAddressValid(true);
+      if(titleValid && addressValid) setNextDisable(false);
     })
   };
 
@@ -81,6 +86,7 @@ const openMeeting2 = () => {
       var address = add.area1.name +" "+ add.area2.name + " " + add.area3.name + " " + add.area4.name;
       console.log(address);
       setAdress(String(address));
+      if(titleValid) setNextDisable(false);
     })
   };
   
@@ -95,6 +101,8 @@ const openMeeting2 = () => {
           setLocation(e);
           console.warn('onMapClick', JSON.stringify(e)); 
           searchCoords(e)
+          setAddressValid(true);
+          if(titleValid && addressValid) setNextDisable(false);
         }} 
       ], 
       { cancelable: false } 

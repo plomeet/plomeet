@@ -9,8 +9,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 const openMeeting3 = () => {
   const navigation = useNavigation();
   const [memberMax, setMemberMax] = useState(1);
-  const [memberMaxValid, setMemberMaxValid] = useState(false);
+  var [memberMaxValid, setMemberMaxValid] = useState(false);
   const [nextDisable, setNextDisable] = useState(true);
+  var isOverZero = false;
 
   function goNext() {
     AsyncStorage.setItem('memberMax', memberMax, () => {
@@ -24,25 +25,29 @@ const openMeeting3 = () => {
 
 
   const memberMaxChangeHandler = (text) => {
-    setMemberMax(text)
-    console.log(text.length)
-    if (text === '') {
-      console.log("모임 인원 입력해야함!")
-      setMemberMaxValid(false);
-      setNextDisable(true);
+    var numMember = Number(text);
+    setMemberMax(text);
+    if(numMember>0)isOverZero = true;
+    console.log(text);
+    if (Number(text) > 0) {
+      setMemberMaxValid(true);
+      console.log("여기?" + memberMaxValid)
+      if((memberMax>0) && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택')) setNextDisable(false);
+      if(isOverZero && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택')) {setNextDisable(false);}
     }
     else {
-      setMemberMaxValid(true);
-      if(memberMaxValid && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택')){
-        setNextDisable(false);
-      }
+      console.log("모임 인원 입력해야함!")
+      setMemberMaxValid(false);
+      setNextDisable(true); 
+      isOverZero = false;
     }
   };
   const isDone = () => {
     console.log("확인");
-    if(memberMaxValid && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택')){
+    if((memberMax>0) && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택')){
       setNextDisable(false);
     }
+    if(isOverZero && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택') ) {setNextDisable(false);}
   }
 
   // Modal을 표시하거나 숨기기 위한 변수 
@@ -67,7 +72,7 @@ const openMeeting3 = () => {
           placeholder="모임의 최대인원을 입력해주세요."
           keyboardType='numeric'
           autoFocus
-          maxLength={3}
+          maxLength={2}
           defaultValue=''
           autoCapitalize='none'
           returnKeyType='next'
