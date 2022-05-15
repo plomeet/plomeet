@@ -9,6 +9,7 @@
 import React, { Component, Node } from 'react';
 import 'react-native-gesture-handler';
 import { StyleSheet, Text, View } from "react-native";
+import firestore from '@react-native-firebase/firestore';
 
 const App = () => {
 
