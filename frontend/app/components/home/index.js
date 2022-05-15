@@ -190,6 +190,17 @@ const Home = () => {
   const navigation = useNavigation();
   const [meetingList, setMeetingList] = useState([]);
   const isFocused = useIsFocused();
+  const week = ['일', '월', '화', '수', '목', '금', '토'];
+
+  function parse(str) {
+    var y = str.substr(0, 4);
+    var m = str.substr(5, 2);
+    var d = str.substr(8, 2);
+    var ymd = new Date(y,m-1,d);
+    let day = week[ymd.getDay()];
+    var res = m+"월 "+d+"일("+day+") "+ str.substr(11, 5)
+    return res
+  }
 
   //모임 정보 세팅
   useEffect(() => {
@@ -243,7 +254,7 @@ const Home = () => {
     lat = {item.lat}
     lng = {item.lng}
     placeDetail = {item.meetingPlaceDetail}
-    date={item.meetingDate}
+    date = {parse(item.meetingDate)}
     meetingId = {item.meetingId}
     meetingDesc = {item.meetingDesc}
     index = {item.meetingId} />

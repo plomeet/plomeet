@@ -38,6 +38,18 @@ const meetingDetail = ({route}) => {
   const P1 = {latitude: 37.565051, longitude: 126.978567};
   const P2 = {latitude: 37.565383, longitude: 126.976292};
 
+  const week = ['일', '월', '화', '수', '목', '금', '토'];
+
+  function parse(str) {
+    var y = str.substr(0, 4);
+    var m = str.substr(5, 2);
+    var d = str.substr(8, 2);
+    var ymd = new Date(y,m-1,d);
+    let day = week[ymd.getDay()];
+    var res = m+"월 "+d+"일("+day+") "+ str.substr(11, 5)
+    return res
+  }
+
   //모임 정보 세팅
   useEffect(() => {
     getMeetingById(meetingId);
@@ -93,7 +105,7 @@ const meetingDetail = ({route}) => {
               <View style={styles.row}>
                 <Icon name='ios-calendar-sharp' size={20} color='#313333' />
                 <Text style={styles.subtitle}>날짜</Text>
-                <Text style={styles.subtext}>{meetingDate}</Text>
+                <Text style={styles.subtext}>{parse(meetingDate)}</Text>
               </View>
 
               <View style={styles.tempMap}>
