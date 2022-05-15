@@ -41,6 +41,7 @@ const ChattingList = () => {
     
 
     return (
+        
         <Container>
             <FlatList
                 keyExtractor={item => item.meeting.meetingId}
