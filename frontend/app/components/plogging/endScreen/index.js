@@ -11,7 +11,7 @@ import ImageDelete from '../icons/imageDelete.svg';
 
 
 
-const EndPlogging = ({ ploggingPath, center, setImages, distSum, isPlogging, setTimeSum, timeSumString, setIsSave, resetPloggingPath, setDistSum, handleShowEndPage }) => {
+const EndPlogging = ({ saveLogs, ploggingPath, center, setImages, distSum, isPlogging, setTimeSum, timeSumString, setIsSave, resetPloggingPath, setDistSum, handleShowEndPage }) => {
     const mapView = useRef(null);
     const [middle, setMiddle] = useState();
     const startTime = useSelector(state => state.startTime);
@@ -135,7 +135,7 @@ const EndPlogging = ({ ploggingPath, center, setImages, distSum, isPlogging, set
                     </NaverMapView>
                 </View>
                 <View style={style.containerState} >
-                    <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} setTimeSum={setTimeSum} timeSumString={timeSum} setIsSave={setIsSave} resetPloggingPath={resetPloggingPath} setDistSum={setDistSum} handleShowEndPage={handleShowEndPage}></PloggingStatusBar>
+                    <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} setTimeSum={setTimeSum} timeSumString={timeSum} setIsSave={setIsSave} resetPloggingPath={resetPloggingPath} setDistSum={setDistSum} handleShowEndPage={handleShowEndPage} saveLogs={saveLogs}></PloggingStatusBar>
                 </View>
                 <Text style={{ marginLeft: 10, color: "grey" }}>최대 9개 업로드 가능</Text>
                 <ScrollView horizontal={true} style={style.containerPicture} >

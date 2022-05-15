@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,5 +42,10 @@ public class PloggingServiceImpl implements PloggingService{
             System.out.println("해당 회원이 없습니다.");
             return null;
         }
+    }
+
+    @Override
+    public List<PloggingLog> getPloggingLogs(Optional<User> user) throws Exception {
+        return ploggingRepo.findAllByUser(user.get());
     }
 }

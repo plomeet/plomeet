@@ -8,12 +8,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import BackSvg from '../plogging/icons/back.svg'
 
-const App = ({ distSum, setDistSum, isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage, timeSum, setTimeSum, setStart, setWeatherLoc, setImages, setIsSave, setPloggingPath, resetPloggingPath }) => {
+const App = ({ saveLogs, distSum, setDistSum, isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage, timeSum, setTimeSum,
+    setStart, setWeatherLoc, setImages, setIsSave, setPloggingPath, resetPloggingPath }) => {
     const navigation = useNavigation();
 
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             {!showPloggingEndPage &&
                 <View style={styles.containerTitle}>
                     {!isPlogging &&
@@ -28,21 +29,33 @@ const App = ({ distSum, setDistSum, isPlogging, handleIsPlogging, showPloggingEn
                 <View style={styles.containerResultTitle}>
                     <Text style={styles.resultTitleText}>플로깅 결과</Text>
                 </View>
-                }
-            {(!showPloggingEndPage) && <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} setTimeSum={setTimeSum} timeSumString={timeSum} setIsSave={setIsSave} resetPloggingPath={resetPloggingPath} setDistSum={setDistSum}></PloggingStatusBar>}
-            <Plogging setDistSum={setDistSum} isPlogging={isPlogging} showPloggingEndPage={showPloggingEndPage} setWeatherLoc={setWeatherLoc} setImages={setImages} setPloggingPath={setPloggingPath}></Plogging>
-            <PloggingStartEndButton isPlogging={isPlogging} handleIsPlogging={handleIsPlogging} showPloggingEndPage={showPloggingEndPage} handleShowEndPage={handleShowEndPage} setStart={setStart} setIsSave={setIsSave}></PloggingStartEndButton>
+            }
+            {(!showPloggingEndPage) && <PloggingStatusBar distSum={distSum} isPlogging={isPlogging}
+                setTimeSum={setTimeSum} timeSumString={timeSum} setIsSave={setIsSave} resetPloggingPath={resetPloggingPath}
+                setDistSum={setDistSum}></PloggingStatusBar>}
+            <Plogging distSum={distSum} timeSumString={timeSum} setDistSum={setDistSum} isPlogging={isPlogging}
+                showPloggingEndPage={showPloggingEndPage} setTimeSum={setTimeSum} resetPloggingPath={resetPloggingPath}
+                setWeatherLoc={setWeatherLoc} setImages={setImages} setPloggingPath={setPloggingPath} setIsSave={setIsSave}
+                handleShowEndPage={handleShowEndPage} saveLogs={saveLogs}></Plogging>
+            <PloggingStartEndButton isPlogging={isPlogging} handleIsPlogging={handleIsPlogging}
+                showPloggingEndPage={showPloggingEndPage} handleShowEndPage={handleShowEndPage}
+                setStart={setStart} setIsSave={setIsSave}></PloggingStartEndButton>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        width: "100%",
+        height: "100%",
+    },
     containerTitle: {
         backgroundColor: "white",
         alignItems: 'center',
         borderBottomWidth: 0.3,
         flexDirection: "row",
         height: '8%',
+        zIndex: 1002,
     },
     titleText: {
         fontSize: 20,

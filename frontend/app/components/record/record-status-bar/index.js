@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Config from 'react-native-config'
 
-const RecordStatusBar = () => {
+const RecordStatusBar = ({ td, tt, tc }) => {
     const layout = useWindowDimensions();
 
     return (
@@ -19,15 +19,15 @@ const RecordStatusBar = () => {
             <RecordStatusBarBlock width={layout.width}>
                 <View style={styles.statusView}>
                     <MapSvg width={27} height={27} fill={"#FFF"} />
-                    <Text style={styles.statusText}>000 km</Text>
+                    <Text style={styles.statusText}>{td}km</Text>
                 </View>
                 <View style={styles.statusView}>
                     <TimeSvg width={27} height={27} fill={"#FFF"} />
-                    <Text style={styles.statusText}>123시간</Text>
+                    <Text style={styles.statusText}>{tt}</Text>
                 </View>
                 <View style={styles.statusView}>
                     <Icon name="run" size={27} color="#292D32" />
-                    <Text style={styles.statusText}>123회</Text>
+                    <Text style={styles.statusText}>{tc}회</Text>
                 </View>
 
             </RecordStatusBarBlock>
