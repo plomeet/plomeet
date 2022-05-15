@@ -4,13 +4,27 @@ import { Chip, ToggleButton } from 'react-native-paper';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
 import { StyleSheet, Modal, Text, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const openMeeting3 = () => {
   const navigation = useNavigation();
+  const [memberMax, setMemberMax] = useState(1);
   const [memberMaxValid, setMemberMaxValid] = useState(false);
   const [nextDisable, setNextDisable] = useState(true);
 
+  function goNext() {
+    AsyncStorage.setItem('memberMax', memberMax, () => {
+      console.log('[모임 최대 인원 저장 완료] '+memberMax);
+    });
+    AsyncStorage.setItem('meetingDate', selectedDate+" "+selectedTime, () => {
+      console.log('[모임 일시 저장 완료] ' + selectedDate+" "+selectedTime);
+    });
+    navigation.push('OpenMeeting4');
+  }
+
+
   const memberMaxChangeHandler = (text) => {
+    setMemberMax(text)
     console.log(text.length)
     if (text === '') {
       console.log("모임 인원 입력해야함!")
@@ -157,7 +171,7 @@ const openMeeting3 = () => {
           <TouchableOpacity style={styles.chip}><Text style={{color:"#000"}}>도시락</Text></TouchableOpacity>
         </View>
         <View style={{flex:1}}/>
-        <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => navigation.navigate('OpenMeeting4')}>
+        <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => goNext()}>
           <Text style={styles.text}>다음</Text>
         </TouchableOpacity>
       </View>

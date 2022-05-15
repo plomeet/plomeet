@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 const openMeeting2 = () => {
@@ -13,10 +14,29 @@ const openMeeting2 = () => {
   
   const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
   const [center, setCenter] = useState();
+  const [meetingPlace, setMeetingPlace] = useState("");
 
   const [titleValid, setTitleValid] = useState(false);
   const [nextDisable, setNextDisable] = useState(true);
-  const titleChangeHandler = (text) => {
+
+  function goNext() {
+    AsyncStorage.setItem('lat', String(location.latitude), () => {
+      console.log('[모임 좌표 저장 완료] : '+location.latitude.toFixed(5));
+    });
+    AsyncStorage.setItem('lng', String(location.longitude), () => {
+      console.log('[모임 좌표 저장 완료] : '+location.longitude.toFixed(5));
+    });
+    AsyncStorage.setItem('address', address, () => {
+      console.log('[모임 주소 저장 완료] ' + address);
+    });
+    AsyncStorage.setItem('meetingPlace', meetingPlace, () => {
+      console.log('[모임 장소 명칭 저장 완료] ' + meetingPlace);
+    });
+    navigation.push('OpenMeeting3');
+  }
+
+  const aliasChangeHandler = (text) => {
+    setMeetingPlace(text)
     if (text.trim().length === 0) {
       setTitleValid(false);
       setNextDisable(true);
@@ -133,7 +153,7 @@ const openMeeting2 = () => {
           maxLength={20}
           autoCapitalize='none'
           returnKeyType='next'
-          onChangeText={(text) => titleChangeHandler(text)}
+          onChangeText={(text) => aliasChangeHandler(text)}
           // onChangeText={this.onChangeInput}
         />
         <Text style={[styles.title, {marginTop:40}]}>상세주소(도로명)</Text>
@@ -167,7 +187,7 @@ const openMeeting2 = () => {
         
 
         <View style={{flex:1}}/>
-        <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => navigation.navigate('OpenMeeting3')}>
+        <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => goNext()}>
           <Text style={styles.text}>다음</Text>
         </TouchableOpacity>
       </View>

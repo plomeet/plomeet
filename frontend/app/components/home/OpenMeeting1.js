@@ -1,15 +1,30 @@
 import React, { Component, Node, useState} from 'react';
 import 'react-native-gesture-handler';
-import { StyleSheet, Text, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
+import { StyleSheet, Text, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 const openMeeting1 = () => {
   const navigation = useNavigation();
   const [titleValid, setTitleValid] = useState(false);
+  const [meetingName, setMeetingName] = useState("");
   const [contentValid, setContentValid] = useState(false);
+  const [meetingDetail, setMeetingDetail] = useState(false);
   const [nextDisable, setNextDisable] = useState(true);
+
+  function goNext() {
+    AsyncStorage.setItem('meetingName', meetingName, () => {
+      console.log('[모임 제목 저장 완료] '+meetingName);
+    });
+    AsyncStorage.setItem('meetingDetail', meetingDetail, () => {
+      console.log('[모임 내용 저장 완료] '+ meetingDetail);
+    });
+    navigation.push('OpenMeeting2');
+  }
+
   const titleChangeHandler = (text) => {
+    setMeetingName(text)
     if (text.trim().length === 0) {
       setTitleValid(false);
       setNextDisable(true);
@@ -19,6 +34,7 @@ const openMeeting1 = () => {
     }
   };
   const contentChangeHandler = (text) => {
+    setMeetingDetail(text)
     if (text.trim().length === 0) {
       setContentValid(false);
       setNextDisable(true);
@@ -53,7 +69,7 @@ const openMeeting1 = () => {
           autoCapitalize='none'
         />
         <View style={{flex:1}}/>
-        <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => navigation.push('OpenMeeting2')}>
+        <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => goNext()}>
           <Text style={styles.text}>다음</Text>
         </TouchableOpacity>
       </View>

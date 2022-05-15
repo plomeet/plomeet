@@ -6,10 +6,18 @@ import Icon from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from 'react-native-image-picker';
 import styled from "styled-components/native";
 import * as ImagePicker from 'react-native-image-picker';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const openMeeting4 = () => {
 
   const [imageSource, setImageSource] = useState({uri:'', fileName:''});
+
+  function goNext() {
+    AsyncStorage.setItem('meetingImg', imageSource.uri, () => {
+      console.log('[모임 이미지 저장 완료] '+imageSource.uri);
+    });
+    navigation.push('OpenMeeting5');
+  }
 
   const options = {
     title: 'Load Photo',
@@ -48,7 +56,7 @@ const openMeeting4 = () => {
           <Icon style={{position:'absolute'}} name='plus' size={50} color='#C4C4C4' />
         </TouchableOpacity>
         <View style={{flex:1}}/>
-        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => navigation.navigate('OpenMeeting5')}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => goNext()}>
           <Text style={styles.text}>다음</Text>
         </TouchableOpacity>
       </View>

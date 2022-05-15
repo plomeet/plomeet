@@ -1,21 +1,61 @@
-import React, { Component, Node } from 'react';
+import React, { Component, Node, useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { StyleSheet, Text, View, TextInput, Image, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
 import { ScrollView } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const openMeeting5 = () => {
   const navigation = useNavigation();
-  const meetingImg="file:///data/user/0/com.nom.plomeet/cache/rn_image_picker_lib_temp_9949987b-bd3c-4e5d-9528-0241fbdfdd55.jpg";
-  const meetingName="망원동 플로깅";
-  const detail = "모두 모여 망원 한강공원으로";
-  const meetingPlace="한강공원 스벅 앞";
-  const memberMax = "10";
-  const memberCnt=1;
-  const meetingDate ="2022/05/18 09:00";
-  const location = {latitude: 37.55459, longitude: 126.89573};
+  const [meetingImg, setMeetingImg] = useState("https://i.postimg.cc/QtNKqGGJ/default-Meeting-Img.png");
+  const [meetingName, setMeetingName] = useState("");
+  const [detail, setDetail] = useState("");
+  const [meetingPlace, setMeetingPlace] = useState("");
+  const [memberMax, setMemberMax] = useState(1);
+  // const [memberCnt, setMemberCnt] = useState(1);
+  const [meetingDate, setMeetingDate] = useState("");
+  const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
+
+  useEffect(() => {
+    AsyncStorage.getItem('meetingName', (err, result) => {
+      console.log(result);
+      setMeetingName(result)
+    })
+    AsyncStorage.getItem('meetingDetail', (err, result) => {
+      console.log(result);
+      setDetail(result);
+    })
+    AsyncStorage.getItem('lat', (err, result) => {
+      var lat = 0.0;
+      lat = Number(Number(result).toFixed(6));
+      console.log(lat);
+      setLocation({...location, latitude:lat});
+    })
+    AsyncStorage.getItem('lng', (err, result) => {
+      var lng= 0.0;
+      lng = Number(Number(result).toFixed(6));
+      console.log(lng);
+      setLocation({...location, longitude:lng});
+    })
+    AsyncStorage.getItem('meetingPlace', (err, result) => {
+      console.log(result);
+      setMeetingPlace(result);
+    })
+    AsyncStorage.getItem('memberMax', (err, result) => {
+      console.log(result);
+      setMemberMax(result);
+    })
+    AsyncStorage.getItem('meetingDate', (err, result) => {
+      console.log(result);
+      setMeetingDate(result);
+    })
+    AsyncStorage.getItem('meetingImg', (err, result) => {
+      console.log(result);
+      setMeetingImg(result);
+    })
+  }, [])
 
     return (
       <View style={styles.container}>
@@ -36,7 +76,7 @@ const openMeeting5 = () => {
               <View style={styles.row}>
                 <Icon name='person-outline' size={20} color='#313333' />
                 <Text style={styles.subtitle}>모집인원</Text>
-                <Text style={styles.subtext}>{memberCnt} / {memberMax}</Text>
+                <Text style={styles.subtext}>1 / {memberMax}</Text>
               </View>
               <View style={styles.row}>
                 <Icon name='ios-calendar-sharp' size={20} color='#313333' />
