@@ -1,4 +1,4 @@
-import React, { Component, Node, Button } from 'react';
+import React, { Component, Node, Button, useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import { Chip } from 'react-native-paper';
 import { LogBox , SafeAreaView, StyleSheet, Text, View, FlatList, Image, StatusBar, TouchableOpacity } from "react-native";
@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Align } from '../plogging/map';
 import { TouchableHighlight } from 'react-native-gesture-handler';
+import axiosInstance from '../../../utils/API';
 
 
 LogBox.ignoreAllLogs();
@@ -191,6 +192,29 @@ const data = [
 
 const Home = () => {
   const navigation = useNavigation();
+  const [meetingList, setMeetingList] = useState([]);
+
+  //모임 정보 세팅
+  useEffect(() => {
+    getAllMeeting();
+  }, []);
+
+  async function getAllMeeting() {
+    try {
+        await axiosInstance.get("/meetings/all")
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log(response.data);
+                    setMeetingList(response.data);
+                    console.log("[모임 정보 조회 성공]");
+                } else {
+                    console.log("[모임 정보 조회 실패]]");
+                }
+            })
+            .catch((response) => { console.log(response); });
+    } catch (err) { console.log(err); }
+  };
+
 
   const Item = ({ id, detail, img, title, place, numMember, maxMember, date, index, lat, lng, placeDetail}) => (
     <TouchableOpacity
@@ -237,7 +261,7 @@ const Home = () => {
       </View>
       <FlatList
         columnWrapperStyle={{justifyContent: 'space-between'}}
-        data={data}
+        data={meetingList}
         renderItem={renderItem}
         keyExtractor={item => item.meetingId}
         windowSize={3}
