@@ -1,7 +1,8 @@
 import React, { Component, Node, Button, useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import { Chip } from 'react-native-paper';
-import { LogBox , SafeAreaView, StyleSheet, Text, View, FlatList, Image, StatusBar, TouchableOpacity } from "react-native";
+import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
+import { LogBox , SafeAreaView, Modal, StyleSheet, Text, View, FlatList, Image, StatusBar, TouchableOpacity } from "react-native";
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -75,7 +76,31 @@ const styles = StyleSheet.create({
     width: 65,
     height: 65,
     shadowColor: '#bbbbbb',
-  }
+  },
+  closeButton: {
+    height: 42,
+    borderRadius : 8,
+    backgroundColor: "#1BE58D",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft:3
+  },
+  deleteButton: {
+    height: 42,
+    borderRadius : 8,
+    borderWidth: 2,
+    borderColor: "#1BE58D",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  deleteButtonText: {
+    fontSize: 18,
+    color: "#1BE58D"
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "#fff"
+  },
 });
 
 // const data = [
@@ -190,8 +215,26 @@ const Home = () => {
   const navigation = useNavigation();
   const [meetingList, setMeetingList] = useState([]);
   const isFocused = useIsFocused();
+  const current= getToday(); //오늘 날짜
   const week = ['일', '월', '화', '수', '목', '금', '토'];
+  const [selectedDate, setSelectedDate] = useState('일시'); //일정 필터
+  const [visibleCalendar, setVisibleCalendar] = useState(false); //캘린더 표시 여부
 
+  function deleteDate(){
+    setSelectedDate('일시');
+    setVisibleCalendar(false);
+    getAllMeeting();
+  }
+
+  function setDate(){
+    for(var i=0; i<meetingList.length; i++){
+      if(parse(meetingList[i].meetingDate).substring(0,11)!=selectedDate) {
+        meetingList.splice(i, 1);
+        i--;
+      }
+    }
+    setVisibleCalendar(false)
+  }
   function parse(str) {
     var y = str.substr(0, 4);
     var m = str.substr(5, 2);
@@ -262,9 +305,54 @@ const Home = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+
+        <Modal animationType="slide" 
+          transparent={false}
+          activeOpacity={0.8} 
+          visible={visibleCalendar}> 
+          <View style={{ 
+            flex: 1, 
+            marginHorizontal : 30,
+            justifyContent: 'center', 
+            alignItems: 'center'}}>
+
+            <DatePicker
+            options={{
+              mainColor: '#1BE58D',
+              borderColor: 'rgba(122, 146, 165, 0.1)',
+            }}
+            mode="calendar"
+            configs={{
+              dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
+              monthNames: [
+                "1월",
+                "2월",
+                "3월",
+                "4월",
+                "5월",
+                "6월",
+                "7월",
+                "8월",
+                "9월",
+                "10월",
+                "11월",
+                "12월",
+              ],
+            }}
+            minimumDate= {current}
+            style={{ borderRadius: 10 }}
+            onSelectedChange={date => setSelectedDate(parse(date))}
+            />
+            <View style={styles.row}>
+              <TouchableOpacity activeOpacity={0.8} style={[styles.deleteButton, {paddingHorizontal:30}]} onPress={() => deleteDate()}><Text style={styles.deleteButtonText}>조건 삭제</Text></TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.8} style={[styles.closeButton, {paddingHorizontal:30}]} onPress={() => setDate()}><Text style={styles.buttonText}>선택</Text></TouchableOpacity>
+            </View>
+          </View> 
+        </Modal>
+
       <View style={[styles.row, {marginLeft:20}, {marginBottom:10}, {marginTop:10}]}>
         <Chip style={{marginRight:10}} icon="map-marker" mode="outlined" selectedColor="#232732" onPress={() => console.log('지역')}>지역</Chip>
-        <Chip style={{marginRight:10}} icon="clock" mode="outlined" selectedColor='#232732' onPress={() => console.log('일정')}>일정</Chip>
+        <Chip style={{marginRight:10}} icon="clock" mode="outlined" selectedColor='#232732' onPress={()=> setVisibleCalendar(true)}>{selectedDate}</Chip>
         <Chip icon="align-vertical-center" mode="outlined" selectedColor='#232732' onPress={() => console.log('정렬')}>정렬</Chip>
       </View>
       <FlatList
