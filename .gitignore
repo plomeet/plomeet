@@ -212,4 +212,4 @@ fabric.properties
 
 #firebase
 frontend/android/app/google-services.json
-node_modules
+frontend/ios/GoogleService-Info.plist

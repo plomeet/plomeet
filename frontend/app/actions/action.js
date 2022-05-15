@@ -46,3 +46,13 @@ export const setPloggingPath = (ploggingPath) => ({
 export const resetPloggingPath = () => ({
   type: "RESET_PLOGGINGPATH"
 })
+
+export const saveLogs = (savedLogs) => ({
+  type: "SET_LOGS",
+  payload: savedLogs
+})
+
+export const setListMonth = (listMonth) => ({
+  type: "SET_LISTMONTH",
+  payload: listMonth
+})

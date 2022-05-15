@@ -15,6 +15,7 @@
 		192514782820B5A200033847 /* libreact-native-nmap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 192514772820B5A100033847 /* libreact-native-nmap.a */; };
 		1925147A2820B7C500033847 /* libreact-native-nmap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 192514792820B7C500033847 /* libreact-native-nmap.a */; };
 		1978927E281A24ED009CDEB2 /* geoSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1978927D281A24ED009CDEB2 /* geoSetting.swift */; };
+		199420722831279D0091AB58 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 199420712831279D0091AB58 /* GoogleService-Info.plist */; };
 		7C8506A1119266E4751D78B1 /* libPods-frontend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CDE3E4D35625077C9FE1A65 /* libPods-frontend.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -42,6 +43,7 @@
 		192514772820B5A100033847 /* libreact-native-nmap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-nmap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		192514792820B7C500033847 /* libreact-native-nmap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-nmap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1978927D281A24ED009CDEB2 /* geoSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = geoSetting.swift; sourceTree = "<group>"; };
+		199420712831279D0091AB58 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		635DF426EFA2FC0BDC6BDAF0 /* Pods-frontend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-frontend.debug.xcconfig"; path = "Target Support Files/Pods-frontend/Pods-frontend.debug.xcconfig"; sourceTree = "<group>"; };
 		6CA9EB96FC3BF6D738006CDB /* libPods-frontend-frontendTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-frontend-frontendTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		725A2F0AEEF1BCCB61C2941C /* Pods-frontend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-frontend.release.xcconfig"; path = "Target Support Files/Pods-frontend/Pods-frontend.release.xcconfig"; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 		13B07FAE1A68108700A75B9A /* frontend */ = {
 			isa = PBXGroup;
 			children = (
+				199420712831279D0091AB58 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -264,6 +267,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				199420722831279D0091AB58 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

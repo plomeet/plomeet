@@ -3,16 +3,17 @@ import StaticSafeAreaInsets from 'react-native-static-safe-area-insets';
 
 export const CONTENT_SPACING = 15;
 
+/* 잘되면 여기는 지워도 될듯
 const SAFE_BOTTOM =
   Platform.select({
     ios: StaticSafeAreaInsets.safeAreaInsetsBottom,
-  }) ;
-
+  });
+*/
 export const SAFE_AREA_PADDING = {
   paddingLeft: StaticSafeAreaInsets.safeAreaInsetsLeft + CONTENT_SPACING,
   paddingTop: StaticSafeAreaInsets.safeAreaInsetsTop + CONTENT_SPACING,
   paddingRight: StaticSafeAreaInsets.safeAreaInsetsRight + CONTENT_SPACING,
-  paddingBottom: SAFE_BOTTOM + CONTENT_SPACING,
+  paddingBottom: StaticSafeAreaInsets.safeAreaInsetsBottom + CONTENT_SPACING,
 };
 
 // The maximum zoom _factor_ you should be able to zoom in

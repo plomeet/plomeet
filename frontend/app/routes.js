@@ -11,11 +11,12 @@ import Splash from './components/auth/Splash';
 import SignUp from './components/auth/SignUp';
 import NicknameRegister from './components/auth/NicknameRegister';
 import Home from './components/home/index';
-import Record from './components/record/index';
+import RecordContainer from './container/LogContainer';
 import Plogging from './container/PloggingContainer';
 import Chat from './components/chat/index';
 import MyPage from './components/my/index';
 import CameraPage from './components/plogging/button/CameraPage';
+import LogDetail from './components/record/plogDetail/index';
 
 //Chatting
 import InsideRoom from './components/chat/room/inside_room';
@@ -65,7 +66,7 @@ const AppTabComponent = () => {
             }}
         >
             <MainScreenTab.Screen name="홈" component={Home} />
-            <MainScreenTab.Screen name="기록" component={Record} options={{ headerShown: false }} />
+            <MainScreenTab.Screen name="기록" component={RecordContainer} />
             <MainScreenTab.Screen name="플로깅" component={Plogging} />
             <MainScreenTab.Screen name="채팅 목록" component={Chat} />
             <MainScreenTab.Screen name="MY" component={MyPage} />
@@ -74,9 +75,6 @@ const AppTabComponent = () => {
 }
 
 export const RootNavigator = () => {
-    const isPlogging = useSelector(state => state.isPlogging);
-    const showPloggingEndPage = useSelector(state => state.showPloggingEndPage);
-
     return (
         <Stack.Navigator>
           <Stack.Screen
@@ -98,6 +96,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: false, gestureEnabled: false }} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
             <Stack.Screen name="InChatRoom" component={InsideRoom} />
+            <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '' }} />
         </Stack.Navigator>
     )
 }

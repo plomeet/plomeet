@@ -21,7 +21,6 @@ public class TrashcanRes {
     float latitude;
     float longitude;
     public static List<TrashcanRes> of(List<Trashcan> trashcans){
-        System.out.println(trashcans.size()+"#####");
         List<TrashcanRes> result = new LinkedList<>();
 
         for(Trashcan tcan : trashcans) {
