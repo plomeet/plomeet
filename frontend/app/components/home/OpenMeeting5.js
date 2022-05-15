@@ -7,10 +7,13 @@ import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "..
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 import axiosInstance from '../../../utils/API';
+import Config from 'react-native-config'
+import AWS from 'aws-sdk';
 
 const openMeeting5 = () => {
   const navigation = useNavigation();
-  const [meetingImg, setMeetingImg] = useState("https://i.postimg.cc/QtNKqGGJ/default-Meeting-Img.png");
+  const [meetingImgUri, setMeetingImgUri] = useState("https://i.postimg.cc/QtNKqGGJ/default-Meeting-Img.png");
+  const [meetingImgFileName, setMeetingImgFileName] = useState("");
   const [meetingName, setMeetingName] = useState("");
   const [detail, setDetail] = useState("");
   const [meetingPlace, setMeetingPlace] = useState("");
@@ -21,9 +24,42 @@ const openMeeting5 = () => {
   const [longitude, setLongitude] = useState(126.977011);
   var loc = {latitude: latitude, longitude: longitude};
 
+  var s3 = new AWS.S3({
+    apiVersion: '2006-03-01',
+  });
+
+  AWS.config.update({
+    region: 'ap-northeast-2', // 리전이 서울이면 이거랑 같게
+    credentials: new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: Config.IDENTITYPOOLID,
+    })
+  })
+
+  const uploadImg = async () => {
+    const response1 = await fetch(meetingImgUri)
+    const blob = await response1.blob()
+    var albumPhotosKey = "meetings/"
+    var photoKey = albumPhotosKey + meetingImgFileName;
+
+    var params = { Bucket: 'plomeet-image', Key: photoKey, Body: blob }
+    s3.upload(params, function (err, data) {
+      if (err) {
+        alert('There was an error uploading your photo: ', err.message);
+      }
+      // data.Location
+      // https://plomeet-image.s3.ap-northeast-2.amazonaws.com/photos/1_3C369038-4102-4887-A8DB-43C42E706340.jpg
+      // data.Key
+      // photos/1_3C369038-4102-4887-A8DB-43C42E706340.jpg
+      console.log(data);
+    });
+  }
+
+
   const creatMeeting = async () => {
+    uploadImg();
     try {
       await axiosInstance.post("/meetings/host", {
+        meetingImg: "https://plomeet-image.s3.ap-northeast-2.amazonaws.com/meetings/"+meetingImgFileName,
         meetingName: meetingName,
         meetingDesc: detail,
         meetingPlace: meetingPlace,
@@ -79,9 +115,13 @@ const openMeeting5 = () => {
       console.log(result);
       setMeetingDate(result);
     })
-    AsyncStorage.getItem('meetingImg', (err, result) => {
-      console.log(result);
-      if(result) setMeetingImg(result);
+    AsyncStorage.getItem('meetingImgFileName', (err, result) => {
+      console.log("meetingImgFileName : " +result);
+      if(result) setMeetingImgFileName(result);
+    })
+    AsyncStorage.getItem('meetingImgUri', (err, result) => {
+      console.log("meetingImgUri : " +result);
+      if(result) setMeetingImgUri(result);
     })
   }, [])
 
@@ -91,7 +131,7 @@ const openMeeting5 = () => {
           <View style={styles.container}>
             <Image
               style={styles.image}
-              source={{ uri : meetingImg}}
+              source={{ uri : meetingImgUri}}
             />
             <View style={{marginHorizontal:25}}>
               <Text style={styles.title}>{meetingName}</Text>

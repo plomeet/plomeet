@@ -13,8 +13,11 @@ const openMeeting4 = () => {
   const [imageSource, setImageSource] = useState({uri:'', fileName:''});
 
   function goNext() {
-    AsyncStorage.setItem('meetingImg', imageSource.uri, () => {
-      console.log('[모임 이미지 저장 완료] '+imageSource.uri);
+    AsyncStorage.setItem('meetingImgUri', imageSource.uri, () => {
+      console.log('[모임 이미지 Uri 저장 완료] '+imageSource.uri);
+    });
+    AsyncStorage.setItem('meetingImgFileName', imageSource.fileName, () => {
+      console.log('[모임 이미지 fileName 저장 완료] '+imageSource.fileName);
     });
     navigation.push('OpenMeeting5');
   }
