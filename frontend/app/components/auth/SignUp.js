@@ -25,6 +25,13 @@ const SignUp = () => {
 
   var kakaoUserId = '';
 
+  useEffect(() => {
+  KakaoLogins.getProfile().then(result => {
+    kakaoUserId = result.id;
+    console.log(kakaoUserId);
+  });
+},[])
+
   const isSignedUp = async (params) => {
     axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
      .then((response) => {
@@ -60,6 +67,7 @@ const SignUp = () => {
   }
 
   function logout() {
+    AsyncStorage.clear();
     KakaoLogins.logout()
       .then(result => {
         console.log(`### Logout Result : ${JSON.stringify(result)}`);
@@ -67,6 +75,7 @@ const SignUp = () => {
       .catch(err => {
         console.log(`### Logout Error : ${JSON.stringify(err)}`);
       });
+    KakaoLogins.unlink();
   }
 
   BackHandler.addEventListener('hardwareBackPress', () => {
@@ -86,7 +95,7 @@ const SignUp = () => {
           함께 즐거운 플로깅을 {'\n'}시작해 볼까요?
         </Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={login}>
+      <TouchableOpacity style={styles.button} onPress={isSignedUp}>
         <View style={styles.button2}>
           <Image
             source={KakaoLogo}

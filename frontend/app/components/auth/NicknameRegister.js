@@ -17,10 +17,7 @@ import axiosInstanceLocal from "../../../utils/API";
 import LogoImage from '../../../assets/imgs/6881.png';
 import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { useSelector } from "react-redux"
-
-import { connect } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import * as actions from '../../actions/userActions';
 
 const kakaoHelper = require('./KakaoHelper.js');
@@ -28,7 +25,7 @@ const kakaoHelper = require('./KakaoHelper.js');
 
 const NicknameRegister = () => {
   
-
+  const [value, onChangeText] = useState("");
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const id = useSelector(state => state.id)
