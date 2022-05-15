@@ -5,8 +5,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import RecordStatusBar from './record-status-bar/index'
 import LogCalendar from './calendar/index'
 import PloggingList from './ploggingList/index'
-//import axiosInstance from "../../../utils/API";
-import axiosInstance from "../../../utils/ApiLocal";
+import axiosInstance from "../../../utils/API";
+//import axiosInstance from "../../../utils/ApiLocal";
 import { useSelector } from "react-redux"
 import Spinner from 'react-native-spinkit'
 
