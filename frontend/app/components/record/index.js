@@ -8,6 +8,7 @@ import PloggingList from './ploggingList/index'
 import axiosInstance from "../../../utils/API";
 //import axiosInstance from "../../../utils/ApiLocal";
 import { useSelector } from "react-redux"
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 const Record = ({ saveLogs, setListMonth }) => {
     const [plogLists, setPlogLists] = useState([]);
@@ -19,6 +20,7 @@ const Record = ({ saveLogs, setListMonth }) => {
     const [tc, setTc] = useState(0);
     const [dateArr, setDateArr] = useState([]);
     const [month, setMonth] = useState(0);
+    const isFocused = useIsFocused();
 
 
     useEffect(() => {
@@ -41,7 +43,7 @@ const Record = ({ saveLogs, setListMonth }) => {
             } catch (err) { console.log(err); }
         };
         getSavedLogs();
-    }, []);
+    }, [isFocused]);
 
     useEffect(() => {
         setPlogLists([]);
