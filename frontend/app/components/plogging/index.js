@@ -11,6 +11,7 @@ import haversine from 'haversine';
 import TrashcanInfo from './trashcan-modal/index';
 import EndPlogging from './endScreen/index';
 import dfs_xy_conv from '../../../utils/IHateMeteorologicalAgency'
+import PlomeetSpinner from '../../../utils/PlomeetSpinner'
 
 //테스트용으로 남겨둔 데이터 삭제 X
 const P0 = { latitude: 37.564362, longitude: 126.977011 };
@@ -48,7 +49,7 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
     }, []);
 
     //플로깅 저장 안하고 돌아왔을 때 처리에 필요
-    useEffect(() => { 
+    useEffect(() => {
         setTotalDist(0);
         setPrevLocation({})
         return () => { }
@@ -324,12 +325,16 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                 */}
                         </NaverMapView>
                     }
-                    {center &&
+                    {center ?
                         <TouchableOpacity style={{ position: 'absolute', bottom: '75%', right: 8 }} onPress={() => setMyLocToCenter()}>
                             <View style={style.compassBackGround}>
                                 <IconMaterialIcons name="gps-fixed" size={30} color="#303644" />
                             </View>
                         </TouchableOpacity>
+
+                        :
+
+                        <PlomeetSpinner isVisible={true} size={130} />
 
                     }
                     {/*<TouchableOpacity style={{ position: 'absolute', bottom: '10%', right: 8 }} onPress={() => navigation.navigate('stack')}>

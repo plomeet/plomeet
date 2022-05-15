@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 150
+        bottom: 60
     },
     endState: {
         flexDirection: 'row',
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 150,
+        bottom: 60,
     },
     endBtn: {
         flex: 4,
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 80,
+        bottom: 60,
     },
     saveBtn: {
         width: '100%',
