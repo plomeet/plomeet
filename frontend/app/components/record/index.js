@@ -1,4 +1,4 @@
-import React, { Component, Node, Button, useEffect, useState } from 'react';
+import React, { Component, Node, Button, useEffect, useState, useRef } from 'react';
 import 'react-native-gesture-handler';
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
@@ -21,6 +21,7 @@ const Record = ({ saveLogs, setListMonth }) => {
     const [dateArr, setDateArr] = useState([]);
     const [month, setMonth] = useState(0);
     const isFocused = useIsFocused();
+    const scrollViewRef = useRef();
 
 
     useEffect(() => {
@@ -64,7 +65,7 @@ const Record = ({ saveLogs, setListMonth }) => {
                     }
                 });
         }
-    }, [listMonth]);
+    }, [listMonth, isFocused]);
 
     useEffect(() => {
         if (savedLogs[0] !== undefined) {
@@ -127,7 +128,10 @@ const Record = ({ saveLogs, setListMonth }) => {
             <LogCalendar dateArr={dateArr} setListMonth={setListMonth} />
 
             <View style={styles.plogListContainer}>
-                <ScrollView>
+                <ScrollView ref={scrollViewRef}
+                    onContentSizeChange={() => {
+                        scrollViewRef.current.scrollToEnd({ animated: false })
+                    }}>
                     {
                         plogLists.map((log, index) => {
                             return (
