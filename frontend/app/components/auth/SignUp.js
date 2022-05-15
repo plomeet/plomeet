@@ -18,6 +18,7 @@ import KakaoLogo from '../../../assets/imgs/kakao1.png';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+import * as actions from '../../actions/userActions';
 
 // const kakaoHelper = require('./KakaoHelper.js');
 
@@ -32,39 +33,88 @@ const SignUp = () => {
 
   var kakaoUserId = '';
 
-  const isSignedUp = async (params) => {
-    axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
-     .then((response) => {
-       console.log(response.status);
-       if(response.status == 200){ //홈으로, Redux 저장
-        navigation.navigate('M');
-       }else{ // 진행시켜
-        login();
-        navigation.navigate('NickNameRegister');
-       }
-    }).catch((error) => {
-      console.log(error); 
-    });
-  };
-
-  function login() {
-    KakaoLogins.login()
-      .then(result => {
-        console.log(`### Login Result : ${JSON.stringify(result)}`);
-        AsyncStorage.setItem('refreshToken', result.refreshToken);
-        KakaoLogins.getProfile()
+  const isSignedUp = () => {
+    AsyncStorage.getItem('refreshToken').then(res => {
+      if(res) { //토큰이있으면
+        KakaoLogins.login()
           .then(result => {
-            console.log(`### Profile Result : ${JSON.stringify(result)}`);
-            navigation.navigate('NicknameRegister');
+            console.log('갱신함')
+            AsyncStorage.setItem('refreshToken', result.refreshToken);
+            KakaoLogins.getProfile()
+            .then(result => {
+              console.log('프로필받음?')
+              kakaoUserId = result.id;
+              console.log(`### Profile Result : ${JSON.stringify(result)}`);
+              axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
+              .then((response) => {
+                console.log(response.status);
+                dispatch(actions.setNickname(response.data.userNickName));
+                if(response.status == 200){ //홈으로, Redux 저장
+                  dispatch(actions.setId(result.id))
+                  dispatch(actions.setImg(result.profileImageUrl))
+                  dispatch(actions.setName(result.nickname))
+                  dispatch(actions.setEmail(result.email))
+                  navigation.navigate('M');
+                }else{ // 진행시켜
+                  console.log('토큰은있지만 가입한적없어?? ->말이안됨')
+                  navigation.navigate('NicknameRegister');
+                }
+              }).catch((error) => {
+                console.log(error); 
+              }); 
+            })
+            
           })
-          .catch(err => {
-            console.log(`### Profile Error : ${JSON.stringify(err)}`);
-          });
-      })
-      .catch(err => {
-        console.log(`### Login Error : ${JSON.stringify(err)}`);
-      });
+      }else{ //토큰없으면
+        console.log('토큰없음')
+        KakaoLogins.login()
+          .then(result => {
+            AsyncStorage.setItem('refreshToken', result.refreshToken);
+            KakaoLogins.getProfile()
+              .then(result => {
+                console.log(`### Profile Result : ${JSON.stringify(result)}`);
+                navigation.navigate('NicknameRegister');
+              })
+              .catch(err => {
+                console.log(`### Profile Error : ${JSON.stringify(err)}`);
+              }); 
+          })
+      }
+    })
   }
+  // const isSignedUp = async (params) => {
+  //   axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
+  //    .then((response) => {
+  //      console.log(response.status);
+  //      if(response.status == 200){ //홈으로, Redux 저장
+  //       navigation.navigate('M');
+  //      }else{ // 진행시켜
+  //       login();
+  //       navigation.navigate('NicknameRegister');
+  //      }
+  //   }).catch((error) => {
+  //     console.log(error); 
+  //   });
+  // };
+
+  // function login() {
+  //   KakaoLogins.login()
+  //     .then(result => {
+  //       console.log(`### Login Result : ${JSON.stringify(result)}`);
+  //       AsyncStorage.setItem('refreshToken', result.refreshToken);
+  //       KakaoLogins.getProfile()
+  //         .then(result => {
+  //           console.log(`### Profile Result : ${JSON.stringify(result)}`);
+  //           navigation.navigate('NicknameRegister');
+  //         })
+  //         .catch(err => {
+  //           console.log(`### Profile Error : ${JSON.stringify(err)}`);
+  //         });
+  //     })
+  //     .catch(err => {
+  //       console.log(`### Login Error : ${JSON.stringify(err)}`);
+  //     });
+  // }
 
   function logout() {
     AsyncStorage.clear();
@@ -75,6 +125,7 @@ const SignUp = () => {
       .catch(err => {
         console.log(`### Logout Error : ${JSON.stringify(err)}`);
       });
+      console.log('여기서걸리나?')
     KakaoLogins.unlink();
   }
 
@@ -95,7 +146,7 @@ const SignUp = () => {
           함께 즐거운 플로깅을 {'\n'}시작해 볼까요?
         </Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={login}>
+      <TouchableOpacity style={styles.button} onPress={isSignedUp}>
         <View style={styles.button2}>
           <Image
             source={KakaoLogo}

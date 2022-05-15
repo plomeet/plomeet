@@ -47,7 +47,7 @@ const AuthComponent = () => {
             }
           })},2000);
         }else{
-          navigation.navigate('SignUp');
+          setTimeout(() => {navigation.navigate('SignUp');},1000);
         }
       });
 
