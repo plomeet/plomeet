@@ -17,20 +17,20 @@ import LogoImage from '../../../assets/imgs/6881.png';
 import KakaoLogo from '../../../assets/imgs/kakao1.png';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 
 // const kakaoHelper = require('./KakaoHelper.js');
 
 const SignUp = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const nickname = useSelector(state => state.nickname)
+  const id = useSelector(state => state.id)
+  const name = useSelector(state => state.name)
+  const img = useSelector(state => state.img)
+  const email = useSelector(state => state.email)
 
   var kakaoUserId = '';
-
-  useEffect(() => {
-  KakaoLogins.getProfile().then(result => {
-    kakaoUserId = result.id;
-    console.log(kakaoUserId);
-  });
-},[])
 
   const isSignedUp = async (params) => {
     axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
@@ -95,7 +95,7 @@ const SignUp = () => {
           함께 즐거운 플로깅을 {'\n'}시작해 볼까요?
         </Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={isSignedUp}>
+      <TouchableOpacity style={styles.button} onPress={login}>
         <View style={styles.button2}>
           <Image
             source={KakaoLogo}

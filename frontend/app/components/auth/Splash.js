@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -9,21 +9,47 @@ import {
 import AuthLogo from './authLogo';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
+import * as KakaoLogins from '@react-native-seoul/kakao-login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as actions from '../../actions/userActions';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
 const AuthComponent = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const nickname = useSelector(state => state.nickname)
+  const id = useSelector(state => state.id)
+  const name = useSelector(state => state.name)
+  const img = useSelector(state => state.img)
+  const email = useSelector(state => state.email)
 
-  setTimeout(() => {
-    AsyncStorage.getItem('refreshToken').then(res => {
-      if(res) {
-        navigation.navigate('M');
-      }else{
-        navigation.navigate('SignUp');
-      }
-    });
-  },2000);
-  
+  AsyncStorage.getItem('refreshToken').then(res => {
+        if(res) {
+          KakaoLogins.getProfile().then(result => {
+            kakaoUserId = result.id;
+          });
+          setTimeout(() => {axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
+          .then((response) => {
+            console.log(response.data.userNickName);
+            dispatch(actions.setNickname(response.data.userNickName));
+            if(response.status == 200){
+              //store 저장
+              KakaoLogins.getProfile().then(result => {
+                dispatch(actions.setId(result.id))
+                dispatch(actions.setImg(result.profileImageUrl))
+                dispatch(actions.setName(result.nickname))
+                dispatch(actions.setEmail(result.email))
+              });
+              navigation.navigate('M');
+            }else{
+              navigation.navigate('SignUp');
+            }
+          })},2000);
+        }else{
+          navigation.navigate('SignUp');
+        }
+      });
 
 
   return (
