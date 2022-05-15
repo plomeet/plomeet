@@ -1,29 +1,42 @@
 import React, { useEffect, useRef, useState, Component, Node, Button } from 'react';
 import 'react-native-gesture-handler';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../../plogging/map/index";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View, Photo } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import BackSvg from '../../plogging/icons/back.svg'
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import PloggingStatusBar from '../../plogging/plogging-status-bar/index';
+import DetailPhotos from './detailPhotos';
 
-const LogDetail = () => {
-    const navigation = useNavigation();
+const LogDetail = ({ route }) => {
     const mapView = useRef(null);
     const [middle, setMiddle] = useState({ latitude: 37.564362, longitude: 126.977011 });
+    const { userId, plogId, log, mm, index } = route.params;
+    const [ploggingPathJson, setPloggingPathJson] = useState();
+    //const { plogId } = route.params;
 
-    return (
-        <View style={styles.container}>
+    useEffect(() => {
+        setPloggingPathJson(JSON.parse(log.route).coord);
+    }, []);
+
+    useEffect(() => {
+        if (ploggingPathJson !== undefined && ploggingPathJson[(ploggingPathJson.length / 2)] !== undefined && ploggingPathJson.length >= 2) {
+            const { latitude, longitude } = ploggingPathJson[(ploggingPathJson.length / 2)];
+            setMiddle({
+                ...middle,
+                latitude,
+                longitude,
+            });
+        }
+    }, [ploggingPathJson])
+
+
+
+    const headerComponent = (
+        <View>
             <View style={styles.containerTitle}>
-                <TouchableOpacity onPress={navigation.goBack}>
-                    <BackSvg width={20} height={20} fill={"#FFF"} style={{ marginLeft: 5 }}></BackSvg>
-                </TouchableOpacity>
-                <Text style={styles.titleText}>X월 X번째 플로깅</Text>
-            </View>
-            <View style={styles.containerTime} >
+                <Text style={styles.titleText}>{mm}월 {index + 1}번째 플로깅</Text>
                 <View style={styles.innerContainerTime} >
-                    <Text style={styles.date}>2022/05/11(수) </Text>
-                    <Text style={styles.timeStart}>17:28 출발</Text>
+                    <Text style={styles.date}>{log.plogDate.substring(0, 13)} </Text>
+                    <Text style={styles.timeStart}>{log.plogDate.substring(14, 19)} 출발</Text>
                 </View>
             </View>
             <View style={styles.containerMap} >
@@ -31,53 +44,45 @@ const LogDetail = () => {
                     style={styles.containerMapIn}
                     center={{ ...middle, zoom: 16 }}
                     useTextureView>
-                    {/* {ploggingPath.length >= 2 &&
-                            <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
-                        } */}
+                    {ploggingPathJson !== undefined && ploggingPathJson.length >= 2 &&
+                        <Path coordinates={ploggingPathJson} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
+                    }
                 </NaverMapView>
             </View>
-            <View style={styles.statusBar} >
-                <PloggingStatusBar distSum={1.2} isPlogging={false} timeSumString={"01:01"}></PloggingStatusBar>
-            </View>
-            <View style={styles.pictureContainer} >
-                <Text>사진공간</Text>
+            <View style={styles.containerState} >
+                <PloggingStatusBar distSum={log.plogDist} isPlogging={false} timeSumString={log.plogTime} islogDetail={true} logDetailWeather={log.plogWeather}></PloggingStatusBar>
             </View>
         </View>
+    )
+    return (
+        <DetailPhotos userId={userId} plogId={plogId} headerComponent={headerComponent}></DetailPhotos>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: "column",
         flex: 1,
     },
     containerTitle: {
-        flex: 0.05,
+        padding: 10,
         backgroundColor: "white",
-        alignItems: 'center',
-        flexDirection: "row",
-        alignItems: 'flex-end',
+        justifyContent: 'center',
+
     },
     titleText: {
-        fontSize: 20,
-        marginLeft: 40,
+        fontSize: 15,
+        marginLeft: 20,
         fontWeight: "bold",
-        position: "absolute",
-    },
-    containerTime: {
-        flex: 0.05,
-        backgroundColor: "white",
-        flexDirection: 'column',
     },
     innerContainerTime: {
-        flex: 1,
         flexDirection: 'row',
-        alignItems: 'baseline',
-        marginTop: 20,
-        marginLeft: 15,
+        marginTop: 7,
+        marginLeft: 20,
+        alignItems: 'center',
+
     },
     date: {
-        fontSize: 15,
+        fontSize: 12,
         color: 'black',
         fontWeight: "500"
     },
@@ -86,7 +91,7 @@ const styles = StyleSheet.create({
         color: "#ABABAB",
     },
     containerMap: {
-        flex: 0.4,
+        height: 250,
         paddingLeft: 10,
         paddingRight: 10
     },
@@ -95,11 +100,9 @@ const styles = StyleSheet.create({
         height: "100%",
         backgroundColor: "white",
     },
-    statusBar: {
-        flex: 0.1,
-    },
-    pictureContainer: {
-        flex: 0.4,
+    containerState: {
+        borderBottomWidth: 5,
+        borderColor: "#DDDDDD",
     },
 });
 

@@ -61,5 +61,4 @@ public class MeetingRes {
         this.registerDate = meeting.getRegisterDate();
         this.isActivate = meeting.getIsActivate();
     }
-
 }

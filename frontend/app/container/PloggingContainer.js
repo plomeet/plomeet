@@ -15,6 +15,7 @@ const mapDispatchToProps = dispatch => {
         setIsSave: isSave => dispatch(actions.setIsSave(isSave)),
         setPloggingPath: ploggingPath => dispatch(actions.setPloggingPath(ploggingPath)),
         resetPloggingPath: () => dispatch(actions.resetPloggingPath()),
+        saveLogs: savedLogs => dispatch(actions.saveLogs(savedLogs)),
     }
 }
 
