@@ -27,12 +27,10 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    flex:1,
+    flex:0.48,
     borderRadius: 8,
     marginBottom: 20,
-    marginLeft: 20,
     paddingBottom: 10,
-    paddingRight: 10,
   },
   elevation: {
     elevation: 5,
@@ -41,7 +39,6 @@ const styles = StyleSheet.create({
   img: {
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
-    marginRight: -10,
     flex: 1,
     height: 100,
   },
@@ -219,7 +216,8 @@ const Home = () => {
     <TouchableOpacity
     activeOpacity={0.7}
     onPress={() => navigation.navigate('MeetingDetail', {img:img, title:title, place:place, numMember:numMember, maxMember:maxMember, date:date, meetingDesc:meetingDesc, lat:lat, lng:lng, placeDetail:placeDetail})}
-    style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles.card, styles.elevation]}>
+    // style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles.card, styles.elevation]}>
+    style={[styles.card, styles.elevation]}>
       <Image source={{uri: img}} style={styles.img} />
       <Text style={styles.title}>{title}</Text>
       <View style={styles.row } >
@@ -259,10 +257,10 @@ const Home = () => {
         <Chip icon="align-vertical-center" mode="outlined" selectedColor='#232732' onPress={() => console.log('정렬')}>정렬</Chip>
       </View>
       <FlatList
-        columnWrapperStyle={{justifyContent: 'space-between'}}
+        columnWrapperStyle={[{justifyContent: 'space-between'}, {marginHorizontal:20}]}
         data={meetingList}
         renderItem={renderItem}
-        keyExtractor={item => item.meetingId}
+        keyExtractor={(item, index) => item.meetingId}
         windowSize={3}
         numColumns = {2}
       />
