@@ -115,9 +115,6 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, isPlogging, setTimeSum, timeSumStri
             .then(async (response) => {
               if (response.status === 200) {
                 console.log("log insert SUCCESS");
-                setTimeSum("0 : 00");
-                setDistSum(0);
-                dispatch(resetPloggingPath());
                 console.log(response.data.data); //플로깅 아이디
                 upload(userId, response.data.data); //userId + 플로깅아이디
                 await axiosInstance.get(`/ploggings/${userId}`)  // 성공할때만 정보를 다시 가져오기위해
@@ -125,6 +122,9 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, isPlogging, setTimeSum, timeSumStri
                     if (response.status === 200) {
                       console.log("저장 후 플로깅 정보 업뎃 성공");
                       saveLogs(response.data.data);
+                      setTimeSum("0 : 00");
+                      setDistSum(0);
+                      dispatch(resetPloggingPath());
                     } else if (response.status === 204) {
                       console.log("저장된 기록이 없습니다") // todo 기록없을때 처리
                     }
