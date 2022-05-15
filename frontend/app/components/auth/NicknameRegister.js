@@ -39,29 +39,31 @@ const NicknameRegister = () => {
 
 
   
-  // console.log('##', value);
-  const NicknameUpdate = (nickname2) => {
-    dispatch(actions.setNickname(nickname2));
-    console.log('입력: ',nickname);
+  // console.log(value);
+  const NicknameUpdate = () => {
+    dispatch(actions.setNickname(value));
+    console.log(nickname);
   }
   
   
   // kakaoHelper.getProfile();
+  useEffect(() => { 
     KakaoLogins.getProfile().then(result => {
-      dispatch(actions.setId(result.id));
-      dispatch(actions.setImg(result.profileImageUrl));
-      dispatch(actions.setName(result.nickname));
-      dispatch(actions.setEmail(result.email));
+      dispatch(actions.setId(result.id))
+      dispatch(actions.setImg(result.profileImageUrl))
+      dispatch(actions.setName(result.nickname))
+      dispatch(actions.setEmail(result.email))
     });
+  },[])
 
   // setTimeout(() => {console.log(img)},100);
   // setTimeout() 걸어줄것
   
   // setTimeout(() => {},100);
-  const Register = async (text) => {
+  const Register = () => {
     axios.post('http://k6a205.p.ssafy.io:8000/user', {
       kakaoUserId: id,
-      userNickName: nickname, // 입력받은값으로 변경
+      userNickName: value, // 입력받은값으로 변경
       userProfileImg: img,
       userName: name,
       userEmail: email,
@@ -69,12 +71,11 @@ const NicknameRegister = () => {
       "Content-Type": "application/json",
     },).then((response) => {
       console.log(response);
-      NicknameUpdate(text);
-      console.log(nickname);
+      NicknameUpdate()
+      navigation.navigate('M');
     }).then((error) => {
       console.log(error);
     }); 
-    // navigation.navigate('M');
   };
 
   return (
@@ -95,12 +96,14 @@ const NicknameRegister = () => {
             keyboardType="default"
             autoFocus
             maxLength={10}
-            autoCapitalize="none">
+            autoCapitalize="none"
+            onChangeText={text => onChangeText(text)}
+            value={value}>
           </TextInput>
         </View>
         <TouchableOpacity
           style={styles.button}
-          onPress={(text) =>  Register(text)}>
+          onPress={() => Register()}>
           <View style={styles.button2}>
             <Text style={styles.title2}>회원가입</Text>
           </View>
@@ -190,4 +193,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NicknameRegister);
+export default NicknameRegister;

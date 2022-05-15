@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React, {useState, Component, useEffect} from 'react';
 import {
   View,
   Image,
@@ -25,10 +25,6 @@ const SignUp = () => {
 
   var kakaoUserId = '';
 
-  KakaoLogins.getProfile().then(result => {
-    kakaoUserId = result.id;
-  });
-
   const isSignedUp = async (params) => {
     axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
      .then((response) => {
@@ -52,6 +48,7 @@ const SignUp = () => {
         KakaoLogins.getProfile()
           .then(result => {
             console.log(`### Profile Result : ${JSON.stringify(result)}`);
+            navigation.navigate('NicknameRegister');
           })
           .catch(err => {
             console.log(`### Profile Error : ${JSON.stringify(err)}`);
@@ -60,18 +57,17 @@ const SignUp = () => {
       .catch(err => {
         console.log(`### Login Error : ${JSON.stringify(err)}`);
       });
-      navigation.navigate('NicknameRegister');
   }
 
-  // function logout() {
-  //   KakaoLogins.logout()
-  //     .then(result => {
-  //       console.log(`### Logout Result : ${JSON.stringify(result)}`);
-  //     })
-  //     .catch(err => {
-  //       console.log(`### Logout Error : ${JSON.stringify(err)}`);
-  //     });
-  // }
+  function logout() {
+    KakaoLogins.logout()
+      .then(result => {
+        console.log(`### Logout Result : ${JSON.stringify(result)}`);
+      })
+      .catch(err => {
+        console.log(`### Logout Error : ${JSON.stringify(err)}`);
+      });
+  }
 
   BackHandler.addEventListener('hardwareBackPress', () => {
     return true;
@@ -90,7 +86,7 @@ const SignUp = () => {
           함께 즐거운 플로깅을 {'\n'}시작해 볼까요?
         </Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={isSignedUp}>
+      <TouchableOpacity style={styles.button} onPress={login}>
         <View style={styles.button2}>
           <Image
             source={KakaoLogo}
@@ -99,7 +95,7 @@ const SignUp = () => {
           <Text style={styles.title3}>카카오톡으로 시작하기</Text>
         </View>
       </TouchableOpacity>
-      {/* <Text onPress={logout}>로그아웃</Text> */}
+      <Text onPress={logout}>로그아웃</Text>
       <View style={styles.logo}>
         <Image
           source={LogoImage}

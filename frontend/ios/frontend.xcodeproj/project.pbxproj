@@ -41,7 +41,6 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = frontend/main.m; sourceTree = "<group>"; };
 		192514772820B5A100033847 /* libreact-native-nmap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-nmap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		192514792820B7C500033847 /* libreact-native-nmap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-nmap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1978927C281A24ED009CDEB2 /* frontend-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "frontend-Bridging-Header.h"; sourceTree = "<group>"; };
 		1978927D281A24ED009CDEB2 /* geoSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = geoSetting.swift; sourceTree = "<group>"; };
 		635DF426EFA2FC0BDC6BDAF0 /* Pods-frontend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-frontend.debug.xcconfig"; path = "Target Support Files/Pods-frontend/Pods-frontend.debug.xcconfig"; sourceTree = "<group>"; };
 		6CA9EB96FC3BF6D738006CDB /* libPods-frontend-frontendTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-frontend-frontendTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,7 +101,6 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				1978927D281A24ED009CDEB2 /* geoSetting.swift */,
-				1978927C281A24ED009CDEB2 /* frontend-Bridging-Header.h */,
 			);
 			name = frontend;
 			sourceTree = "<group>";
@@ -536,9 +534,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nom.plomeet;
 				PRODUCT_NAME = frontend;
-				SWIFT_OBJC_BRIDGING_HEADER = "frontend-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "PloMeet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -563,9 +561,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nom.plomeet;
 				PRODUCT_NAME = frontend;
-				SWIFT_OBJC_BRIDGING_HEADER = "frontend-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "PloMeet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
