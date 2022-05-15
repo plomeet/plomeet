@@ -8,7 +8,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import BackSvg from '../plogging/icons/back.svg'
 
-const App = ({ distSum, setDistSum, isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage, timeSum, setTimeSum, setStart, setWeatherLoc, setImages, setIsSave, setPloggingPath, resetPloggingPath }) => {
+const App = ({ saveLogs, distSum, setDistSum, isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage, timeSum, setTimeSum,
+    setStart, setWeatherLoc, setImages, setIsSave, setPloggingPath, resetPloggingPath }) => {
     const navigation = useNavigation();
 
 
@@ -28,10 +29,17 @@ const App = ({ distSum, setDistSum, isPlogging, handleIsPlogging, showPloggingEn
                 <View style={styles.containerResultTitle}>
                     <Text style={styles.resultTitleText}>플로깅 결과</Text>
                 </View>
-                }
-            {(!showPloggingEndPage) && <PloggingStatusBar distSum={distSum} isPlogging={isPlogging} setTimeSum={setTimeSum} timeSumString={timeSum} setIsSave={setIsSave} resetPloggingPath={resetPloggingPath} setDistSum={setDistSum}></PloggingStatusBar>}
-            <Plogging setDistSum={setDistSum} isPlogging={isPlogging} showPloggingEndPage={showPloggingEndPage} setWeatherLoc={setWeatherLoc} setImages={setImages} setPloggingPath={setPloggingPath} setIsSave={setIsSave} handleShowEndPage={handleShowEndPage} setTimeSum={setTimeSum}></Plogging>
-            <PloggingStartEndButton isPlogging={isPlogging} handleIsPlogging={handleIsPlogging} showPloggingEndPage={showPloggingEndPage} handleShowEndPage={handleShowEndPage} setStart={setStart} setIsSave={setIsSave}></PloggingStartEndButton>
+            }
+            {(!showPloggingEndPage) && <PloggingStatusBar distSum={distSum} isPlogging={isPlogging}
+                setTimeSum={setTimeSum} timeSumString={timeSum} setIsSave={setIsSave} resetPloggingPath={resetPloggingPath}
+                setDistSum={setDistSum}></PloggingStatusBar>}
+            <Plogging distSum={distSum} timeSumString={timeSum} setDistSum={setDistSum} isPlogging={isPlogging}
+                showPloggingEndPage={showPloggingEndPage} setTimeSum={setTimeSum} resetPloggingPath={resetPloggingPath}
+                setWeatherLoc={setWeatherLoc} setImages={setImages} setPloggingPath={setPloggingPath} setIsSave={setIsSave}
+                handleShowEndPage={handleShowEndPage} saveLogs={saveLogs}></Plogging>
+            <PloggingStartEndButton isPlogging={isPlogging} handleIsPlogging={handleIsPlogging}
+                showPloggingEndPage={showPloggingEndPage} handleShowEndPage={handleShowEndPage}
+                setStart={setStart} setIsSave={setIsSave}></PloggingStartEndButton>
         </SafeAreaView>
     )
 }

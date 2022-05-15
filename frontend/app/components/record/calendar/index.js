@@ -2,14 +2,13 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useWindowDimensions, Text, View, StyleSheet } from "react-native";
 import { Calendar } from 'react-native-calendars';
 
-const LogCalendar = () => {
+const LogCalendar = ({ dateArr, setListMonth }) => {
     const [markedDates, setMarkedDates] = useState(null);
-    const [dates, setDates] = useState(['2022-05-01', '2022-05-10']); // 테스트용 데이터
-    const [selectDate, setSelectDate] = useState();
+    //const [dates, setDates] = useState(['2022-05-01', '2022-05-10']); // 테스트용 데이터
 
     //기록이 있는 날짜 마커 띄우기
     useEffect(() => {
-        let markObj = dates.reduce(
+        let markObj = dateArr.reduce(
             (c, v, i) =>
                 Object.assign(c, {
                     [v]: { marked: true, dotColor: 'white', startingDay: true, color: '#1BE58D', endingDay: true },
@@ -17,21 +16,26 @@ const LogCalendar = () => {
             ,
             {}
         );
-
-        // if (selectDate)
-        //     markObj = Object.assign(markObj, { [selectDate.dateString]: { marked: true, dotColor: 'white', startingDay: true, color: '#1BE58D', endingDay: true } });
-        // console.log(markObj);
         setMarkedDates(markObj);
-    }, [selectDate]);
+    }, [dateArr]);
 
-    // const selectMarking = (day) => {
+    // useEffect(() => {
+    //     const now = new Date();
+    //     const dateString = dateFormat(now);
+    //     setListMonth(dateString);
+    // }, []);
 
-    //     console.log(day.dateString);
+    const makeDs = (dateStr) => {
+        const dateFormatStr = dateStr.substring(0, 7);
+        setListMonth(dateFormatStr);
+    }
 
-    //     Object.assign(markObj, { [day.dateString]: { marked: true, dotColor: 'white', startingDay: true, color: '#1BE58D', endingDay: true } });
-    //     console.log(markObj);
-    //     setMarkedDates(markObj);
-    //     const selectDateMarker = day.dateString : { marked: true, dotColor: 'white', startingDay: true, color: '#1BE58D', endingDay: true };
+    // const dateFormat = (date) => {  //dateformat 마찬가지
+    //     let month = date.getMonth() + 1;
+
+    //     month = month >= 10 ? month : '0' + month;
+
+    //     return date.getFullYear() + '-' + month;
     // }
 
     return (
@@ -43,6 +47,7 @@ const LogCalendar = () => {
                 minDate={"1996-05-10"}
                 maxDate={"2030-05-30"}
                 scrollEnabled={true}
+                onMonthChange={month => (makeDs(month.dateString))}
             />
         </View>
     )

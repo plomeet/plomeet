@@ -8,6 +8,8 @@ const initialState = {
     images: [],
     isSave: false,
     ploggingPath: [],
+    savedLogs: [],
+    listMonth: "",
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -32,6 +34,10 @@ const rootReducer = (state = initialState, action) => {
             return { ...state, ploggingPath: [...state.ploggingPath, action.payload] }
         case "RESET_PLOGGINGPATH":
             return { ...state, ploggingPath: [] }
+        case "SET_LOGS":
+            return { ...state, savedLogs: action.payload }
+        case "SET_LISTMONTH":
+            return { ...state, listMonth: action.payload }
         default:
             return state;
     }

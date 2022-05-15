@@ -104,7 +104,7 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
     useEffect(() => {
         if (showPloggingEndPage) {
             const backAction = () => {
-                Alert.alert("잠시만요!!", "플로깅 기록을 삭제하시겠습니까?", [
+                Alert.alert("", "플로깅 기록을 삭제하시겠습니까?", [
                     {
                         text: "아니요",
                         onPress: () => null,

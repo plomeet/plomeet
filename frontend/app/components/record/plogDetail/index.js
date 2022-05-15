@@ -6,19 +6,37 @@ import { useNavigation } from '@react-navigation/native';
 import PloggingStatusBar from '../../plogging/plogging-status-bar/index';
 import DetailPhotos from './detailPhotos';
 
-const LogDetail = ({route}) => {
+const LogDetail = ({ route }) => {
     const mapView = useRef(null);
     const [middle, setMiddle] = useState({ latitude: 37.564362, longitude: 126.977011 });
-    const { userId } = route.params;
-    const { plogId } = route.params;
+    const { userId, plogId, log, mm, index } = route.params;
+    const [ploggingPathJson, setPloggingPathJson] = useState();
+    //const { plogId } = route.params;
+
+    useEffect(() => {
+        setPloggingPathJson(JSON.parse(log.route).coord);
+    }, []);
+
+    useEffect(() => {
+        if (ploggingPathJson !== undefined && ploggingPathJson[(ploggingPathJson.length / 2)] !== undefined && ploggingPathJson.length >= 2) {
+            const { latitude, longitude } = ploggingPathJson[(ploggingPathJson.length / 2)];
+            setMiddle({
+                ...middle,
+                latitude,
+                longitude,
+            });
+        }
+    }, [ploggingPathJson])
+
+
 
     const headerComponent = (
         <View>
             <View style={styles.containerTitle}>
-                <Text style={styles.titleText}>X월 X번째 플로깅</Text>
+                <Text style={styles.titleText}>{mm}월 {index + 1}번째 플로깅</Text>
                 <View style={styles.innerContainerTime} >
-                    <Text style={styles.date}>2022/05/11(수) </Text>
-                    <Text style={styles.timeStart}>17:28 출발</Text>
+                    <Text style={styles.date}>{log.plogDate.substring(0, 13)} </Text>
+                    <Text style={styles.timeStart}>{log.plogDate.substring(14, 19)} 출발</Text>
                 </View>
             </View>
             <View style={styles.containerMap} >
@@ -26,13 +44,13 @@ const LogDetail = ({route}) => {
                     style={styles.containerMapIn}
                     center={{ ...middle, zoom: 16 }}
                     useTextureView>
-                    {/* {ploggingPath.length >= 2 &&
-                            <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
-                        } */}
+                    {ploggingPathJson !== undefined && ploggingPathJson.length >= 2 &&
+                        <Path coordinates={ploggingPathJson} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
+                    }
                 </NaverMapView>
             </View>
             <View style={styles.containerState} >
-                <PloggingStatusBar distSum={1.2} isPlogging={false} timeSumString={"01:01"}></PloggingStatusBar>
+                <PloggingStatusBar distSum={log.plogDist} isPlogging={false} timeSumString={log.plogTime} islogDetail={true} logDetailWeather={log.plogWeather}></PloggingStatusBar>
             </View>
         </View>
     )
