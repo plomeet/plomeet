@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useWindowDimensions, Text, View, StyleSheet } from "react-native";
 import { Calendar } from 'react-native-calendars';
 
-const LogCalendar = ({ dateArr, setListMonth }) => {
+const LogCalendar = ({ dateArr, setListMonth, setShowSpinner }) => {
     const [markedDates, setMarkedDates] = useState(null);
     //const [dates, setDates] = useState(['2022-05-01', '2022-05-10']); // 테스트용 데이터
 
@@ -26,10 +26,13 @@ const LogCalendar = ({ dateArr, setListMonth }) => {
     // }, []);
 
     const makeDs = (dateStr) => {
+        showSpinner();
         const dateFormatStr = dateStr.substring(0, 7);
         setListMonth(dateFormatStr);
     }
-
+    const showSpinner = () => {
+        setShowSpinner(true);
+    }
     // const dateFormat = (date) => {  //dateformat 마찬가지
     //     let month = date.getMonth() + 1;
 
