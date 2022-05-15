@@ -1084,6 +1084,8 @@ PODS:
     - RCTTypeSafety
     - React
     - ReactCommon/turbomodule/core
+  - react-native-spinkit (1.4.1):
+    - React
   - React-perflogger (0.68.1)
   - React-RCTActionSheet (0.68.1):
     - React-Core/RCTActionSheetHeaders (= 0.68.1)
@@ -1153,14 +1155,14 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
-  - RNFBApp (14.9.4):
+  - RNFBApp (14.9.1):
     - Firebase/CoreOnly (= 8.15.0)
     - React-Core
-  - RNFBFirestore (14.9.4):
+  - RNFBFirestore (14.9.1):
     - Firebase/Firestore (= 8.15.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.4.2):
+  - RNGestureHandler (2.4.1):
     - React-Core
   - RNPermissions (3.3.1):
     - React-Core
@@ -1280,6 +1282,7 @@ DEPENDENCIES:
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-nmap (from `../node_modules/react-native-nmap`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-spinkit (from `../node_modules/react-native-spinkit`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -1440,6 +1443,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-nmap"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-spinkit:
+    :path: "../node_modules/react-native-spinkit"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -1575,6 +1580,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: e95b4785b685cfc06609bc50ed6fb55b59990c99
   react-native-nmap: cfcc5402746040494c544ea90a6062f49505acdf
   react-native-safe-area-context: ebf8c413eb8b5f7c392a036a315eb7b46b96845f
+  react-native-spinkit: da294fd828216ad211fe36a5c14c1e09f09e62db
   React-perflogger: 30ab8d6db10e175626069e742eead3ebe8f24fd5
   React-RCTActionSheet: 4b45da334a175b24dabe75f856b98fed3dfd6201
   React-RCTAnimation: d6237386cb04500889877845b3e9e9291146bc2e
@@ -1589,9 +1595,9 @@ SPEC CHECKSUMS:
   ReactCommon: bf2888a826ceedf54b99ad1b6182d1bc4a8a3984
   RNCAsyncStorage: 9367a646dc24e3ab7b6874d79bc1bfd0832dce58
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
-  RNFBApp: bef4ec5a6d31a3da9bf285379d0c4857c6b7313e
-  RNFBFirestore: 841f319bfba0fbf3bd48fae80145301941219dd6
-  RNGestureHandler: 61628a2c859172551aa2100d3e73d1e57878392f
+  RNFBApp: fd23737680ed2bdde41ca27d8bfb171b6d668c6b
+  RNFBFirestore: 1f23c9c31cfa96d532a33255d89feb70b1052465
+  RNGestureHandler: 4f4986408310a43f1606c391f38f76e0d6e790d5
   RNPermissions: 34d678157c800b25b22a488e4d8babb57456e796
   RNReanimated: 64573e25e078ae6bec03b891586d50b9ec284393
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19

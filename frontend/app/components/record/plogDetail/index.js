@@ -18,8 +18,8 @@ const LogDetail = ({ route }) => {
     }, []);
 
     useEffect(() => {
-        if (ploggingPathJson !== undefined && ploggingPathJson[(ploggingPathJson.length / 2)] !== undefined && ploggingPathJson.length >= 2) {
-            const { latitude, longitude } = ploggingPathJson[(ploggingPathJson.length / 2)];
+        if (ploggingPathJson !== undefined && ploggingPathJson[parseInt(ploggingPathJson.length / 2)] !== undefined && ploggingPathJson.length >= 2) {
+            const { latitude, longitude } = ploggingPathJson[parseInt(ploggingPathJson.length / 2)];
             setMiddle({
                 ...middle,
                 latitude,

@@ -52,6 +52,7 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
     useEffect(() => {
         setTotalDist(0);
         setPrevLocation({})
+        return () => { }
     }, [isPlogging, showPloggingEndPage])
 
     //시작시 쓰레기통 전부를 가져온다.
