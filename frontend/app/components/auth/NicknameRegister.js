@@ -28,32 +28,37 @@ const kakaoHelper = require('./KakaoHelper.js');
 
 const NicknameRegister = () => {
   
-  const [value, onChangeText] = useState("");
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const id = useSelector(state => state.id)
   const nickname = useSelector(state => state.nickname)
+  const img = useSelector(state => state.img)
+  const name = useSelector(state => state.name)
+  const email = useSelector(state => state.email)
+
 
   
-  // console.log(value);
+  // console.log('##', value);
   const NicknameUpdate = (nickname2) => {
-    dispatch(setNickname(nickname2));
-    console.log(nickname);
+    dispatch(actions.setNickname(nickname2));
+    console.log('입력: ',nickname);
   }
   
   
   // kakaoHelper.getProfile();
     KakaoLogins.getProfile().then(result => {
-      id = result.id;
-      img = result.profileImageUrl;
-      name = result.nickname;
-      email = result.email;
+      dispatch(actions.setId(result.id));
+      dispatch(actions.setImg(result.profileImageUrl));
+      dispatch(actions.setName(result.nickname));
+      dispatch(actions.setEmail(result.email));
     });
 
   // setTimeout(() => {console.log(img)},100);
   // setTimeout() 걸어줄것
   
   // setTimeout(() => {},100);
-  const Register = async () => {
+  const Register = async (text) => {
     axios.post('http://k6a205.p.ssafy.io:8000/user', {
       kakaoUserId: id,
       userNickName: nickname, // 입력받은값으로 변경
@@ -64,10 +69,12 @@ const NicknameRegister = () => {
       "Content-Type": "application/json",
     },).then((response) => {
       console.log(response);
+      NicknameUpdate(text);
+      console.log(nickname);
     }).then((error) => {
       console.log(error);
     }); 
-    navigation.navigate('M');
+    // navigation.navigate('M');
   };
 
   return (
@@ -88,14 +95,12 @@ const NicknameRegister = () => {
             keyboardType="default"
             autoFocus
             maxLength={10}
-            autoCapitalize="none"
-            onChangeText={text => NicknameUpdate(text)}
-            value={value}>
+            autoCapitalize="none">
           </TextInput>
         </View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() =>  Register()}>
+          onPress={(text) =>  Register(text)}>
           <View style={styles.button2}>
             <Text style={styles.title2}>회원가입</Text>
           </View>
