@@ -9,7 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 
 const meetingDetail = ({route}) => {
-  let detail = route.params.detail;
+  let meetingDesc = route.params.meetingDesc;
   let meetingImg = route.params.img;
   let meetingName = route.params.title;
   let meetingPlace = route.params.place;
@@ -34,7 +34,7 @@ const meetingDetail = ({route}) => {
             />
             <View style={{marginHorizontal:25}}>
               <Text style={styles.title}>{meetingName}</Text>
-              <Text style={styles.text}>{detail}</Text>
+              <Text style={styles.text}>{meetingDesc}</Text>
               <View style={styles.row}>
                 <Icon name='location-outline' size={20} color='#313333' />
                 <Text style={styles.subtitle}>장소</Text>

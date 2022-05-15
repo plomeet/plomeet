@@ -17,7 +17,9 @@ const openMeeting5 = () => {
   const [memberMax, setMemberMax] = useState(1);
   // const [memberCnt, setMemberCnt] = useState(1);
   const [meetingDate, setMeetingDate] = useState("");
-  const [location, setLocation] = useState({ latitude: 37.564362, longitude: 126.977011 });
+  const [latitude, setLatitude] = useState(37.564362);
+  const [longitude, setLongitude] = useState(126.977011);
+  var loc = {latitude: latitude, longitude: longitude};
 
   const creatMeeting = async () => {
     try {
@@ -26,8 +28,8 @@ const openMeeting5 = () => {
         meetingDesc: detail,
         meetingPlace: meetingPlace,
         meetingPlaceDetail: "주소", //필요하면 수정
-        lat: location.latitude,
-        lng: location.longitude,
+        lat: latitude,
+        lng: longitude,
         memberMax: memberMax,
         meetingDate: meetingDate,
         item: "쓰레기봉투"
@@ -57,13 +59,13 @@ const openMeeting5 = () => {
       var lat = 0.0;
       lat = Number(Number(result).toFixed(6));
       console.log(lat);
-      setLocation({...location, latitude:lat});
+      setLatitude(lat);
     })
     AsyncStorage.getItem('lng', (err, result) => {
       var lng= 0.0;
       lng = Number(Number(result).toFixed(6));
       console.log(lng);
-      setLocation({...location, longitude:lng});
+      setLongitude(lng);
     })
     AsyncStorage.getItem('meetingPlace', (err, result) => {
       console.log(result);
@@ -79,7 +81,7 @@ const openMeeting5 = () => {
     })
     AsyncStorage.getItem('meetingImg', (err, result) => {
       console.log(result);
-      setMeetingImg(result);
+      if(result) setMeetingImg(result);
     })
   }, [])
 
@@ -114,8 +116,8 @@ const openMeeting5 = () => {
               <NaverMapView
                   style={{width: '100%', height: '100%'}} 
                   showsMyLocationButton={true}
-                  center={{...location, zoom: 15}}>
-                  <Marker coordinate={location} pinColor="green"/>
+                  center={{...loc, zoom: 15}}>
+                  <Marker coordinate={loc} pinColor="green"/>
               </NaverMapView>
               </View>
             </View>
