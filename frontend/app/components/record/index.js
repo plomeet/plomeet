@@ -8,7 +8,8 @@ import PloggingList from './ploggingList/index'
 import axiosInstance from "../../../utils/API";
 //import axiosInstance from "../../../utils/ApiLocal";
 import { useSelector } from "react-redux"
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import Spinner from 'react-native-spinkit'
 
 const Record = ({ saveLogs, setListMonth }) => {
     const [plogLists, setPlogLists] = useState([]);
@@ -21,10 +22,9 @@ const Record = ({ saveLogs, setListMonth }) => {
     const [dateArr, setDateArr] = useState([]);
     const [month, setMonth] = useState(0);
     const isFocused = useIsFocused();
-
+    const [showSpinner, setShowSpinner] = useState(true);
 
     useEffect(() => {
-        //let jArray = new Array();
         const getSavedLogs = async () => {
             console.log("기록들 가져오기");
             try {
@@ -51,7 +51,8 @@ const Record = ({ saveLogs, setListMonth }) => {
             const mm = parseInt(listMonth.substring(5, 7));
             setMonth(mm);
             if (savedLogs[0] !== undefined)
-                savedLogs.map((data) => {
+                savedLogs.map((data, i) => {
+                    if (i === savedLogs.length - 1) setShowSpinner(false);
                     const min = parseInt(data.plogTime.substring(0, data.plogTime.indexOf(' ')));
                     const sec = parseInt(data.plogTime.substr(-2));
                     let dateString = data.plogDate.substring(0, 7);
@@ -124,7 +125,7 @@ const Record = ({ saveLogs, setListMonth }) => {
     return (
         <View style={styles.container}>
             <RecordStatusBar td={td} tt={tt} tc={tc} />
-            <LogCalendar dateArr={dateArr} setListMonth={setListMonth} />
+            <LogCalendar dateArr={dateArr} setListMonth={setListMonth} setShowSpinner={setShowSpinner} />
 
             <View style={styles.plogListContainer}>
                 <ScrollView>
@@ -136,6 +137,11 @@ const Record = ({ saveLogs, setListMonth }) => {
                         })
                     }
                 </ScrollView>
+                {showSpinner &&
+                    <View style={styles.containerSpinner}>
+                        <Spinner isVisible={true} size={80} type={'ThreeBounce'} color={"#1BE58D"} />
+                    </View>
+                }
             </View>
         </View>
     );
@@ -148,9 +154,16 @@ const styles = StyleSheet.create({
     },
     plogListContainer: {
         flex: 1,
-        paddingBottom: 5
+        paddingBottom: 5,
     },
-
+    containerSpinner: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+        zIndex: 1001,
+    },
 });
 
 export default Record;

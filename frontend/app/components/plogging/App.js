@@ -14,7 +14,7 @@ const App = ({ saveLogs, distSum, setDistSum, isPlogging, handleIsPlogging, show
 
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             {!showPloggingEndPage &&
                 <View style={styles.containerTitle}>
                     {!isPlogging &&
@@ -45,12 +45,17 @@ const App = ({ saveLogs, distSum, setDistSum, isPlogging, handleIsPlogging, show
 }
 
 const styles = StyleSheet.create({
+    container: {
+        width: "100%",
+        height: "100%",
+    },
     containerTitle: {
         backgroundColor: "white",
         alignItems: 'center',
         borderBottomWidth: 0.3,
         flexDirection: "row",
         height: '8%',
+        zIndex: 1002,
     },
     titleText: {
         fontSize: 20,
