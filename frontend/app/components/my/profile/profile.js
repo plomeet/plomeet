@@ -24,38 +24,38 @@ const Profile = () => {
 
     var input = null;
     if (index2) {
-        input = <Text style = {styles.Text}>{nickname}</Text>
+        input = <Text style={styles.Text}>{nickname}</Text>
     } else {
         input = <TextInput style={styles.input}
-        placeholder="닉네임"
-        keyboardType="default"
-        autoFocus
-        maxLength={10}
-        autoCapitalize="none"
-        onChangeText={text => onChangeText(text)}
-        value={value}></TextInput>
+            placeholder="닉네임"
+            keyboardType="default"
+            autoFocus
+            maxLength={10}
+            autoCapitalize="none"
+            onChangeText={text => onChangeText(text)}
+            value={value}></TextInput>
     }
 
     var button = null;
     if (index) {
-        button = <TouchableOpacity style= {styles.TouchableOpacityStyle} onPress={updateNickname}>
-                    <Text style = {styles.Text3}>수정</Text>
-                </TouchableOpacity>;
+        button = <TouchableOpacity style={styles.TouchableOpacityStyle} onPress={updateNickname}>
+            <Text style={styles.Text3}>수정</Text>
+        </TouchableOpacity>;
     } else {
-        button = <TouchableOpacity style= {styles.TouchableOpacityStyle} onPress={confirmNickname}>
-                    <Text style = {styles.Text3}>완료</Text>
-                </TouchableOpacity>;
+        button = <TouchableOpacity style={styles.TouchableOpacityStyle} onPress={confirmNickname}>
+            <Text style={styles.Text3}>완료</Text>
+        </TouchableOpacity>;
     }
 
-    return(
-        <View style = {styles.Container}>
-            <TouchableOpacity >
-                <Image style = {styles.ProfileImage} source={{uri: img}}></Image>
+    return (
+        <View style={styles.Container}>
+            <TouchableOpacity style={styles.Touchable}>
+                <Image style={styles.ProfileImage} source={{ uri: img }}></Image>
             </TouchableOpacity>
-            <View>
+            <View style={styles.ContainerInput}>
                 {input}
                 {/* <Text style = {styles.Text}>{nickname}</Text> */}
-                <Text style = {styles.Text2}>{email}</Text>
+                <Text style={styles.Text2}>{email}</Text>
             </View>
             {button}
             {/* <TouchableOpacity style= {styles.TouchableOpacityStyle} onPress={updateNickname}>
@@ -72,6 +72,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         borderBottomWidth: 0.3,
     },
+    Touchable: {
+        flex: 1,
+    },
+    ContainerInput: {
+        flex: 3,
+        flexDirection: 'column',
+        backgroundColor: '#FFFFFF',
+        justifyContent: 'flex-end',
+    },
     ProfileImage: {
         width: 60,
         height: 60,
@@ -83,32 +92,20 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     Text: {
-        width: 170,
-        height: 30,
+        paddingTop: 5,
+        paddingBottom: 16,
+        paddingLeft: 4,
+        flex: 0.3,
         fontSize: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        left: 40,
-        top: 22,
-        color:'#000000'
-        // backgroundColor: '#808080'
+        color: '#000000'
     },
     input: {
-        width: 170,
-        height: 42,
+        flex: 0.3,
         fontSize: 20,
-        left: 40,
-        top: 22,
     },
     Text2: {
-        width: 170,
-        height: 25,
+        flex: 0.5,
         fontSize: 14,
-        alignItems: 'center',
-        justifyContent: 'center',
-        left: 40,
-        top: 22,
-        // backgroundColor: '#808080'
     },
     TouchableOpacityStyle: {
         position: 'absolute',
