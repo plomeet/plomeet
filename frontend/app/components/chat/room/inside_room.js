@@ -7,11 +7,15 @@ import CustomSend from './custom/custom_send';
 import CustomInputToolbar from './custom/custom_inputtoolbar';
 import firestore from '@react-native-firebase/firestore';
 import { saveChatting, updateUserLastReadChatTime } from '../../../../utils/firestore';
+import { useSelector } from 'react-redux';
 
 
-const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} }) => {
+const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     const title = meeting.meetingName;
     const [user, setUser] = useState();
+    const userId = useSelector(state => state.userId);
+    const name = useSelector(state => state.name);
+    const img = useSelector(state => state.img);
     const members = {};
     const [messages, setMessages] = useState([]);
 
@@ -100,18 +104,12 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
     
     
     useEffect(() => {
-        const subscriberUser = firestore()
-            .collection('users')
-            .doc(userId)
-            .onSnapshot(querySnapShot => {
-                const userData = querySnapShot.data();
-                const userInfo = {
-                    _id: userData.userId.toString(),
-                    avatar: userData.userProfileImg,
-                    name: userData.userNickName,
-                }
-                setUser(userInfo);
-            });
+            const userInfo = {
+                _id: userId,
+                avatar: img,
+                name: name,
+            };
+            setUser(userInfo);
         
         //console.log("meetingId::"+ meeting.meetingId);
         const subscriberChatting = firestore()

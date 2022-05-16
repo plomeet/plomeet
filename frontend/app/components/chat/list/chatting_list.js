@@ -5,11 +5,12 @@ import { FlatList } from 'react-native-gesture-handler';
 import { Container } from '../styles';
 import firestore from '@react-native-firebase/firestore';
 import axiosInstance from '../../../../utils/API';
+import { useSelector } from 'react-redux';
 
 
 const ChattingList = React.memo(()=> {
     const navigation = useNavigation();
-    const userId="1";
+    const userId = useSelector(state => state.userId);
     const [meeting, setMeeting] = useState();
     const [chatRooms, setChatRooms] = useState([]);
 
@@ -134,7 +135,7 @@ const ChattingList = React.memo(()=> {
             .collectionGroup('members')
             .where('userId', "==", userId.toString())
             .onSnapshot(querySnapShot => {                  
-                const meetingIds = [];
+                const meetingIds = [""];
                 querySnapShot.forEach((docs) => {
                     meetingIds.push(docs.ref.parent.parent._documentPath._parts[1]);
                 });
