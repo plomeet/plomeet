@@ -22,6 +22,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/userActions';
 
+import { createUser } from '../../../utils/firestore';
+
 const kakaoHelper = require('./KakaoHelper.js');
 
 
@@ -71,7 +73,9 @@ const NicknameRegister = () => {
       "Content-Type": "application/json",
     },).then((response) => {
       console.log(response);
-      NicknameUpdate()
+      NicknameUpdate();
+      const userIdRegister = response.data.userId.toString();
+      createUser({userId: userIdRegister, userNickName: value, userProfileImg: img});
       navigation.navigate('M');
     }).then((error) => {
       console.log(error);

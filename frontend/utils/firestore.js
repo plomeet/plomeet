@@ -36,14 +36,14 @@ export const updateUserLastReadChatTime = async ({meetingId, userId, lastChatId,
 }
 
 //신규 사용자 추가
-export const createUser = async ({userId, user}) => {
+export const createUser = async ({userId, userNickName, userProfileImg}) => {
     const usersRef = firestore().collection('users');
     const newUser = {
-        userId: userId,
-        userNickName: user.userNickName,
-        userProfileImg: user.userProfileImg,
+        userId,
+        userNickName,
+        userProfileImg,
     }
-    //await usersRef.doc(userId).set(newUser);
+    await usersRef.doc(userId).set(newUser);
 }
 
 //새로운 모임 생성 > 채팅방 생성
