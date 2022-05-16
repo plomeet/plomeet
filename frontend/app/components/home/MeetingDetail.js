@@ -9,7 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 
 
-const meetingDetail = ({route}) => {
+const MeetingDetail = ({route}) => {
   const isFocused = useIsFocused();
   
   const meetingId = route.params.meetingId;
@@ -125,7 +125,7 @@ const meetingDetail = ({route}) => {
           </View>
         </ScrollView>
 
-        <TouchableOpacity activeOpacity={0.8} style={styles.button} >
+        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => joinMeeting()}>
           <Text style={styles.buttonText}>모임 가입하기</Text>
         </TouchableOpacity>
       </View>
@@ -194,4 +194,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default meetingDetail;
+export default MeetingDetail;

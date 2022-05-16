@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 
-const openMeeting1 = () => {
+const OpenMeeting1 = () => {
   const navigation = useNavigation();
   const [titleValid, setTitleValid] = useState(false);
   const [meetingName, setMeetingName] = useState("");
@@ -124,4 +124,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default openMeeting1;
+export default OpenMeeting1;

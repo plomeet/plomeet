@@ -10,7 +10,7 @@ import axiosInstance from '../../../utils/API';
 import Config from 'react-native-config'
 import AWS from 'aws-sdk';
 
-const openMeeting5 = () => {
+const OpenMeeting5 = () => {
   const navigation = useNavigation();
   const [meetingImgUri, setMeetingImgUri] = useState("https://i.postimg.cc/QtNKqGGJ/default-Meeting-Img.png");
   const [meetingImgFileName, setMeetingImgFileName] = useState("");
@@ -246,4 +246,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default openMeeting5;
+export default OpenMeeting5;

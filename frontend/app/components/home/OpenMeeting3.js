@@ -6,7 +6,7 @@ import { StyleSheet, Modal, Text, View, TextInput, Button, KeyboardAvoidingView,
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const openMeeting3 = () => {
+const OpenMeeting3 = () => {
   const navigation = useNavigation();
   const [memberMax, setMemberMax] = useState(1);
   var [memberMaxValid, setMemberMaxValid] = useState(false);
@@ -263,4 +263,4 @@ const styles = StyleSheet.create({
   
 });
 
-export default openMeeting3;
+export default OpenMeeting3;
