@@ -13,7 +13,7 @@ const openMeeting1 = () => {
   const [contentValid, setContentValid] = useState(false);
   const [meetingDetail, setMeetingDetail] = useState(false);
   const [nextDisable, setNextDisable] = useState(true);
-  const [statusBarHeight, setStatusBarHeight] = useState(0);
+  const [statusBarHeight, setStatusBarHeight] = useState(-400);
 
 
   function goNext() {
