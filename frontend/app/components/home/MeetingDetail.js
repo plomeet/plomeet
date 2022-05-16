@@ -31,6 +31,7 @@ const MeetingDetail = ({route}) => {
   const [joinDisable, setJoinDisable] = useState(true); 
   const windowHeight = Dimensions.get('window').height;
   const toastRef = useRef(); // toast ref 생성
+  const [btnText, setBtnText] = useState("모임 가입하기");
 
   // let meetingDesc = route.params.meetingDesc;
   // let meetingImg = route.params.img;
@@ -66,6 +67,7 @@ const MeetingDetail = ({route}) => {
     else {
       console.log("포함!!!!!!!");
       setJoinDisable(true);
+      setBtnText("가입중인 모임");
     }
   }, [meetingId, myMeetingList]);
 
@@ -81,6 +83,7 @@ const MeetingDetail = ({route}) => {
           joinMeeting();
           setJoinDisable(true);
           showCopyToast();
+          setBtnText("가입중인 모임");
         }} 
       ], 
       { cancelable: true } 
@@ -104,6 +107,31 @@ const MeetingDetail = ({route}) => {
         .then(async (response) => {
           if (response.status === 200) {
             console.log(response); 
+          } else {
+            console.log(response);
+          }
+        })
+        .catch((response) => { console.log(response); });
+    } catch (err) { console.log(err); }
+
+    try {
+      await axiosInstance.put("/meetings/"+ meetingId, {
+        meetingImg: userId,
+        meetingDesc: meetingId,
+        meetingName: meetingName,
+        meetingPlace: meetingPlace,
+        meetingPlaceDetail: placeDetail,
+        lat: lat,
+        lng: lng,
+        memberMax: memberMax,
+        memberCnt: memberCnt+1,
+        meetingDate: meetingDate,
+        item: item,
+      })
+        .then(async (response) => {
+          if (response.status === 200) {
+            console.log(response); 
+            setMemberCnt(memberCnt+1);
           } else {
             console.log(response);
           }
@@ -141,6 +169,10 @@ const MeetingDetail = ({route}) => {
                     setPlaceDetail(response.data.placeDetail);
                     setLat(response.data.lat);
                     setLng(response.data.lng);
+                    if(response.data.memberMax == response.data.memberCnt){
+                      setJoinDisable(true);
+                      setBtnText("마감된 모임");
+                    }
                 } else {
                     console.log("[모임 정보 조회 실패] : "+meetingId);
                 }
@@ -201,7 +233,7 @@ const MeetingDetail = ({route}) => {
         />
 
         <TouchableOpacity activeOpacity={0.8} disabled={joinDisable} style={joinDisable? styles.disButton :styles.button} onPress={() => alertJoinMeeting()}>
-          <Text style={styles.buttonText}>모임 가입하기</Text>
+          <Text style={styles.buttonText}>{btnText}</Text>
         </TouchableOpacity>
       </View>
     );
