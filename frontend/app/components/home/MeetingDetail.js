@@ -8,6 +8,7 @@ import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "..
 import { ScrollView } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 import { useSelector } from 'react-redux';
+import { joinMember } from '../../../utils/firestore';
 
 const MeetingDetail = ({route}) => {
   const isFocused = useIsFocused();
@@ -78,6 +79,9 @@ const MeetingDetail = ({route}) => {
         .then(async (response) => {
           if (response.status === 200) {
             console.log(response); 
+            const meetingIdStr = meetingId.toString();
+            const userIdStr = userId.toString();
+            joinMember({meetingId: meetingIdStr, userId: userIdStr, lastChatTime: Date.now()})
           } else {
             console.log(response);
           }
