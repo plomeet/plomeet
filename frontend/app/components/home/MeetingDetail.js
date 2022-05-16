@@ -1,17 +1,18 @@
 import React, { Component, Node, useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
-import { StyleSheet, Text, View, TextInput, Button, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
+import { StyleSheet, Text, View, Alert, TextInput, Button, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
 import { ScrollView } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
+import { useSelector } from 'react-redux';
 
-
-const meetingDetail = ({route}) => {
+const MeetingDetail = ({route}) => {
   const isFocused = useIsFocused();
   
+  const userId = useSelector(state => state.userId)
   const meetingId = route.params.meetingId;
   const [meetingDesc, setMeetingDesc] = useState("");
   const [meetingImg, setMeetingImg] = useState("");
@@ -49,6 +50,41 @@ const meetingDetail = ({route}) => {
     var res = m+"월 "+d+"일("+day+") "+ str.substr(11, 5)
     return res
   }
+
+  // 모임 가입하기 버튼 누르면 뜨는 알럿창
+  function alertJoinMeeting() {
+    Alert.alert( 
+      "", 
+      "모임에 가입할까요?", 
+      [ 
+        { text: '아니오'}, 
+        { text: '네', onPress: () => { 
+          joinMeeting();
+        }} 
+      ], 
+      { cancelable: true } 
+    ); 
+
+  }
+
+  // 알럿창에서 네!를 누르면 가입ㄱㄱ
+  const joinMeeting = async () => {
+    try {
+      await axiosInstance.post("/meetings", {
+        userId: userId,
+        meetingId: meetingId,
+        isLeader: false,
+      })
+        .then(async (response) => {
+          if (response.status === 200) {
+            console.log(response); 
+          } else {
+            console.log(response);
+          }
+        })
+        .catch((response) => { console.log(response); });
+    } catch (err) { console.log(err); }
+  };
 
   //모임 정보 세팅
   useEffect(() => {
@@ -125,7 +161,7 @@ const meetingDetail = ({route}) => {
           </View>
         </ScrollView>
 
-        <TouchableOpacity activeOpacity={0.8} style={styles.button} >
+        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => alertJoinMeeting()}>
           <Text style={styles.buttonText}>모임 가입하기</Text>
         </TouchableOpacity>
       </View>
@@ -192,6 +228,12 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginBottom:50
   },
+  disButton: {
+    height: 55,
+    backgroundColor: "#aaaaaa",
+    justifyContent: "center",
+    alignItems: "center"
+  },
 });
 
-export default meetingDetail;
+export default MeetingDetail;

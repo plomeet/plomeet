@@ -8,7 +8,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 
 
-const openMeeting2 = () => {
+const OpenMeeting2 = () => {
   const navigation = useNavigation();
   const [address, setAdress] = useState(''); //상세주소 검색
   
@@ -302,4 +302,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default openMeeting2;
+export default OpenMeeting2;

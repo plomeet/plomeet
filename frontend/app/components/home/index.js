@@ -306,10 +306,6 @@ const Home = () => {
     index = {item.meetingId} />
   );
 
-  BackHandler.addEventListener('hardwareBackPress', () => {
-    return true;
-  });
-  
   return (
     <SafeAreaView style={styles.container}>
 
