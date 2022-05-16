@@ -1,6 +1,6 @@
-import React, { Component, Node, useEffect, useState } from 'react';
+import React, { Component, Node, useEffect, useState, useRef, useCallback } from 'react';
 import 'react-native-gesture-handler';
-import { StyleSheet, Text, View, Alert, TextInput, Button, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
+import { Dimensions , StyleSheet, Text, View, Alert, TextInput, Button, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
@@ -9,6 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
+import Toast from 'react-native-easy-toast';
 
 const MeetingDetail = ({route}) => {
   const isFocused = useIsFocused();
@@ -28,6 +29,8 @@ const MeetingDetail = ({route}) => {
   const [lng, setLng] = useState(0);
   var loc = {latitude: lat, longitude: lng};
   const [joinDisable, setJoinDisable] = useState(true); 
+  const windowHeight = Dimensions.get('window').height;
+  const toastRef = useRef(); // toast ref 생성
 
   // let meetingDesc = route.params.meetingDesc;
   // let meetingImg = route.params.img;
@@ -76,12 +79,19 @@ const MeetingDetail = ({route}) => {
         { text: '아니오'}, 
         { text: '네', onPress: () => { 
           joinMeeting();
+          setJoinDisable(true);
+          showCopyToast();
         }} 
       ], 
       { cancelable: true } 
     ); 
 
   }
+
+  //토스트
+  const showCopyToast = useCallback(() => {
+    toastRef.current.show('모임에 가입되었습니다.');
+  }, []);
 
   // 알럿창에서 네!를 누르면 가입ㄱㄱ
   const joinMeeting = async () => {
@@ -183,6 +193,12 @@ const MeetingDetail = ({route}) => {
 
           </View>
         </ScrollView>
+        <Toast ref={toastRef}
+             positionValue={windowHeight * 0.55}
+             fadeInDuration={200}
+             fadeOutDuration={1000}
+             style={{backgroundColor:"#1BE58D"}}
+        />
 
         <TouchableOpacity activeOpacity={0.8} disabled={joinDisable} style={joinDisable? styles.disButton :styles.button} onPress={() => alertJoinMeeting()}>
           <Text style={styles.buttonText}>모임 가입하기</Text>
