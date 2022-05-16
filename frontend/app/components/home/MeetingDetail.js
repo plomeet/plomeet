@@ -83,6 +83,7 @@ const MeetingDetail = ({route}) => {
           joinMeeting();
           setJoinDisable(true);
           showCopyToast();
+          setMemberCnt(memberCnt+1);
           setBtnText("가입중인 모임");
         }} 
       ], 
