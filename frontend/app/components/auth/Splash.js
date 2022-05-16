@@ -10,10 +10,11 @@ import AuthLogo from './authLogo';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 import * as KakaoLogins from '@react-native-seoul/kakao-login';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as actions from '../../actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 const AuthComponent = () => {
   const navigation = useNavigation();
@@ -44,7 +45,7 @@ const AuthComponent = () => {
                 dispatch(actions.setName(result.nickname))
                 dispatch(actions.setEmail(result.email))
               });
-              navigation.navigate('M');
+              navigation.replace('M');
             }
           })},2000);
         }else{
