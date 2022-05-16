@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -32,5 +33,10 @@ public class MyMeetingServiceImpl implements MyMeetingService{
         myMeeting.mapUser(userId);
         myMeeting.mapMeeting(meetingId);
         return myMeetingRepository.save(myMeeting).getMyMeetingId();
+    }
+
+    @Transactional
+    public List<MyMeeting> findMeetingListByUserId(Long userId) {
+        return myMeetingRepository.findAllByUserId(userId);
     }
 }
