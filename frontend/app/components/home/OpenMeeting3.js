@@ -1,8 +1,7 @@
 import React, { Component, Node, useState, useEffect } from 'react';
-import 'react-native-gesture-handler';
 import { Chip, ToggleButton } from 'react-native-paper';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
-import { StyleSheet, Modal, Text, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
+import { StyleSheet, Modal, Text, View, TextInput, Button, KeyboardAvoidingView, Keyboard, Platform, TouchableOpacity, TouchableWithoutFeedback  } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -64,6 +63,7 @@ const openMeeting3 = () => {
   }
 
     return (
+        <TouchableWithoutFeedback onPressOut={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <Text style={styles.title}>최대 인원</Text>
         <TextInput
@@ -117,21 +117,19 @@ const openMeeting3 = () => {
             onSelectedChange={date => setSelectedDate(date)}
             />
             {/* Modal 다이얼로그 숨기기 */} 
-            <TouchableOpacity activeOpacity={0.8} style={[styles.closeButton, {paddingHorizontal:30}]} onPress={() => setVisibleCalendar(false)}><Text style={styles.text}>선택</Text></TouchableOpacity>
-
-          
+            <TouchableOpacity activeOpacity={0.8} style={[styles.closeButton, {paddingHorizontal:30}]} onPress={() => setVisibleCalendar(false)}><Text style={styles.text}>선택</Text></TouchableOpacity>          
           </View> 
         </Modal>
-
+            
         <View  style={[styles.row, {marginLeft:30}, {marginBottom:10}, {marginTop:20}]}>
-          <Chip style={{marginRight:10}} onPress={()=> setVisibleCalendar(true)} icon="calendar" mode="outlined" selectedColor='#232732'> {selectedDate}</Chip>
+            <Chip style={{ marginRight: 10 }} onPress={() => setVisibleCalendar(true)} icon="calendar" mode="outlined" selectedColor='#232732'> {selectedDate}</Chip>
         </View>
 
         <Text style={[styles.title, {marginTop:40}]}>모임 시간</Text>
         <View  style={[styles.row, {marginLeft:30}, {marginBottom:10}, {marginTop:20}]}>
-          <Chip style={{marginRight:10}} onPress={()=> setVisibleTimer(true)} icon="clock" mode="outlined" selectedColor='#232732'> {selectedTime}</Chip>
+          <Chip style={[{marginRight:10}, {zIndex: 100}]} onPress={()=> setVisibleTimer(true)} icon="clock" mode="outlined" selectedColor='#232732'> {selectedTime}</Chip>
         </View>
-
+      
         <Modal animationType="slide" 
           transparent={false} 
           visible={visibleTimer}> 
@@ -174,12 +172,13 @@ const openMeeting3 = () => {
           <TouchableOpacity style={styles.chip}><Text style={{color:"#000"}}>운동화</Text></TouchableOpacity>
           <TouchableOpacity style={styles.chipOver}><Text style={{color:"#fff"}}>물</Text></TouchableOpacity>
           <TouchableOpacity style={styles.chip}><Text style={{color:"#000"}}>도시락</Text></TouchableOpacity>
-        </View>
+          </View>
         <View style={{flex:1}}/>
         <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => goNext()}>
           <Text style={styles.text}>다음</Text>
         </TouchableOpacity>
       </View>
+          </TouchableWithoutFeedback>
     );
 };
 

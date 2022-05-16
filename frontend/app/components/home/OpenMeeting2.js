@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, Component, Node } from 'react';
 import 'react-native-gesture-handler';
-import { StyleSheet, Text, View, TextInput, Button, Image, Alert, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
+import { StyleSheet, Text, View, TextInput, Button, Image, Alert, KeyboardAvoidingView,TouchableOpacity, Keyboard, Platform, ScrollView, TouchableWithoutFeedback } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
@@ -150,7 +150,8 @@ const openMeeting2 = () => {
   const temp_location = {latitude: 37.565051, longitude: 126.978567};
 
     return (
-      <View style={styles.container}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container} scrollEnabled={false}>
         <Text style={styles.title}>장소명(명칭)</Text>
         <TextInput
           // value={this.state.myTextInput}
@@ -168,8 +169,8 @@ const openMeeting2 = () => {
 
         <View style={styles.row}>
           <TextInput
-            style={styles.input}
-            placeholder="모임 장소의 상세 주소를 입력해주세요."
+            style={styles.input2}
+            placeholder="상세 주소를 입력해주세요."
             keyboardType='default'
             maxLength={500}
             multiline={true}
@@ -177,7 +178,7 @@ const openMeeting2 = () => {
             onChangeText={newAddress => setAdress(newAddress)}
             autoCapitalize='none'
           />
-          <TouchableOpacity activeOpacity={0.8} style={styles.searchButton} onPress={() => searchAddress(address)}>
+          <TouchableOpacity activeOpacity={0.8} style={styles.searchButton} onPress={() => searchAddress(address)} >
             <Text style={styles.text}>검색</Text>
           </TouchableOpacity>
         </View>
@@ -192,13 +193,12 @@ const openMeeting2 = () => {
               </NaverMapView>
         </View>
         <Text style={[{marginLeft:25}, {marginRight:30}, {marginTop:10}, {color:"#aaaaaa"}]}> - 지도를 클릭해 정확한 위치에 마커를 찍어주세요!</Text>
-        
-
         <View style={{flex:1}}/>
         <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => goNext()}>
           <Text style={styles.text}>다음</Text>
         </TouchableOpacity>
       </View>
+        </TouchableWithoutFeedback>
     );
 };
 
@@ -239,7 +239,13 @@ const styles = StyleSheet.create({
   input: {
     marginHorizontal: 30,
     fontSize: 15,
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+  },
+  input2: {
+    marginHorizontal: 30,
+    fontSize: 15,
+    borderBottomWidth: 1,
+    flex: 3
   },
   title: {
     marginTop: 30,
