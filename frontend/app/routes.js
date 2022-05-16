@@ -1,6 +1,6 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -15,6 +15,12 @@ import RecordContainer from './container/LogContainer';
 import Plogging from './container/PloggingContainer';
 import Chat from './components/chat/index';
 import MyPage from './components/my/index';
+import OpenMeeting from './components/home/OpenMeeting1';
+import OpenMeeting2 from './components/home/OpenMeeting2';
+import OpenMeeting3 from './components/home/OpenMeeting3';
+import OpenMeeting4 from './components/home/OpenMeeting4';
+import OpenMeeting5 from './components/home/OpenMeeting5';
+import MeetingDetail from './components/home/MeetingDetail';
 import CameraPage from './components/plogging/button/CameraPage';
 import LogDetail from './components/record/plogDetail/index';
 
@@ -101,7 +107,6 @@ export const RootNavigator = () => {
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
             <Stack.Screen name="InChatRoom" component={InsideRoom} />
             <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '' }} />
-            <Stack.Screen name="BadgeList" component={BadgeList} options={{ title: '배지' }}/>
         </Stack.Navigator>
     )
 }
