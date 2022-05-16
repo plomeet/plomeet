@@ -108,6 +108,7 @@ const MeetingDetail = ({route}) => {
         .then(async (response) => {
           if (response.status === 200) {
             console.log(response); 
+            updateMeeting();
           } else {
             console.log(response);
           }
@@ -115,10 +116,13 @@ const MeetingDetail = ({route}) => {
         .catch((response) => { console.log(response); });
     } catch (err) { console.log(err); }
 
+  };
+
+  const updateMeeting = async () => {
     try {
       await axiosInstance.put("/meetings/"+ meetingId, {
-        meetingImg: userId,
-        meetingDesc: meetingId,
+        meetingImg: meetingImg,
+        meetingDesc: meetingDesc,
         meetingName: meetingName,
         meetingPlace: meetingPlace,
         meetingPlaceDetail: placeDetail,
@@ -127,7 +131,7 @@ const MeetingDetail = ({route}) => {
         memberMax: memberMax,
         memberCnt: memberCnt+1,
         meetingDate: meetingDate,
-        item: item,
+        item: "쓰레기봉투&집게",
       })
         .then(async (response) => {
           if (response.status === 200) {
@@ -167,7 +171,7 @@ const MeetingDetail = ({route}) => {
                     setMemberMax(response.data.memberMax);
                     setMemberCnt(response.data.memberCnt);
                     setMeetingDate(response.data.meetingDate);
-                    setPlaceDetail(response.data.placeDetail);
+                    setPlaceDetail(response.data.meetingPlaceDetail);
                     setLat(response.data.lat);
                     setLng(response.data.lng);
                     if(response.data.memberMax == response.data.memberCnt){
