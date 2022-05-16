@@ -20,6 +20,7 @@ const OpenMeeting5 = () => {
   const [memberMax, setMemberMax] = useState(1);
   // const [memberCnt, setMemberCnt] = useState(1);
   const [meetingDate, setMeetingDate] = useState("");
+  const [meetingPlaceDetail, setMeetingPlaceDetail] = useState("");
   const [latitude, setLatitude] = useState(37.564362);
   const [longitude, setLongitude] = useState(126.977011);
   var loc = {latitude: latitude, longitude: longitude};
@@ -63,7 +64,7 @@ const OpenMeeting5 = () => {
         meetingName: meetingName,
         meetingDesc: detail,
         meetingPlace: meetingPlace,
-        meetingPlaceDetail: "주소", //필요하면 수정
+        meetingPlaceDetail: meetingPlaceDetail,
         lat: latitude,
         lng: longitude,
         memberMax: memberMax,
@@ -114,6 +115,10 @@ const OpenMeeting5 = () => {
     AsyncStorage.getItem('meetingDate', (err, result) => {
       console.log(result);
       setMeetingDate(result);
+    })
+    AsyncStorage.getItem('address', (err, result) => {
+      console.log(result);
+      setMeetingPlaceDetail(result);
     })
     AsyncStorage.getItem('meetingImgFileName', (err, result) => {
       console.log("meetingImgFileName : " +result);
