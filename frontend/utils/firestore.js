@@ -30,8 +30,8 @@ export const updateUserLastReadChatTime = async ({meetingId, userId, lastChatId,
         .collection('meetings').doc(meetingId)
         .collection('members').doc(userId);
     await memberDocRef.update({
-        lastChatId: lastChatId,
-        lastChatTime: lastChatTime,
+        lastReadChatId: lastChatId,
+        lastReadChatTime: lastChatTime,
     });
 }
 

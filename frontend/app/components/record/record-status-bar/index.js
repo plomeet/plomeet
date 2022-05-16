@@ -8,26 +8,26 @@ import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Config from 'react-native-config'
 
-const RecordStatusBar = () => {
+const RecordStatusBar = ({ td, tt, tc }) => {
     const layout = useWindowDimensions();
 
     return (
         <View style={styles.container}>
-            <View style={styles.containerTitle}>
+            {/* <View style={styles.containerTitle}>
                 <Text style={styles.titleText}>지금까지 누구누구님은</Text>
-            </View>
+            </View> */}
             <RecordStatusBarBlock width={layout.width}>
                 <View style={styles.statusView}>
                     <MapSvg width={27} height={27} fill={"#FFF"} />
-                    <Text style={styles.statusText}>총 km</Text>
+                    <Text style={styles.statusText}>{td}km</Text>
                 </View>
                 <View style={styles.statusView}>
                     <TimeSvg width={27} height={27} fill={"#FFF"} />
-                    <Text style={styles.statusText}>총 시간</Text>
+                    <Text style={styles.statusText}>{tt}</Text>
                 </View>
                 <View style={styles.statusView}>
                     <Icon name="run" size={27} color="#292D32" />
-                    <Text style={styles.statusText}>총 횟수</Text>
+                    <Text style={styles.statusText}>{tc}회</Text>
                 </View>
 
             </RecordStatusBarBlock>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     },
     statusText: {
         marginLeft: 11,
-        fontSize: 17,
+        fontSize: 14,
     },
     containerTitle: {
         display: "flex",
@@ -65,8 +65,8 @@ const styles = StyleSheet.create({
     },
     container: {
         flexDirection: "column",
-        flex: 1.2,
-        backgroundColor: "#DDDDDD",
+        flex: 0.2,
+        backgroundColor: "#FFFFFF",
     },
 })
 
@@ -76,5 +76,5 @@ const RecordStatusBarBlock = styled.View`
       flex: 1;
       width: ${props => props.width}px;
       background-color: #ffffff;
-      padding: 0px 10px 5px 10px;
+      padding: 5px 10px 5px 10px;
     `

@@ -7,6 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MyMeetingRepository extends JpaRepository<MyMeeting, Long> {
-    public List<MyMeeting> findAllByUserId(User user);
-
 }

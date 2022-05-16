@@ -9,10 +9,10 @@ import firestore from '@react-native-firebase/firestore';
 import { saveChatting, updateUserLastReadChatTime } from '../../../../utils/firestore';
 
 
-const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
+const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} }) => {
     const title = meeting.meetingName;
     const [user, setUser] = useState();
-    //const [members, setMembers] = useState();
+    const members = {};
     const [messages, setMessages] = useState([]);
 
     
@@ -61,11 +61,9 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
         const promises = queryArray.map(async message => {
             const messageData = message.data();
             var userInfo = {};
-            //if(messageData.userId == userNum) userInfo = {"_id": userNum};
-            //else userInfo = await getUserInfo(messageData.userId);
-            userInfo = await getUserInfo(messageData.userId);
-            //var userInfo = members[messageData.userId];
-            //if(userInfo == undefined) userInfo = await getUserInfo(messageData.userId);
+            if(members[userId] == undefined) members[userId] = await getUserInfo(messageData.userId);
+            userInfo = members[userId];
+            //userInfo = await getUserInfo(messageData.userId);
             const messageInfo = {
                 _id: messageData._id,
                 text: messageData.text,
@@ -79,11 +77,11 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
         setMessages(list);
     };
 
-    const getUserInfo = async (userId) => {
+    const getUserInfo = async (messageUserId) => {
         const userInfo = {};
         await firestore().collection('users')
-            .doc(userId).get().then((doc)=>{
-                userInfo._id = userId;
+            .doc(messageUserId).get().then((doc)=>{
+                userInfo._id = messageUserId;
                 userInfo.name = doc.data().userNickName;
                 userInfo.avatar = doc.data().userProfileImg;
             });
@@ -104,7 +102,7 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
     useEffect(() => {
         const subscriberUser = firestore()
             .collection('users')
-            .doc(userNum)
+            .doc(userId)
             .onSnapshot(querySnapShot => {
                 const userData = querySnapShot.data();
                 const userInfo = {
@@ -115,7 +113,7 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
                 setUser(userInfo);
             });
         
-        console.log("meetingId::"+ meeting.meetingId);
+        //console.log("meetingId::"+ meeting.meetingId);
         const subscriberChatting = firestore()
             .collection('meetings')
             .doc(meeting.meetingId)
@@ -157,7 +155,7 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
         if(messages.length != 0){
             const updateUserLastReadChatTimeData = {
                 meetingId: meeting.meetingId,
-                userId: userNum,
+                userId,
                 lastChatId: messages[0]._id,
                 lastChatTime: messages[0].createdAt,
             };
@@ -195,6 +193,6 @@ const InsideRoom = ({ navigation, route: {params: {meeting, userNum}} }) => {
             />
         </Container>
     );
-}
+});
 
 export default InsideRoom;

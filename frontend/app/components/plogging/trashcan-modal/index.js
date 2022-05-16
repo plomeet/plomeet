@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'react-native-gesture-handler';
-import { TouchableOpacity, StyleSheet, Text, View, Modal, Pressable, } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, View, Modal, Pressable} from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
@@ -14,7 +14,6 @@ const TrashcanInfo = ({ showInfoDetail, setShowInfoDetail, setShowThisNum, trash
                 transparent={true}
                 visible={showInfoDetail}
             >
-                <TouchableOpacity style={styles.topView} onPress={() => { setShowInfoDetail(false); setShowThisNum(-1); }} />
                 <View style={styles.leftView}>
                     <View style={styles.modalView}>
                         <View style={styles.img}>
@@ -28,6 +27,7 @@ const TrashcanInfo = ({ showInfoDetail, setShowInfoDetail, setShowThisNum, trash
                         </View>
                     </View>
                 </View>
+                <TouchableOpacity style={styles.topView} onPress={() => { setShowInfoDetail(false); setShowThisNum(-1); }} />
             </Modal>
         </View>
     );

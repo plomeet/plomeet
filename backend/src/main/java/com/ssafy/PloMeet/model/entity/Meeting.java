@@ -20,7 +20,7 @@ public class Meeting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long meetingId;
 
-    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'https://i.postimg.cc/QtNKqGGJ/default-Meeting-Img.png'")
+    @Column(columnDefinition = "VARCHAR(500) DEFAULT 'https://i.postimg.cc/QtNKqGGJ/default-Meeting-Img.png'")
     private String meetingImg;
 
     @Column(nullable = false, length = 25)
