@@ -31,7 +31,8 @@ const NicknameRegister = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const nickname = useSelector(state => state.nickname)
-  const id = useSelector(state => state.id)
+  const userId = useSelector(state => state.userId)
+  const kakaoId = useSelector(state => state.kakaoId)
   const name = useSelector(state => state.name)
   const img = useSelector(state => state.img)
   const email = useSelector(state => state.email)
@@ -41,14 +42,14 @@ const NicknameRegister = () => {
   // console.log(value);
   const NicknameUpdate = () => {
     dispatch(actions.setNickname(value));
-    console.log(nickname);
+    console.log("hey",nickname);
   }
   
   
   // kakaoHelper.getProfile();
   useEffect(() => { 
     KakaoLogins.getProfile().then(result => {
-      dispatch(actions.setId(result.id))
+      dispatch(actions.setkakaoId(result.id))
       dispatch(actions.setImg(result.profileImageUrl))
       dispatch(actions.setName(result.nickname))
       dispatch(actions.setEmail(result.email))
@@ -61,7 +62,7 @@ const NicknameRegister = () => {
   // setTimeout(() => {},100);
   const Register = () => {
     axios.post('http://k6a205.p.ssafy.io:8000/user', {
-      kakaoUserId: id,
+      kakaoUserId: kakaoId,
       userNickName: value, // 입력받은값으로 변경
       userProfileImg: img,
       userName: name,

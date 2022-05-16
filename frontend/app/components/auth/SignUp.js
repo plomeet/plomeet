@@ -26,7 +26,8 @@ const SignUp = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const nickname = useSelector(state => state.nickname)
-  const id = useSelector(state => state.id)
+  const userId = useSelector(state => state.userId)
+  const kakaoId = useSelector(state => state.kakaoId)
   const name = useSelector(state => state.name)
   const img = useSelector(state => state.img)
   const email = useSelector(state => state.email)
@@ -49,6 +50,7 @@ const SignUp = () => {
               .then((response) => {
                 console.log(response.status);
                 dispatch(actions.setNickname(response.data.userNickName));
+                dispatch(actions.setUserId(response.data.userId));
                 if(response.status == 200){ //홈으로, Redux 저장
                   dispatch(actions.setId(result.id))
                   dispatch(actions.setImg(result.profileImageUrl))

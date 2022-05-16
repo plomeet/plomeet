@@ -19,7 +19,8 @@ const AuthComponent = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const nickname = useSelector(state => state.nickname)
-  const id = useSelector(state => state.id)
+  const userId = useSelector(state => state.userId)
+  const kakaoId = useSelector(state => state.kakaoId)
   const name = useSelector(state => state.name)
   const img = useSelector(state => state.img)
   const email = useSelector(state => state.email)
@@ -31,22 +32,23 @@ const AuthComponent = () => {
           });
           setTimeout(() => {axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
           .then((response) => {
-            console.log(response.data.userNickName);
+            // console.log(response.data.userId);
             dispatch(actions.setNickname(response.data.userNickName));
+            dispatch(actions.setUserId(response.data.userId));
             if(response.status == 200){
               //store 저장
               KakaoLogins.getProfile().then(result => {
-                dispatch(actions.setId(result.id))
+                // console.log(result)
+                dispatch(actions.setkakaoId(result.id))
                 dispatch(actions.setImg(result.profileImageUrl))
                 dispatch(actions.setName(result.nickname))
                 dispatch(actions.setEmail(result.email))
               });
               navigation.navigate('M');
-            }else{
-              navigation.navigate('SignUp');
             }
           })},2000);
         }else{
+          console.log('조기')
           setTimeout(() => {navigation.navigate('SignUp');},1000);
         }
       });

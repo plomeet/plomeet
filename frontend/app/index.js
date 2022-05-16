@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-      id: state.id,
+      userId: state.userId,
+      kakaoId: state.kakaoId,
       nickname: state.nickname,
       img: state.img,
       name: state.name,
@@ -37,7 +38,8 @@ const mapStateToProps = state => {
   
   const mapDispatchToProps = dispatch => {
     return {
-      setId: id => dispatch(actions.setId(id)),
+      setUserId: userId => dispatch(actions.setUserId(userId)),
+      setkakaoId: kakaoId => dispatch(actions.setkakaoId(kakaoId)),
       setNickname: nickname => dispatch(actions.setNickname(nickname)),
       setImg: img => dispatch(actions.setImg(img)),
       setName: name => dispatch(actions.setName(name)),

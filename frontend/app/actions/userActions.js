@@ -1,6 +1,11 @@
-export const setId = (id) => ({
-    type: "SET_ID",
-    payload: id,
+export const setUserId = (userId) => ({
+    type: "SET_USERID",
+    payload: userId,
+});
+
+export const setkakaoId = (kakaoId) => ({
+    type: "SET_KAKAOID",
+    payload: kakaoId,
 });
 
 export const setNickname = (nickname) => ({

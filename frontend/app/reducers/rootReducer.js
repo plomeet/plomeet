@@ -10,7 +10,8 @@ const initialState = {
     ploggingPath: [],
     savedLogs: [],
     listMonth: "",
-    id: "",
+    userId: "",
+    kakaoId: "",
     nickname: "",
     img: "",
     name: "",
@@ -43,8 +44,10 @@ const rootReducer = (state = initialState, action) => {
             return { ...state, savedLogs: action.payload }
         case "SET_LISTMONTH":
             return { ...state, listMonth: action.payload }
-        case "SET_ID":
-            return { ...state, id: action.payload }
+        case "SET_USERID":
+            return { ...state, userId: action.payload }
+        case "SET_KAKAOID":
+            return { ...state, kakaoId: action.payload }
         case "SET_NICKNAME":
             return { ...state, nickname: action.payload }
         case "SET_IMG":
