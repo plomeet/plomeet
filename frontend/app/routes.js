@@ -24,6 +24,7 @@ import MeetingDetail from './components/home/MeetingDetail';
 import CameraPage from './components/plogging/button/CameraPage';
 import LogDetail from './components/record/plogDetail/index';
 import Preference from './components/my/preference/index'
+import PolicyDoc from './components/my/preference/policyDoc/index'
 
 //Chatting
 import InsideRoom from './components/chat/room/inside_room';
@@ -116,6 +117,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '' }} />
             <Stack.Screen name="BadgeList" component={BadgeList} options={{ title: '배지' }} />
             <Stack.Screen name="Preference" component={Preference} options={{ title: '환경설정' }} />
+            <Stack.Screen name="PolicyDoc" component={PolicyDoc} options={{ title: '' }} />
         </Stack.Navigator>
     )
 }
