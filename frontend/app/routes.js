@@ -1,6 +1,6 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -87,34 +87,34 @@ const AppTabComponent = () => {
 export const RootNavigator = () => {
     return (
         <Stack.Navigator>
-          <Stack.Screen
-        name="Splash"
-        component={Splash}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
+            <Stack.Screen
+                name="Splash"
+                component={Splash}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
                 name="SignUp"
                 component={SignUp}
                 options={{ headerShown: false, gestureEnabled: false }}
-      />
-      <Stack.Screen
-        name="NicknameRegister"
-        component={NicknameRegister}
-        options={{headerShown: false, gestureEnabled: false}}
-      />
+            />
+            <Stack.Screen
+                name="NicknameRegister"
+                component={NicknameRegister}
+                options={{ headerShown: false, gestureEnabled: false }}
+            />
             <Stack.Screen name="M" component={AppTabComponent} options={{ title: ' ', headerShown: false }} />
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: false, gestureEnabled: false }} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
             <Stack.Screen name="InChatRoom" component={InsideRoom} />
-            <Stack.Screen name="OpenMeeting" component={OpenMeeting} options={{title: '플로깅 모임 생성(1/5)'}} />
-            <Stack.Screen name="OpenMeeting2" component={OpenMeeting2} options={{animationEnabled: false, title: '플로깅 모임 생성(2/5)'}} />
-            <Stack.Screen name="OpenMeeting3" component={OpenMeeting3} options={{animationEnabled: false, title: '플로깅 모임 생성(3/5)'}} />
-            <Stack.Screen name="OpenMeeting4" component={OpenMeeting4} options={{animationEnabled: false, title: '플로깅 모임 생성(4/5)'}} />
-            <Stack.Screen name="OpenMeeting5" component={OpenMeeting5} options={{animationEnabled: false, title: '플로깅 모임 생성(5/5)'}} />
-            <Stack.Screen name="MeetingDetail" component={MeetingDetail} options={{animationEnabled: false, title: '모임 상세정보'}} />
-            <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '', headerShown: false, gestureEnabled: false }} />
+            <Stack.Screen name="OpenMeeting" component={OpenMeeting} options={{ title: '플로깅 모임 생성(1/5)' }} />
+            <Stack.Screen name="OpenMeeting2" component={OpenMeeting2} options={{ animationEnabled: false, title: '플로깅 모임 생성(2/5)' }} />
+            <Stack.Screen name="OpenMeeting3" component={OpenMeeting3} options={{ animationEnabled: false, title: '플로깅 모임 생성(3/5)' }} />
+            <Stack.Screen name="OpenMeeting4" component={OpenMeeting4} options={{ animationEnabled: false, title: '플로깅 모임 생성(4/5)' }} />
+            <Stack.Screen name="OpenMeeting5" component={OpenMeeting5} options={{ animationEnabled: false, title: '플로깅 모임 생성(5/5)' }} />
+            <Stack.Screen name="MeetingDetail" component={MeetingDetail} options={{ animationEnabled: false, title: '모임 상세정보' }} />
+            <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '' }} />
             <Stack.Screen name="BadgeList" component={BadgeList} options={{ title: '배지' }} />
-        </Stack.Navigator> 
+        </Stack.Navigator>
     )
 }
 

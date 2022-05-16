@@ -34,7 +34,7 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, isPlogging, setTimeSum, timeSumStri
   const ploggingPath = useSelector(state => state.ploggingPath);
   const startTime = useSelector(state => state.startTime);
   const images = useSelector(state => state.images);
-  const userId = 1; //나중에 리덕스 스토어에서 가져오기
+  const userId = useSelector(state => state.userId);
   const distSum = useSelector(state => state.distSum)
   const dispatch = useDispatch();
 
@@ -105,7 +105,7 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, isPlogging, setTimeSum, timeSumStri
       const saveLog = async () => {
         try {
           await axiosInstance.post("/ploggings", {
-            userId: 1, // 차후 유저 정보로 수정
+            userId: userId,
             plogDist: distSum,
             plogTime: timeSumString,
             plogWeather: weather,

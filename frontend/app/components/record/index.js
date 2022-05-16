@@ -15,7 +15,7 @@ const Record = ({ saveLogs, setListMonth }) => {
     const [plogLists, setPlogLists] = useState([]);
     const savedLogs = useSelector(state => state.savedLogs);
     const listMonth = useSelector(state => state.listMonth);
-    const userId = 1; //나중에 리덕스 스토어에서 가져오기
+    const userId = useSelector(state => state.userId);
     const [td, setTd] = useState(0.0);
     const [tt, setTt] = useState("0 : 00");
     const [tc, setTc] = useState(0);
@@ -69,7 +69,7 @@ const Record = ({ saveLogs, setListMonth }) => {
                     }
                 });
         }
-    }, [listMonth]);
+    }, [listMonth, savedLogs]);
 
     useEffect(() => {
         if (savedLogs[0] !== undefined) {
