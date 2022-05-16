@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Align } from '../plogging/map';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
+import AsyncStorage from '@react-native-community/async-storage';
 
 LogBox.ignoreAllLogs();
 
@@ -252,7 +253,6 @@ const Home = () => {
 
   //모임 정보 세팅
   useEffect(() => {
-
     getAllMeeting();
   }, [isFocused]);
 
@@ -292,7 +292,6 @@ const Home = () => {
                   setMyMeetingListInfo(test);
                   setMyMeetingList(testId);
                   console.log("[내가 참여한 모임 정보 조회 성공]");
-
                 } else {
                   console.log("[내가 참여한 모임 정보 조회 실패]");
               }
@@ -305,7 +304,7 @@ const Home = () => {
   const Item = ({ meetingId, meetingDesc, img, title, place, numMember, maxMember, date, index, lat, lng, placeDetail}) => (
     <TouchableOpacity
     activeOpacity={0.7}
-    onPress={() => navigation.navigate('MeetingDetail', {meetingId:meetingId})}
+    onPress={() => navigation.navigate('MeetingDetail', {meetingId:meetingId, myMeetingList:myMeetingList})}
     // style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles.card, styles.elevation]}>
     style={[styles.card, styles.elevation]}>
       <Image source={{uri: img}} style={styles.img} />

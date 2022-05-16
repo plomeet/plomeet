@@ -8,12 +8,14 @@ import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "..
 import { ScrollView } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 import { useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const MeetingDetail = ({route}) => {
   const isFocused = useIsFocused();
   
   const userId = useSelector(state => state.userId)
   const meetingId = route.params.meetingId;
+  const myMeetingList = route.params.myMeetingList;
   const [meetingDesc, setMeetingDesc] = useState("");
   const [meetingImg, setMeetingImg] = useState("");
   const [meetingName, setMeetingName] = useState("");
@@ -25,6 +27,7 @@ const MeetingDetail = ({route}) => {
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
   var loc = {latitude: lat, longitude: lng};
+  const [joinDisable, setJoinDisable] = useState(true); 
 
   // let meetingDesc = route.params.meetingDesc;
   // let meetingImg = route.params.img;
@@ -50,6 +53,19 @@ const MeetingDetail = ({route}) => {
     var res = m+"월 "+d+"일("+day+") "+ str.substr(11, 5)
     return res
   }
+
+  useEffect(() => {
+    console.log("[내가 참여한 모임인지 아닌지 여부 확인]");
+    if(myMeetingList.indexOf(meetingId) < 0){
+      console.log("불포함!!!!!!");
+      setJoinDisable(false);
+    }
+    else {
+      console.log("포함!!!!!!!");
+      setJoinDisable(true);
+    }
+  }, [meetingId, myMeetingList]);
+
 
   // 모임 가입하기 버튼 누르면 뜨는 알럿창
   function alertJoinMeeting() {
@@ -90,6 +106,13 @@ const MeetingDetail = ({route}) => {
   useEffect(() => {
     getMeetingById(meetingId);
   }, [isFocused]);
+
+  //내가 참여한 모임인지 아닌지
+  useEffect(() => {
+    AsyncStorage.getItem('myMeeting', (err, result) => {
+      console.log(JSON.parse(result));
+    })
+  }, [])
 
   async function getMeetingById(meetingId) {
     try {
@@ -161,7 +184,7 @@ const MeetingDetail = ({route}) => {
           </View>
         </ScrollView>
 
-        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => alertJoinMeeting()}>
+        <TouchableOpacity activeOpacity={0.8} disabled={joinDisable} style={joinDisable? styles.disButton :styles.button} onPress={() => alertJoinMeeting()}>
           <Text style={styles.buttonText}>모임 가입하기</Text>
         </TouchableOpacity>
       </View>
@@ -229,6 +252,10 @@ const styles = StyleSheet.create({
     marginBottom:50
   },
   disButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    width: "100%",
     height: 55,
     backgroundColor: "#aaaaaa",
     justifyContent: "center",
