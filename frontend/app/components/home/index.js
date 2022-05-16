@@ -1,6 +1,8 @@
 import React, { Component, Node, Button, useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import { Chip } from 'react-native-paper';
+import { NavigationContainer } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
 import { LogBox , SafeAreaView, Modal, StyleSheet, Text, View, FlatList, Image, StatusBar, TouchableOpacity } from "react-native";
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -10,11 +12,7 @@ import { Align } from '../plogging/map';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 
-
 LogBox.ignoreAllLogs();
-import { StyleSheet, Text, View } from "react-native";
-import { NavigationContainer } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
 
 const styles = StyleSheet.create({
   container: {

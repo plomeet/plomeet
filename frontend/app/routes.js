@@ -109,7 +109,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="OpenMeeting5" component={OpenMeeting5} options={{animationEnabled: false, title: '플로깅 모임 생성(5/5)'}} />
             <Stack.Screen name="MeetingDetail" component={MeetingDetail} options={{animationEnabled: false, title: '모임 상세정보'}} />
             <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '', headerShown: false, gestureEnabled: false }} />
-        </Stack.Navigator>
+        </Stack.Navigator> 
     )
 }
 
