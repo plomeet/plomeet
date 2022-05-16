@@ -12,6 +12,9 @@ import axiosInstance from '../../../utils/API';
 
 
 LogBox.ignoreAllLogs();
+import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const styles = StyleSheet.create({
   container: {
