@@ -6,7 +6,6 @@ import RecordStatusBar from './record-status-bar/index'
 import LogCalendar from './calendar/index'
 import PloggingList from './ploggingList/index'
 import axiosInstance from "../../../utils/API";
-//import axiosInstance from "../../../utils/ApiLocal";
 import { useSelector } from "react-redux"
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Spinner from 'react-native-spinkit'
@@ -24,6 +23,7 @@ const Record = ({ saveLogs, setListMonth }) => {
     const isFocused = useIsFocused();
     const scrollViewRef = useRef();
     const [showSpinner, setShowSpinner] = useState(true);
+    const firstPlogging = useSelector(state => state.firstPlogging);
 
     useEffect(() => {
         if (isFocused) {
@@ -44,7 +44,12 @@ const Record = ({ saveLogs, setListMonth }) => {
                         .catch((response) => { console.log(response); });
                 } catch (err) { console.log(err); }
             };
+
+            const checkFirstLog = () => { 
+                if (firstPlogging) alert("첫 플로깅 뱃지 획득 성공!");
+            }
             getSavedLogs();
+            checkFirstLog();
         }
 
     }, [isFocused]);
