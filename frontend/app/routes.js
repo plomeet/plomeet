@@ -40,8 +40,9 @@ const AppTabComponent = () => {
 
     return (
         <MainScreenTab.Navigator
-
+        
             screenOptions={({ route }) => ({
+                tabBarStyle: { height: 55, paddingBottom: 5 },
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
 
@@ -56,7 +57,7 @@ const AppTabComponent = () => {
                     }
                     if (route.name === '플로깅') return (
                         <TouchableOpacity
-                            hitSlop={{ top: 0, bottom: 20, left: 10, right: 10 }}
+                            hitSlop={{ top: 5.5, bottom: 20, left: 10, right: 10 }}
                             onPress={() => navigation.navigate('ploggingActivity', { msg: "plogging start" })}>
                             <View style={style.backGround}>
                                 <Image
@@ -121,7 +122,7 @@ export const RootNavigator = () => {
 const style = StyleSheet.create({
     backGround: {
         width: "100%",
-        height: 35,
+        height: 32,
         //borderRadius: 25,
         paddingLeft: 20,
         paddingRight: 20,

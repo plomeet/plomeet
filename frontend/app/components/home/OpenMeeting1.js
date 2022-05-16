@@ -1,9 +1,10 @@
-import React, { Component, Node, useState} from 'react';
+import React, { Component, Node, useEffect, useState} from 'react';
 import 'react-native-gesture-handler';
-import { StyleSheet, Text, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity, NativeModules } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 
+const { StatusBarManager } = NativeModules
 
 const openMeeting1 = () => {
   const navigation = useNavigation();
@@ -12,6 +13,8 @@ const openMeeting1 = () => {
   const [contentValid, setContentValid] = useState(false);
   const [meetingDetail, setMeetingDetail] = useState(false);
   const [nextDisable, setNextDisable] = useState(true);
+  const [statusBarHeight, setStatusBarHeight] = useState(-400);
+
 
   function goNext() {
     AsyncStorage.setItem('meetingName', meetingName, () => {
@@ -44,8 +47,15 @@ const openMeeting1 = () => {
     }
   };
 
+  
+  useEffect(() => {
+    Platform.OS == 'ios' ? StatusBarManager.getHeight((statusBarFrameData) => {
+      setStatusBarHeight(statusBarFrameData.height)
+    }) : null;
+  }, []);
+
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior={"padding"} keyboardVerticalOffset={statusBarHeight+44}>
         <Text style={styles.title}>모임 제목</Text>
         <TextInput
           // value={this.state.myTextInput}
@@ -72,7 +82,7 @@ const openMeeting1 = () => {
         <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => goNext()}>
           <Text style={styles.text}>다음</Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     );
 };
 
