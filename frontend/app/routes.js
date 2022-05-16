@@ -23,6 +23,7 @@ import OpenMeeting5 from './components/home/OpenMeeting5';
 import MeetingDetail from './components/home/MeetingDetail';
 import CameraPage from './components/plogging/button/CameraPage';
 import LogDetail from './components/record/plogDetail/index';
+import Preference from './components/my/preference/index'
 
 //Chatting
 import InsideRoom from './components/chat/room/inside_room';
@@ -79,7 +80,7 @@ const AppTabComponent = () => {
             <MainScreenTab.Screen name="기록" component={RecordContainer} />
             <MainScreenTab.Screen name="플로깅" component={Plogging} />
             <MainScreenTab.Screen name="채팅 목록" component={Chat} />
-            <MainScreenTab.Screen name="MY" component={MyPage} />
+            <MainScreenTab.Screen name="MY" component={MyPage} options={{ title: 'MY', headerShown: false }} />
         </MainScreenTab.Navigator>
     )
 }
@@ -114,6 +115,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="MeetingDetail" component={MeetingDetail} options={{ animationEnabled: false, title: '모임 상세정보' }} />
             <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '' }} />
             <Stack.Screen name="BadgeList" component={BadgeList} options={{ title: '배지' }} />
+            <Stack.Screen name="Preference" component={Preference} options={{ title: '환경설정' }} />
         </Stack.Navigator>
     )
 }
