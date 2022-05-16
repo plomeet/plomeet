@@ -12,8 +12,6 @@ import { useDispatch } from 'react-redux';
 import DeletePloggingBtn from '../icons/deletePlogging.svg'
 import { setTimeSum, setDistSum, resetPloggingPath } from '../../../actions/action';
 
-
-
 const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage, setStart, setIsSave }) => {
     const navigation = useNavigation();
     const devices = useCameraDevices();

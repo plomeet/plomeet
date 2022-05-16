@@ -44,9 +44,9 @@ const AuthComponent = () => {
                 dispatch(actions.setName(result.nickname))
                 dispatch(actions.setEmail(result.email))
               });
-              navigation.navigate('M');
             }
           })},2000);
+          navigation.replace('M');
         }else{
           console.log('조기')
           setTimeout(() => {navigation.navigate('SignUp');},1000);
