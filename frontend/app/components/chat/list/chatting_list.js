@@ -35,15 +35,16 @@ const ChattingList = React.memo(()=> {
             const meetingDocRef = firestore()
                             .collection('meetings').doc(meetingId);
             const lastReadChat=  await getLastReadChat(meetingDocRef);
-            console.log(lastReadChat);
-
+            
+            /*
             var chat;
             if(lastReadChat.id == 0){
                 chat = await getLastChatInfoAll(meetingDocRef);
             }else{
                 chat = await getLastChatInfo(meetingDocRef, lastReadChat.time);
             }
-
+            */
+            const chat = await getLastChatInfo(meetingDocRef, lastReadChat.time);
             const meetingInfo = await getMeetingInfo(meetingId);
 
             const chatRoom = {
@@ -140,14 +141,13 @@ const ChattingList = React.memo(()=> {
                 querySnapShot.forEach((docs) => {
                     meetingIds.push(docs.ref.parent.parent._documentPath._parts[1]);
                 });
-                console.log(meetingIds);
+                
                 const subscriberMeetings = firestore()
                     .collection('meetings')
                     .where('meetingId', 'in', meetingIds)
                     .orderBy('lastChatTime', 'desc')
                     //.get().then((querySnapShot) => {
                     .onSnapshot(querySnapShot => {
-                        console.log(querySnapShot.docs);
                         setChatRoomData(querySnapShot.docs);
                     }, error => {
                         console.log(error);
