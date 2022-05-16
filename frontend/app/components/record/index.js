@@ -26,24 +26,27 @@ const Record = ({ saveLogs, setListMonth }) => {
     const [showSpinner, setShowSpinner] = useState(true);
 
     useEffect(() => {
-        const getSavedLogs = async () => {
-            console.log("기록들 가져오기");
-            try {
-                await axiosInstance.get(`/ploggings/${userId}`)
-                    .then((response) => {
-                        if (response.status === 200) {
-                            saveLogs(response.data.data);
-                        } else if (response.status === 204) {
-                            console.log("저장된 기록이 없습니다") // todo 기록없을때 처리
-                        }
-                        else {
-                            console.log("log insert FAIL " + response.status);
-                        }
-                    })
-                    .catch((response) => { console.log(response); });
-            } catch (err) { console.log(err); }
-        };
-        getSavedLogs();
+        if (isFocused) {
+            const getSavedLogs = async () => {
+                console.log("기록들 가져오기");
+                try {
+                    await axiosInstance.get(`/ploggings/${userId}`)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                saveLogs(response.data.data);
+                            } else if (response.status === 204) {
+                                console.log("저장된 기록이 없습니다") // todo 기록없을때 처리
+                            }
+                            else {
+                                console.log("log insert FAIL " + response.status);
+                            }
+                        })
+                        .catch((response) => { console.log(response); });
+                } catch (err) { console.log(err); }
+            };
+            getSavedLogs();
+        }
+
     }, [isFocused]);
 
     useEffect(() => {
@@ -66,7 +69,7 @@ const Record = ({ saveLogs, setListMonth }) => {
                     }
                 });
         }
-    }, [listMonth, isFocused]);
+    }, [listMonth]);
 
     useEffect(() => {
         if (savedLogs[0] !== undefined) {
