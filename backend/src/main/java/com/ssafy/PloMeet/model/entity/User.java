@@ -1,5 +1,6 @@
 package com.ssafy.PloMeet.model.entity;
 
+import com.ssafy.PloMeet.api.request.ProfileReq;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -44,6 +45,10 @@ public class User {
         this.userProfileImg = userProfileImg;
         this.userName = userName;
         this.userEmail = userEmail;
+    }
+
+    public void updateProfile(String userNickName) {
+        this.userNickName = userNickName;
     }
 
 }

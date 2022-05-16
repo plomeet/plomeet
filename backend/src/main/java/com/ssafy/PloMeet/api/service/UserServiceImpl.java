@@ -1,5 +1,6 @@
 package com.ssafy.PloMeet.api.service;
 
+import com.ssafy.PloMeet.api.request.ProfileReq;
 import com.ssafy.PloMeet.api.request.UserRegisterReq;
 import com.ssafy.PloMeet.api.response.UserRes;
 import com.ssafy.PloMeet.model.entity.User;
@@ -34,5 +35,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getUserInfo(Long userId) throws Exception {
         return userRepository.findById(userId);
+    }
+
+    @Transactional
+    public void updateProfile(ProfileReq profileReq) {
+        User user = userRepository.findById(profileReq.getUserId()).get();
+        user.updateProfile(profileReq.getUserNickName());
+        userRepository.save(user);
     }
 }
