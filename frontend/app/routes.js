@@ -27,6 +27,10 @@ import LogDetail from './components/record/plogDetail/index';
 //Chatting
 import InsideRoom from './components/chat/room/inside_room';
 
+//My
+import BadgeList from './components/my/badge/badge_all';
+
+
 const Stack = createStackNavigator();
 const MainScreenTab = createBottomTabNavigator();
 
