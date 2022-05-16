@@ -9,6 +9,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import axiosInstance from '../../../utils/API';
 import Config from 'react-native-config'
 import AWS from 'aws-sdk';
+import { createMeeting } from '../../../utils/firestore';
+
 
 const openMeeting5 = () => {
   const navigation = useNavigation();
@@ -72,7 +74,15 @@ const openMeeting5 = () => {
       })
         .then(async (response) => {
           if (response.status === 200) {
-            console.log(response); 
+            console.log(response);
+            /*
+            const meeting = {
+              meetingId,
+              createdAt: Date.now(),
+              notice: "안녕하세요! "+meetingName+"방 입니다.",
+            };
+            */
+            //createMeeting(meeting, userId);
             navigation.popToTop()
           } else {
             console.log(response);
