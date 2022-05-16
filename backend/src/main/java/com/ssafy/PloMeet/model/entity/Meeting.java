@@ -67,6 +67,7 @@ public class Meeting {
         this.lat = lat;
         this.lng = lng;
         this.memberMax = memberMax;
+        this.memberCnt = memberCnt;
         this.meetingDate = meetingDate;
         this.item = item;
     }
@@ -80,6 +81,7 @@ public class Meeting {
         this.lat = meetingReq.getLat();
         this.lng = meetingReq.getLng();
         this.memberMax = meetingReq.getMemberMax();
+        this.memberCnt = meetingReq.getMemberCnt();
         this.meetingDate = meetingReq.getMeetingDate();
         this.item = meetingReq.getItem();
     }

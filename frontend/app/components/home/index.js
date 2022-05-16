@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Align } from '../plogging/map';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
+import AsyncStorage from '@react-native-community/async-storage';
 
 LogBox.ignoreAllLogs();
 
@@ -217,11 +218,14 @@ const styles = StyleSheet.create({
 const Home = () => {
   const navigation = useNavigation();
   const [meetingList, setMeetingList] = useState([]);
+  const [myMeetingList, setMyMeetingList] = useState([]);
+  const [myMeetingListInfo, setMyMeetingListInfo] = useState([]);
   const isFocused = useIsFocused();
   const current= getToday(); //오늘 날짜
   const week = ['일', '월', '화', '수', '목', '금', '토'];
   const [selectedDate, setSelectedDate] = useState('일시'); //일정 필터
   const [visibleCalendar, setVisibleCalendar] = useState(false); //캘린더 표시 여부
+  const userId = useSelector(state => state.userId);
 
   function deleteDate(){
     setSelectedDate('일시');
@@ -238,13 +242,14 @@ const Home = () => {
     }
     setVisibleCalendar(false)
   }
+
   function parse(str) {
     var y = str.substr(0, 4);
     var m = str.substr(5, 2);
     var d = str.substr(8, 2);
     var ymd = new Date(y,m-1,d);
     let day = week[ymd.getDay()];
-    var res = m+"월 "+d+"일("+day+") "+ str.substr(11, 5)
+    var res = m+"월 "+d+"일("+day+") "+ str.substr(11, 5);
     return res
   }
 
@@ -252,6 +257,10 @@ const Home = () => {
   useEffect(() => {
     getAllMeeting();
   }, [isFocused]);
+
+  useEffect(() => {
+    getMyMeeting();
+  }, [userId]);
 
   async function getAllMeeting() {
     try {
@@ -266,13 +275,38 @@ const Home = () => {
             })
             .catch((response) => { console.log(response); });
     } catch (err) { console.log(err); }
-  };
+  }
+
+  async function getMyMeeting() {
+    try {
+      console.log("userID : " + userId)
+      await axiosInstance.get("/mymeetings/"+userId)
+          .then((response) => {
+              if (response.status === 200) {
+                var mList = response.data;
+                var test = [];
+                  var testId = [];
+
+                  for(var i=0; i<mList.length; i++){
+                    test.push(mList[i].meetingId);
+                    testId.push(mList[i].meetingId.meetingId);
+                  }
+                  setMyMeetingListInfo(test);
+                  setMyMeetingList(testId);
+                  console.log("[내가 참여한 모임 정보 조회 성공]");
+                } else {
+                  console.log("[내가 참여한 모임 정보 조회 실패]");
+              }
+          })
+          .catch((response) => { console.log(response); });
+    } catch (err) { console.log(err); }
+  }
 
 
   const Item = ({ meetingId, meetingDesc, img, title, place, numMember, maxMember, date, index, lat, lng, placeDetail}) => (
     <TouchableOpacity
     activeOpacity={0.7}
-    onPress={() => navigation.navigate('MeetingDetail', {meetingId:meetingId})}
+    onPress={() => navigation.navigate('MeetingDetail', {meetingId:meetingId, myMeetingList:myMeetingList})}
     // style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles.card, styles.elevation]}>
     style={[styles.card, styles.elevation]}>
       <Image source={{uri: img}} style={styles.img} />
