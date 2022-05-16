@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 
 const ChattingList = React.memo(()=> {
     const navigation = useNavigation();
-    const userId = useSelector(state => state.userId);
+    const userId = useSelector(state => state.userId).toString();
     const [meeting, setMeeting] = useState();
     const [chatRooms, setChatRooms] = useState([]);
 
@@ -35,6 +35,7 @@ const ChattingList = React.memo(()=> {
             const meetingDocRef = firestore()
                             .collection('meetings').doc(meetingId);
             const lastReadChat=  await getLastReadChat(meetingDocRef);
+            console.log(lastReadChat);
 
             var chat;
             if(lastReadChat.id == 0){
@@ -135,17 +136,18 @@ const ChattingList = React.memo(()=> {
             .collectionGroup('members')
             .where('userId', "==", userId.toString())
             .onSnapshot(querySnapShot => {                  
-                const meetingIds = [""];
+                const meetingIds = ["0"];
                 querySnapShot.forEach((docs) => {
                     meetingIds.push(docs.ref.parent.parent._documentPath._parts[1]);
                 });
-                
+                console.log(meetingIds);
                 const subscriberMeetings = firestore()
                     .collection('meetings')
                     .where('meetingId', 'in', meetingIds)
                     .orderBy('lastChatTime', 'desc')
                     //.get().then((querySnapShot) => {
                     .onSnapshot(querySnapShot => {
+                        console.log(querySnapShot.docs);
                         setChatRoomData(querySnapShot.docs);
                     }, error => {
                         console.log(error);
