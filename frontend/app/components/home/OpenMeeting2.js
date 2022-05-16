@@ -170,7 +170,7 @@ const openMeeting2 = () => {
         <View style={styles.row}>
           <TextInput
             style={styles.input2}
-            placeholder="모임 장소의 상세 주소를 입력해주세요."
+            placeholder="상세 주소를 입력해주세요."
             keyboardType='default'
             maxLength={500}
             multiline={true}
