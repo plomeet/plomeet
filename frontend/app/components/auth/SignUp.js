@@ -10,7 +10,7 @@ import {
   BackHandler,
 } from 'react-native';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import * as KakaoLogins from '@react-native-seoul/kakao-login';
 
 import LogoImage from '../../../assets/imgs/6881.png';

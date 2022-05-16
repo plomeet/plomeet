@@ -15,11 +15,21 @@ import RecordContainer from './container/LogContainer';
 import Plogging from './container/PloggingContainer';
 import Chat from './components/chat/index';
 import MyPage from './components/my/index';
+import OpenMeeting from './components/home/OpenMeeting1';
+import OpenMeeting2 from './components/home/OpenMeeting2';
+import OpenMeeting3 from './components/home/OpenMeeting3';
+import OpenMeeting4 from './components/home/OpenMeeting4';
+import OpenMeeting5 from './components/home/OpenMeeting5';
+import MeetingDetail from './components/home/MeetingDetail';
 import CameraPage from './components/plogging/button/CameraPage';
 import LogDetail from './components/record/plogDetail/index';
 
 //Chatting
 import InsideRoom from './components/chat/room/inside_room';
+
+//My
+import BadgeList from './components/my/badge/badge_all';
+
 
 const Stack = createStackNavigator();
 const MainScreenTab = createBottomTabNavigator();
@@ -96,8 +106,15 @@ export const RootNavigator = () => {
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: false, gestureEnabled: false }} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
             <Stack.Screen name="InChatRoom" component={InsideRoom} />
-            <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '' }} />
-        </Stack.Navigator>
+            <Stack.Screen name="OpenMeeting" component={OpenMeeting} options={{title: '플로깅 모임 생성(1/5)'}} />
+            <Stack.Screen name="OpenMeeting2" component={OpenMeeting2} options={{animationEnabled: false, title: '플로깅 모임 생성(2/5)'}} />
+            <Stack.Screen name="OpenMeeting3" component={OpenMeeting3} options={{animationEnabled: false, title: '플로깅 모임 생성(3/5)'}} />
+            <Stack.Screen name="OpenMeeting4" component={OpenMeeting4} options={{animationEnabled: false, title: '플로깅 모임 생성(4/5)'}} />
+            <Stack.Screen name="OpenMeeting5" component={OpenMeeting5} options={{animationEnabled: false, title: '플로깅 모임 생성(5/5)'}} />
+            <Stack.Screen name="MeetingDetail" component={MeetingDetail} options={{animationEnabled: false, title: '모임 상세정보'}} />
+            <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '', headerShown: false, gestureEnabled: false }} />
+            <Stack.Screen name="BadgeList" component={BadgeList} options={{ title: '배지' }} />
+        </Stack.Navigator> 
     )
 }
 
