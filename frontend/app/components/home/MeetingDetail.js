@@ -33,7 +33,7 @@ const MeetingDetail = ({route}) => {
   const windowHeight = Dimensions.get('window').height;
   const toastRef = useRef(); // toast ref 생성
   const [btnText, setBtnText] = useState("모임 가입하기");
-
+  const [isFirstMeeting, setIsFirstMeeting] = useState(false);
   // let meetingDesc = route.params.meetingDesc;
   // let meetingImg = route.params.img;
   // let meetingName = route.params.title;
@@ -80,10 +80,14 @@ const MeetingDetail = ({route}) => {
       "모임에 가입할까요?", 
       [ 
         { text: '아니오'}, 
-        { text: '네', onPress: () => { 
+        {
+          text: '네', onPress: () => { 
+          if (isFirstMeeting) {
+            saveBadge(); //뱃지 획득 alert뜨고서 toast 뜨게 처리
+          }
+          else showCopyToast();
           joinMeeting();
           setJoinDisable(true);
-          showCopyToast();
           setMemberCnt(memberCnt+1);
           setBtnText("가입중인 모임");
         }}
@@ -95,7 +99,7 @@ const MeetingDetail = ({route}) => {
 
   //토스트
   const showCopyToast = useCallback(() => {
-    toastRef.current.show('모임에 가입되었습니다.');
+      toastRef.current.show('모임에 가입되었습니다.');
   }, []);
 
   // 알럿창에서 네!를 누르면 가입ㄱㄱ
@@ -190,7 +194,64 @@ const MeetingDetail = ({route}) => {
     } catch (err) { console.log(err); }
   };
 
+  useEffect(() => { 
+    //첫 모임 가입인지 확인
+    const checkFirstMeeting = async () => { 
+      try {
+        await axiosInstance.get(`/badges/${userId}/1`)
+          .then((response) => {
+            if (response.status === 200) {
+              console.log("뱃지!!!!", response.data.isOwned)
+              if (!response.data.isOwned) {
+                setIsFirstMeeting(true);
+                console.log("나 첫뱃지임!")
+              }
+              else {
+                setIsFirstMeeting(false);
+              }
+            } else {
+              console.log("error" + response.status);
+            }
+          })
+      }
+      catch (err) {
+        console.log(err);
+      }
+  }
+  checkFirstMeeting();
+  }, [isFocused])
 
+  const saveBadge = async () => { 
+    try {
+        await axiosInstance.post('/badges/get', {
+            userId: userId,
+            badgeId: 1,
+        }).then((response) => {
+            if (response.status === 201) {
+              console.log("뱃지 획득 성공!!");
+              setIsFirstMeeting(true)
+            }
+        })
+    } catch (error) {console.log(error)}
+
+    console.log("첫플로깅이냐???", isFirstMeeting)
+      if (isFirstMeeting) {
+        Alert.alert( 
+          "", 
+          "첫 모임 가입 뱃지 획득!", 
+          [ 
+            {
+              text: '닫기', onPress: () => { 
+              showCopyToast();
+            }}
+          ], 
+          { cancelable: true } 
+        ); 
+
+        setIsFirstMeeting(false);
+      }
+  }
+  
     return (
       <View>
         <ScrollView>
