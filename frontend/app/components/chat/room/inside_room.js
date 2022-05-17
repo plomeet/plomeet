@@ -136,7 +136,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
 
     useEffect(() => { 
         Platform.OS == 'ios' ? StatusBarManager.getHeight((statusBarFrameData) => {
-            setStatusBarHeight(statusBarFrameData.height)
+            setStatusBarHeight(statusBarFrameData.height-165)
         }) : null;
     },[])
 
@@ -174,9 +174,9 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
         }    
     }, [messages]);
     
-
+    
     return (
-        <Container behavior={"padding"} keyboardVerticalOffset={statusBarHeight-165}>
+        <Container behavior={"padding"} keyboardVerticalOffset={statusBarHeight}>
             <GiftedChat
                 listViewProps={{
                     style: { 
