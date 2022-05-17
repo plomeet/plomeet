@@ -176,8 +176,6 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     
 
     return (
-        // <KeyboardAvoidingView style={styles.container} behavior={"padding"} keyboardVerticalOffset={statusBarHeight+44}>
-
         <Container behavior={"padding"} keyboardVerticalOffset={statusBarHeight-165}>
             <GiftedChat
                 listViewProps={{
@@ -205,7 +203,6 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
                 alwaysShowSend={true}
             />
             </Container>
-            // </KeyboardAvoidingView>
     );
 });
 
