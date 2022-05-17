@@ -21,6 +21,7 @@ import OpenMeeting3 from './components/home/OpenMeeting3';
 import OpenMeeting4 from './components/home/OpenMeeting4';
 import OpenMeeting5 from './components/home/OpenMeeting5';
 import MeetingDetail from './components/home/MeetingDetail';
+import MeetingList from './components/my/MeetingList';
 import CameraPage from './components/plogging/button/CameraPage';
 import LogDetail from './components/record/plogDetail/index';
 
@@ -113,6 +114,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="OpenMeeting4" component={OpenMeeting4} options={{ animationEnabled: false, title: '플로깅 모임 생성(4/5)' }} />
             <Stack.Screen name="OpenMeeting5" component={OpenMeeting5} options={{ animationEnabled: false, title: '플로깅 모임 생성(5/5)' }} />
             <Stack.Screen name="MeetingDetail" component={MeetingDetail} options={{ animationEnabled: false, title: '모임 상세정보' }} />
+            <Stack.Screen name="MeetingList" component={MeetingList} options={{ title: '참여한 모임' }} />
             <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '' }} />
             <Stack.Screen name="BadgeList" component={BadgeList} options={{ title: '배지' }} />
         </Stack.Navigator>

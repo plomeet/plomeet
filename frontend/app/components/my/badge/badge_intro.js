@@ -49,7 +49,9 @@ const BadgeIntro = () => {
                     <Icon name="chevron-thin-right" size={13} color={color.black} style={{marginLeft: 5, marginTop: 2}}/>
                 </BadgeMoreComponent>
             </BadgeContainerTitleLine>
-            <ScrollView horizontal={true}>
+            <ScrollView horizontal={true} 
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}>
                 {   
                     badges.map((badge, idx) => (
                         <Badge key={badge.badgeId} badge={badge}></Badge>

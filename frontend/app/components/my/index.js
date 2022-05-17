@@ -6,6 +6,7 @@ import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from "react
 import { NavigationContainer } from '@react-navigation/native';
 import BadgeIntro from './badge/badge_intro';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Icon2 from 'react-native-vector-icons/Entypo';
 import axiosInstance from '../../../utils/API';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -15,8 +16,8 @@ const MyPage = () => {
     return (
         <View>
             <Text>내정보 화면</Text>
-            <BadgeIntro></BadgeIntro>
             <MyMeetingIntro></MyMeetingIntro>
+            <BadgeIntro></BadgeIntro>
         </View>
     );
 };
@@ -25,6 +26,7 @@ const MyPage = () => {
 const MyMeetingIntro = () => {
   const navigation = useNavigation();
   const [myMeetingListInfo, setMyMeetingListInfo] = useState([]);
+  const [myMeetingList, setMyMeetingList] = useState([]);
   const week = ['일', '월', '화', '수', '목', '금', '토'];
 
   function parse(str) {
@@ -76,16 +78,22 @@ const MyMeetingIntro = () => {
 
   useEffect(() => {
     AsyncStorage.getItem('myMeeting', (err, result) => {
-      console.log("[내가 참여한 모임 조회] : "+ JSON.parse(result).length +"개");
-      console.log(JSON.parse(result));
       setMyMeetingListInfo(JSON.parse(result));
+    })
+    AsyncStorage.getItem('myMeetingList', (err, result) => {
+      setMyMeetingList(JSON.parse(result));
     })
   }, []);
 
   return(
-    <View>
-      <Text>얍얍</Text>
+    <View style={[{backgroundColor:"#ffffff"},{paddingLeft:10}, {paddingBottom:10}]}>
+      <View flexDirection="row" style={[{justifyContent:"space-between"},{alignItems: "center"}]}>
+        <Text style={[{marginLeft:5},{marginVertical:10},{fontSize:20}, {color:"#000"}]} >내 모임</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('MeetingList')}><View flexDirection="row"><Text style={[{fontSize:13}, {color:"#000"}]}> 더보기 </Text><Icon2 name="chevron-thin-right" size={13} color="#000" style={[{marginLeft: 5}, {marginTop: 2},{marginRight:10}]}/></View></TouchableOpacity>
+      </View>
       <FlatList
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
         data={myMeetingListInfo}
         horizontal = {true}
         renderItem={renderItem}
