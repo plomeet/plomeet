@@ -8,6 +8,7 @@ import CustomInputToolbar from './custom/custom_inputtoolbar';
 import firestore from '@react-native-firebase/firestore';
 import { saveChatting, updateUserLastReadChatTime } from '../../../../utils/firestore';
 import { useSelector } from 'react-redux';
+import PlomeetSpinner from '../../../../utils/PlomeetSpinner';
 
 
 const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
@@ -18,6 +19,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     const img = useSelector(state => state.img);
     const members = {};
     const [messages, setMessages] = useState([]);
+    const [showSpinner, setShowSpinner] = useState(true);
 
     
     const _handleMessageSend = async messageList => {
@@ -79,6 +81,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
         }
 
         setMessages(list);
+        setShowSpinner(false);
     };
 
     const getUserInfo = async (messageUserId) => {
@@ -165,6 +168,9 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
 
     return (
         <Container>
+            { showSpinner &&
+                <PlomeetSpinner isVisible={showSpinner} size={50}/>
+            }
             <GiftedChat
                 listViewProps={{
                     style: { 
