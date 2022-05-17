@@ -9,12 +9,15 @@ import { ScrollView } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 import { useSelector } from 'react-redux';
 import { joinMember } from '../../../utils/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
+import Toast from 'react-native-easy-toast';
 
 const MeetingDetail = ({route}) => {
   const isFocused = useIsFocused();
   
   const userId = useSelector(state => state.userId)
   const meetingId = route.params.meetingId;
+  const myMeetingList = route.params.myMeetingList;
   const [meetingDesc, setMeetingDesc] = useState("");
   const [meetingImg, setMeetingImg] = useState("");
   const [meetingName, setMeetingName] = useState("");
@@ -26,6 +29,10 @@ const MeetingDetail = ({route}) => {
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
   var loc = {latitude: lat, longitude: lng};
+  const [joinDisable, setJoinDisable] = useState(true);
+  const windowHeight = Dimensions.get('window').height;
+  const toastRef = useRef(); // toast ref 생성
+  const [btnText, setBtnText] = useState("모임 가입하기");
 
   // let meetingDesc = route.params.meetingDesc;
   // let meetingImg = route.params.img;
@@ -52,6 +59,20 @@ const MeetingDetail = ({route}) => {
     return res
   }
 
+  useEffect(() => {
+    console.log("[내가 참여한 모임인지 아닌지 여부 확인]");
+    if(myMeetingList.indexOf(meetingId) < 0){
+      console.log("불포함!!!!!!");
+      setJoinDisable(false);
+    }
+    else {
+      console.log("포함!!!!!!!");
+      setJoinDisable(true);
+      setBtnText("가입중인 모임");
+    }
+  }, [meetingId, myMeetingList]);
+
+
   // 모임 가입하기 버튼 누르면 뜨는 알럿창
   function alertJoinMeeting() {
     Alert.alert( 
@@ -61,12 +82,21 @@ const MeetingDetail = ({route}) => {
         { text: '아니오'}, 
         { text: '네', onPress: () => { 
           joinMeeting();
-        }} 
+          setJoinDisable(true);
+          showCopyToast();
+          setMemberCnt(memberCnt+1);
+          setBtnText("가입중인 모임");
+        }}
       ], 
       { cancelable: true } 
     ); 
 
   }
+
+  //토스트
+  const showCopyToast = useCallback(() => {
+    toastRef.current.show('모임에 가입되었습니다.');
+  }, []);
 
   // 알럿창에서 네!를 누르면 가입ㄱㄱ
   const joinMeeting = async () => {
@@ -79,9 +109,38 @@ const MeetingDetail = ({route}) => {
         .then(async (response) => {
           if (response.status === 200) {
             console.log(response); 
+            updateMeeting();
             const meetingIdStr = meetingId.toString();
             const userIdStr = userId.toString();
-            joinMember({meetingId: meetingIdStr, userId: userIdStr, lastChatTime: Date.now()})
+            joinMember({meetingId: meetingIdStr, userId: userIdStr, lastChatTime: Date.now()});
+          } else {
+            console.log(response);
+          }
+        })
+        .catch((response) => { console.log(response); });
+    } catch (err) { console.log(err); }
+
+  };
+
+  const updateMeeting = async () => {
+    try {
+      await axiosInstance.put("/meetings/"+ meetingId, {
+        meetingImg: meetingImg,
+        meetingDesc: meetingDesc,
+        meetingName: meetingName,
+        meetingPlace: meetingPlace,
+        meetingPlaceDetail: placeDetail,
+        lat: lat,
+        lng: lng,
+        memberMax: memberMax,
+        memberCnt: memberCnt+1,
+        meetingDate: meetingDate,
+        item: "쓰레기봉투&집게",
+      })
+        .then(async (response) => {
+          if (response.status === 200) {
+            console.log(response);
+            setMemberCnt(memberCnt+1);
           } else {
             console.log(response);
           }
@@ -94,6 +153,13 @@ const MeetingDetail = ({route}) => {
   useEffect(() => {
     getMeetingById(meetingId);
   }, [isFocused]);
+
+  //내가 참여한 모임인지 아닌지
+  useEffect(() => {
+    AsyncStorage.getItem('myMeeting', (err, result) => {
+      console.log(JSON.parse(result));
+    })
+  }, [])
 
   async function getMeetingById(meetingId) {
     try {
@@ -109,9 +175,13 @@ const MeetingDetail = ({route}) => {
                     setMemberMax(response.data.memberMax);
                     setMemberCnt(response.data.memberCnt);
                     setMeetingDate(response.data.meetingDate);
-                    setPlaceDetail(response.data.placeDetail);
+                    setPlaceDetail(response.data.meetingPlaceDetail);
                     setLat(response.data.lat);
                     setLng(response.data.lng);
+                    if(response.data.memberMax == response.data.memberCnt){
+                      setJoinDisable(true);
+                      setBtnText("마감된 모임");
+                    }
                 } else {
                     console.log("[모임 정보 조회 실패] : "+meetingId);
                 }
@@ -164,9 +234,15 @@ const MeetingDetail = ({route}) => {
 
           </View>
         </ScrollView>
+        <Toast ref={toastRef}
+             positionValue={windowHeight * 0.55}
+             fadeInDuration={200}
+             fadeOutDuration={1000}
+             style={{backgroundColor:"#1BE58D"}}
+        />
 
-        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => alertJoinMeeting()}>
-          <Text style={styles.buttonText}>모임 가입하기</Text>
+        <TouchableOpacity activeOpacity={0.8} disabled={joinDisable} style={joinDisable? styles.disButton :styles.button} onPress={() => alertJoinMeeting()}>
+          <Text style={styles.buttonText}>{btnText}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -233,6 +309,10 @@ const styles = StyleSheet.create({
     marginBottom:50
   },
   disButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    width: "100%",
     height: 55,
     backgroundColor: "#aaaaaa",
     justifyContent: "center",

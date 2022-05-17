@@ -36,6 +36,7 @@ public class MeetingReq {
         this.lat = lat;
         this.lng = lng;
         this.memberMax = memberMax;
+        this.memberCnt = memberCnt;
         this.meetingDate = meetingDate;
         this.item = item;
     }
@@ -51,6 +52,7 @@ public class MeetingReq {
                 .lat(lat)
                 .lng(lng)
                 .memberMax(memberMax)
+                .memberCnt(memberCnt)
                 .meetingDate(meetingDate)
                 .item(item)
                 .build();
