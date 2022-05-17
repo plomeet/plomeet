@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import ChattingRoom from './chatting_room';
 import { FlatList } from 'react-native-gesture-handler';
 import { Container } from '../styles';
@@ -9,6 +9,8 @@ import axiosInstance from '../../../../utils/API';
 
 const ChattingList = React.memo(()=> {
     const navigation = useNavigation();
+    const isFocused = useIsFocused();
+    
     const userId="1";
     const [meeting, setMeeting] = useState();
     const [chatRooms, setChatRooms] = useState([]);
@@ -130,32 +132,34 @@ const ChattingList = React.memo(()=> {
     }
 
     useEffect(() => {
-        const subscriberMeetingsMember = firestore()
-            .collectionGroup('members')
-            .where('userId', "==", userId.toString())
-            .onSnapshot(querySnapShot => {                  
-                const meetingIds = [];
-                querySnapShot.forEach((docs) => {
-                    meetingIds.push(docs.ref.parent.parent._documentPath._parts[1]);
+        if(isFocused){
+            const subscriberMeetingsMember = firestore()
+                .collectionGroup('members')
+                .where('userId', "==", userId.toString())
+                .onSnapshot(querySnapShot => {                  
+                    const meetingIds = [];
+                    querySnapShot.forEach((docs) => {
+                        meetingIds.push(docs.ref.parent.parent._documentPath._parts[1]);
+                    });
+                    
+                    const subscriberMeetings = firestore()
+                        .collection('meetings')
+                        .where('meetingId', 'in', meetingIds)
+                        .orderBy('lastChatTime', 'desc')
+                        //.get().then((querySnapShot) => {
+                        .onSnapshot(querySnapShot => {
+                            setChatRoomData(querySnapShot.docs);
+                        }, error => {
+                            console.log(error);
+                        });
+                    return() => subscriberMeetings();
+                }, error => {
+                    console.log(error);
                 });
                 
-                const subscriberMeetings = firestore()
-                    .collection('meetings')
-                    .where('meetingId', 'in', meetingIds)
-                    .orderBy('lastChatTime', 'desc')
-                    //.get().then((querySnapShot) => {
-                    .onSnapshot(querySnapShot => {
-                        setChatRoomData(querySnapShot.docs);
-                    }, error => {
-                        console.log(error);
-                    });
-                return() => subscriberMeetings();
-            }, error => {
-                console.log(error);
-            });
-            
-        return () => subscriberMeetingsMember();
-    }, []);
+            return () => subscriberMeetingsMember();
+        }
+    }, [isFocused]);
 
     return (
         <Container>
