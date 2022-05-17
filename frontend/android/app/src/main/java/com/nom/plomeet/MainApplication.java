@@ -13,6 +13,7 @@ import com.facebook.soloader.SoLoader;
 import com.nom.plomeet.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import io.xogus.reactnative.versioncheck.RNVersionCheckPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 

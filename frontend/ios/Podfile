@@ -30,6 +30,9 @@ target 'frontend' do
   pod 'Permission-SpeechRecognition', :path => "#{permissions_path}/SpeechRecognition"
   pod 'Permission-StoreKit', :path => "#{permissions_path}/StoreKit"
 
+  pod 'react-native-version-check', :path => '../node_modules/react-native-version-check'
+
+
   # Flags change depending on the env values.
   flags = get_default_flags()
 
