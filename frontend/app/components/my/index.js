@@ -1,8 +1,6 @@
 import React, { useState, useEffect, Component, Node, Button } from 'react';
 import BadgeIntro from './badge/badge_intro';
 import Profile from './profile/profile';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
 import BackSvg from '../plogging/icons/back.svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Chip } from 'react-native-paper';
