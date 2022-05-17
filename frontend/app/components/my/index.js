@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Component, Node, Button } from 'react';
 import BadgeIntro from './badge/badge_intro';
+import Profile from './profile/profile';
 import BackSvg from '../plogging/icons/back.svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Chip } from 'react-native-paper';
@@ -25,6 +26,7 @@ const MyPage = () => {
                     </View>
                 </TouchableOpacity>
             </View>
+            <Profile></Profile>
             <MyMeetingIntro></MyMeetingIntro>
             <BadgeIntro></BadgeIntro>
           </SafeAreaView>
@@ -95,7 +97,7 @@ const MyMeetingIntro = () => {
   }, [isFocused]);
 
   return(
-    <View style={[{backgroundColor:"#ffffff"},{paddingLeft:10}]}>
+    <View style={[{backgroundColor:"#ffffff"},{paddingLeft:10}, {marginTop:10}]}>
       <View flexDirection="row" style={[{justifyContent:"space-between"},{alignItems: "center"}]}>
         <Text style={[{marginLeft:5},{marginVertical:10},{fontSize:20}, {color:"#000"}]} >내 모임</Text>
         <TouchableOpacity onPress={() => navigation.navigate('MeetingList')}><View flexDirection="row"><Text style={[{fontSize:13}, {color:"#000"}]}> 더보기 </Text><Icon2 name="chevron-thin-right" size={13} color="#000" style={[{marginLeft: 5}, {marginTop: 2},{marginRight:10}]}/></View></TouchableOpacity>
@@ -196,6 +198,7 @@ const styles = StyleSheet.create({
   container: {
       width: "100%",
       height: "100%",
+      backgroundColor: "#fff"
   },
   containerTitle: {
       backgroundColor: "white",
