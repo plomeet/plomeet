@@ -1,14 +1,17 @@
 import React, { Component, Node, Button } from 'react';
 import 'react-native-gesture-handler';
 import { StyleSheet, Text, View } from "react-native";
-import { NavigationContainer } from '@react-navigation/native';
 import DetailArrow from '../../record/icon/detailArrow.svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import VersionCheck from "react-native-version-check";
 
 const Preference = () => {
+    const navigation = useNavigation();
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => console.log("이용 및 운영 정책 버튼")}>
+            <TouchableOpacity onPress={() => navigation.navigate('PolicyDoc', { msg: "go PolicyDoc screen" })}>
                 <View style={styles.listContainer}>
                     <Text style={styles.menuText}>이용약관 및 운영정책</Text>
                     <View style={styles.detailButtonContainer}>
@@ -18,7 +21,7 @@ const Preference = () => {
             </TouchableOpacity>
             <View style={styles.listContainer}>
                 <Text style={styles.menuText}>버전</Text>
-                <Text style={styles.versionText}>1.0.0</Text>
+                <Text style={styles.versionText}>{VersionCheck.getCurrentVersion()}</Text>
             </View>
             <View style={styles.listContainer}>
             </View>

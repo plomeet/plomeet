@@ -2,6 +2,7 @@ import React, { Component, Node, Button } from 'react';
 import 'react-native-gesture-handler';
 import { StyleSheet, Text, View } from "react-native";
 import BadgeIntro from './badge/badge_intro';
+import Profile from './profile/profile';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import BackSvg from '../plogging/icons/back.svg';
@@ -23,9 +24,7 @@ const MyPage = () => {
                     </View>
                 </TouchableOpacity>
             </View>
-
-
-
+            <Profile></Profile>
             <BadgeIntro></BadgeIntro>
         </SafeAreaView >
     );

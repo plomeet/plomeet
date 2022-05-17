@@ -1,5 +1,6 @@
 package com.ssafy.PloMeet.api.service;
 
+import com.ssafy.PloMeet.api.request.ProfileReq;
 import com.ssafy.PloMeet.api.request.UserRegisterReq;
 import com.ssafy.PloMeet.api.response.UserRes;
 import com.ssafy.PloMeet.model.entity.User;
@@ -15,4 +16,5 @@ public interface UserService {
     UserRes findUserByKakaoUserId(Long kakaoUserId);
     Long signUp(UserRegisterReq userRegisterReq);
     Optional<User> getUserInfo(Long userId) throws Exception;
+    void updateProfile(ProfileReq profileReq);
 }
