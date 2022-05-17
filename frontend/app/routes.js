@@ -21,6 +21,7 @@ import OpenMeeting3 from './components/home/OpenMeeting3';
 import OpenMeeting4 from './components/home/OpenMeeting4';
 import OpenMeeting5 from './components/home/OpenMeeting5';
 import MeetingDetail from './components/home/MeetingDetail';
+import MeetingList from './components/my/MeetingList';
 import CameraPage from './components/plogging/button/CameraPage';
 import LogDetail from './components/record/plogDetail/index';
 import Preference from './components/my/preference/index'
@@ -42,8 +43,9 @@ const AppTabComponent = () => {
 
     return (
         <MainScreenTab.Navigator
-
+        
             screenOptions={({ route }) => ({
+                tabBarStyle: { height: 55, paddingBottom: 5 },
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
 
@@ -58,7 +60,7 @@ const AppTabComponent = () => {
                     }
                     if (route.name === '플로깅') return (
                         <TouchableOpacity
-                            hitSlop={{ top: 0, bottom: 20, left: 10, right: 10 }}
+                            hitSlop={{ top: 5.5, bottom: 20, left: 10, right: 10 }}
                             onPress={() => navigation.navigate('ploggingActivity', { msg: "plogging start" })}>
                             <View style={style.backGround}>
                                 <Image
@@ -114,6 +116,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="OpenMeeting4" component={OpenMeeting4} options={{ animationEnabled: false, title: '플로깅 모임 생성(4/5)' }} />
             <Stack.Screen name="OpenMeeting5" component={OpenMeeting5} options={{ animationEnabled: false, title: '플로깅 모임 생성(5/5)' }} />
             <Stack.Screen name="MeetingDetail" component={MeetingDetail} options={{ animationEnabled: false, title: '모임 상세정보' }} />
+            <Stack.Screen name="MeetingList" component={MeetingList} options={{ title: '참여한 모임' }} />
             <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '' }} />
             <Stack.Screen name="BadgeList" component={BadgeList} options={{ title: '배지' }} />
             <Stack.Screen name="Preference" component={Preference} options={{ title: '환경설정' }} />
@@ -125,7 +128,7 @@ export const RootNavigator = () => {
 const style = StyleSheet.create({
     backGround: {
         width: "100%",
-        height: 35,
+        height: 32,
         //borderRadius: 25,
         paddingLeft: 20,
         paddingRight: 20,

@@ -51,6 +51,8 @@ const BadgeList = () => {
         <BadgesContainer style={{ flex: 1, alignItems: 'center'}}>
             <FlatList 
                 data={badges}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
                 renderItem={renderBadges}
                 keyExtractor={item => item.badgeId}
                 numColumns={3} 
