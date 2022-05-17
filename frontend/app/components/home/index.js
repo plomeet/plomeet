@@ -256,6 +256,7 @@ const Home = () => {
   //모임 정보 세팅
   useEffect(() => {
     getAllMeeting();
+    getMyMeeting();
   }, [isFocused]);
 
   useEffect(() => {
@@ -293,6 +294,9 @@ const Home = () => {
                   }
                   setMyMeetingListInfo(test);
                   setMyMeetingList(testId);
+                  AsyncStorage.setItem('myMeeting', JSON.stringify(test), () => {
+                    console.log('[SetItem 완료] : myMeeting');
+                  });
                   console.log("[내가 참여한 모임 정보 조회 성공]");
                 } else {
                   console.log("[내가 참여한 모임 정보 조회 실패]");
