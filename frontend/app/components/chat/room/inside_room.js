@@ -33,9 +33,8 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
     const [user, setUser] = useState();
     const members = {};
     const [messages, setMessages] = useState([]);
-
     const meetingId = meeting.meetingId;
-    
+    const [meetingInfo, setMeetingInfo] = useState();
 
     
     const _handleMessageSend = async messageList => {
@@ -84,7 +83,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
     }
 
     // 윤수 추가 : 공지방에 상세정보 띄우는 함수 
-    const getMeetingInfo = async(meetingId) => {
+    const getMeetingInfo = async() => {
         var meetingInfo = {};
         try {
             await axiosInstance.get(`/meetings/${meetingId}`)
@@ -100,7 +99,8 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
                 })
                 .catch((response) => { console.log(response); });
         } catch (err) { console.log(err); }
-        return meetingInfo;
+        setMeetingInfo(meetingInfo);
+        //return meetingInfo;
     }
 
 
@@ -240,7 +240,8 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
                 title= "회원가입메롱메롱 공지사항을 어떻게 쓸까 고민중이에요"
                 noIcon={false}
                 rightIcon={<Icons name="left" size={20} />}
-                //rightIconPress={() => getMeetingInfo(meetingId)}    // 여기 고치면 됨 
+                rightIconPress={() => getMeetingInfo()}    // 여기 고치면 됨 
+                meeting={meetingInfo}
                 //rightIconPress={() => getMeetingUsers(meetingId)}
             />
             </View>

@@ -10,8 +10,9 @@ const AppHeader = ({
     rightIconPress,
     leftIcon,
     leftIconPress,
+    meeting,
 }) => {
-
+    console.log(meeting);
     return (
         <View style={styles(2).container}>      
             {leftIcon &&
