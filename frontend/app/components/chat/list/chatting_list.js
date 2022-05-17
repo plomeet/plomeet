@@ -6,6 +6,7 @@ import { Container } from '../styles';
 import firestore from '@react-native-firebase/firestore';
 import axiosInstance from '../../../../utils/API';
 import { useSelector } from 'react-redux';
+import PlomeetSpinner from '../../../../utils/PlomeetSpinner';
 
 
 const ChattingList = React.memo(()=> {
@@ -13,6 +14,7 @@ const ChattingList = React.memo(()=> {
     const userId = useSelector(state => state.userId).toString();
     const [meeting, setMeeting] = useState();
     const [chatRooms, setChatRooms] = useState([]);
+    const [showSpinner, setShowSpinner] = useState(true);
 
     const _handleChattingRoomPress = async ( item ) => {
         navigation.navigate('InChatRoom', {meeting: item.meeting, userId});
@@ -63,6 +65,7 @@ const ChattingList = React.memo(()=> {
             list.push(chatRoom);
         }
         setChatRooms(list);
+        setShowSpinner(false);
     }
 
     const getLastReadChat = async (docRef) => {
@@ -162,6 +165,9 @@ const ChattingList = React.memo(()=> {
 
     return (
         <Container>
+            { showSpinner &&
+                <PlomeetSpinner isVisible={showSpinner} size={50}/>
+            }
             <FlatList
                 keyExtractor={item => item.meeting.meetingId}
                 data={chatRooms}
