@@ -7,11 +7,15 @@ import CustomSend from './custom/custom_send';
 import CustomInputToolbar from './custom/custom_inputtoolbar';
 import firestore from '@react-native-firebase/firestore';
 import { saveChatting, updateUserLastReadChatTime } from '../../../../utils/firestore';
+import { useSelector } from 'react-redux';
 
 
-const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} }) => {
+const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     const title = meeting.meetingName;
     const [user, setUser] = useState();
+    const userId = useSelector(state => state.userId).toString();
+    const name = useSelector(state => state.name);
+    const img = useSelector(state => state.img);
     const members = {};
     const [messages, setMessages] = useState([]);
 
@@ -58,11 +62,12 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
 
     const setMessagesData = async(queryArray) => {
         const list = [];
-        const promises = queryArray.map(async message => {
+        for(const message of queryArray){
             const messageData = message.data();
+            const userIdSend = messageData.userId;
             var userInfo = {};
-            if(members[userId] == undefined) members[userId] = await getUserInfo(messageData.userId);
-            userInfo = members[userId];
+            if(members[userIdSend] == undefined) members[userIdSend] = await getUserInfo(userIdSend);
+            userInfo = members[userIdSend];
             //userInfo = await getUserInfo(messageData.userId);
             const messageInfo = {
                 _id: messageData._id,
@@ -71,8 +76,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
                 user: userInfo,
             };
             list.push(messageInfo);
-        });
-        await Promise.all(promises);
+        }
 
         setMessages(list);
     };
@@ -100,18 +104,13 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
     
     
     useEffect(() => {
-        const subscriberUser = firestore()
-            .collection('users')
-            .doc(userId)
-            .onSnapshot(querySnapShot => {
-                const userData = querySnapShot.data();
-                const userInfo = {
-                    _id: userData.userId.toString(),
-                    avatar: userData.userProfileImg,
-                    name: userData.userNickName,
-                }
-                setUser(userInfo);
-            });
+        const userInfo = {
+            _id: userId,
+            avatar: img,
+            name: name,
+        };
+        setUser(userInfo);
+        members[userId] = userInfo;
         
         //console.log("meetingId::"+ meeting.meetingId);
         const subscriberChatting = firestore()
