@@ -16,6 +16,7 @@ const mapDispatchToProps = dispatch => {
         setPloggingPath: ploggingPath => dispatch(actions.setPloggingPath(ploggingPath)),
         resetPloggingPath: () => dispatch(actions.resetPloggingPath()),
         saveLogs: savedLogs => dispatch(actions.saveLogs(savedLogs)),
+        setFirstPlogging: firstPlogging => dispatch(actions.setFirstPlogging(firstPlogging)),
     }
 }
 
@@ -28,6 +29,7 @@ const mapStateToProps = state => {
         weatherLoc: state.weatherLoc,
         timeSum: state.timeSum,
         images: state.images,
+        firstPlogging: state.firstPlogging,
     }
 }
 
