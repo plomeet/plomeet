@@ -47,25 +47,28 @@ export const createUser = async ({userId, userNickName, userProfileImg}) => {
 }
 
 //새로운 모임 생성 > 채팅방 생성
-export const createMeeting = async ({meetingId, userId}) => {
+export const createMeeting = async ({meeting, userId}) => {
+    console.log("채팅방...", meeting);
+    const meetingId = meeting.meetingId;
     const meetingsRef = firestore().collection('meetings');
     const newMeeting = {
-        meetingId: meetingId,
-        lastChatTime: 0,    //이 부분 그냥 방 만들어진 날짜로 해도 될 지 보기...
+        meetingId,
+        lastChatTime: meeting.createdAt,
+        notice: meeting.notice,
     }
-    //await meetingsRef.doc(meetingId).set(newMeeting);
-    //await joinMember(meetingId, userId);
+    await meetingsRef.doc(meetingId).set(newMeeting);
+    await joinMember({meetingId, userId, lastChatTime: meeting.createdAt});
 }
 
 //채팅방 사용자 추가
-export const joinMember = async ({meetingId, userId}) => {
+export const joinMember = async ({meetingId, userId, lastChatTime}) => {
     const meetingMembersRef = firestore()
         .collection('meetings').doc(meetingId)
         .collection('members');
     const newMember = {
         userId: userId,
-        lastChatId: 0,
-        lastChatTime: 0, 
+        lastReadChatId: "0",
+        lastReadChatTime: lastChatTime, 
     }
-    //await meetingMembersRef.doc(userId).set(newMember);
+    await meetingMembersRef.doc(userId).set(newMember);
 }

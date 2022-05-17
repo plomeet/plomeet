@@ -1,6 +1,6 @@
 import React, { Component, Node, useEffect, useState, useRef, useCallback } from 'react';
 import 'react-native-gesture-handler';
-import { Dimensions , StyleSheet, Text, View, Alert, TextInput, Button, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
+import { StyleSheet, Text, View, Alert, TextInput, Button, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity, Dimensions  } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
@@ -8,6 +8,7 @@ import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "..
 import { ScrollView } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 import { useSelector } from 'react-redux';
+import { joinMember } from '../../../utils/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-easy-toast';
 
@@ -28,7 +29,7 @@ const MeetingDetail = ({route}) => {
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
   var loc = {latitude: lat, longitude: lng};
-  const [joinDisable, setJoinDisable] = useState(true); 
+  const [joinDisable, setJoinDisable] = useState(true);
   const windowHeight = Dimensions.get('window').height;
   const toastRef = useRef(); // toast ref 생성
   const [btnText, setBtnText] = useState("모임 가입하기");
@@ -85,7 +86,7 @@ const MeetingDetail = ({route}) => {
           showCopyToast();
           setMemberCnt(memberCnt+1);
           setBtnText("가입중인 모임");
-        }} 
+        }}
       ], 
       { cancelable: true } 
     ); 
@@ -109,6 +110,9 @@ const MeetingDetail = ({route}) => {
           if (response.status === 200) {
             console.log(response); 
             updateMeeting();
+            const meetingIdStr = meetingId.toString();
+            const userIdStr = userId.toString();
+            joinMember({meetingId: meetingIdStr, userId: userIdStr, lastChatTime: Date.now()});
           } else {
             console.log(response);
           }
@@ -135,7 +139,7 @@ const MeetingDetail = ({route}) => {
       })
         .then(async (response) => {
           if (response.status === 200) {
-            console.log(response); 
+            console.log(response);
             setMemberCnt(memberCnt+1);
           } else {
             console.log(response);

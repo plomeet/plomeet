@@ -9,6 +9,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import axiosInstance from '../../../utils/API';
 import Config from 'react-native-config'
 import AWS from 'aws-sdk';
+import { createMeeting } from '../../../utils/firestore';
+import { useSelector } from 'react-redux';
+
 
 const OpenMeeting5 = () => {
   const navigation = useNavigation();
@@ -24,6 +27,7 @@ const OpenMeeting5 = () => {
   const [latitude, setLatitude] = useState(37.564362);
   const [longitude, setLongitude] = useState(126.977011);
   var loc = {latitude: latitude, longitude: longitude};
+  const userId = useSelector(state => state.userId);
 
   var s3 = new AWS.S3({
     apiVersion: '2006-03-01',
@@ -73,7 +77,14 @@ const OpenMeeting5 = () => {
       })
         .then(async (response) => {
           if (response.status === 200) {
-            console.log(response); 
+            console.log(response);
+            const userIdStr = userId.toString();
+            const meeting = {
+              meetingId: response.data.meetingId.toString(),
+              createdAt: Date.now(),
+              notice: "안녕하세요! "+meetingName+" 방 입니다.",
+            };
+            createMeeting({meeting, userId: userIdStr});
             navigation.popToTop()
           } else {
             console.log(response);
