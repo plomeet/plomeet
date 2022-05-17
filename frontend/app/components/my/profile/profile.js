@@ -10,12 +10,15 @@ const Profile = () => {
     const userId = useSelector(state => state.userId)
     const nickname = useSelector(state => state.nickname)
     const img = useSelector(state => state.img)
-    const email = useSelector(state => state.email)
+    let email = useSelector(state => state.email)
 
     const [index, setIndex] = useState(true);
     const [index2, setIndex2] = useState(true);
     const [value, onChangeText] = useState("");
 
+    if(email === null){
+        email = '어서오세요!';
+    }
     const updateNickname = () => {
         setIndex(false);
         setIndex2(false);
