@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { GiftedChat  } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/Entypo'
 import { color, Container } from '../styles';
@@ -23,19 +23,19 @@ import {DrawerContentScrollView, DrawerItemList, DrawerItem} from '@react-naviga
 //import { SideBar_, DrawerNavigator } from './DrawerNavigator';
 import AppHeader from './customheader';
 import Icons from 'react-native-vector-icons/AntDesign';
+import {doc, getDoc} from "firebase/firestore";
+import axiosInstance from '../../../../utils/API';
+import axios from 'axios';
 
 
-
-
-const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} }) => {
-//const InsideRoom = ({ navigation, route: {params: {item}} }) => {   // 윤수가 한거
-    //const meeting = item.meeting;
-    //const chat = item.chatting;
-    //const title = meeting.meetingName;
+const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} }) => {   // 윤수가 한거
     const title = meeting.meetingName;
     const [user, setUser] = useState();
     const members = {};
     const [messages, setMessages] = useState([]);
+
+    const meetingId = meeting.meetingId;
+    
 
     
     const _handleMessageSend = async messageList => {
@@ -83,8 +83,28 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
         Alert.alert("니 띄웠다ㅋ","ㅇ");
     }
 
+    // 윤수 추가 : 공지방에 상세정보 띄우는 함수 
+    const getMeetingInfo = async(meetingId) => {
+        var meetingInfo = {};
+        try {
+            await axiosInstance.get(`/meetings/${meetingId}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        meetingInfo = response.data;        // 여기 더 수정!!! 
+                        //console.log(meetingInfo);
+                        //console.log(meetingInfo.item);
+                        //console.log(meetingInfo.registerDate);
+                    } else {
+                        console.log("error");
+                    }
+                })
+                .catch((response) => { console.log(response); });
+        } catch (err) { console.log(err); }
+        return meetingInfo;
+    }
 
-     
+
+
 
 
     const setMessagesData = async(queryArray) => {
@@ -118,6 +138,9 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
             });
         return userInfo;
     };
+
+
+
     
     
 
@@ -172,6 +195,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
             subscriberUser();
             subscriberChatting();
         }
+
     }, []);
 
     /*
@@ -213,10 +237,11 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
         <Container>
             <View>
             <AppHeader
-                title= "oo 모임방 입니다"//"회원가입메롱메롱 공지사항을 어떻게 쓸까 고민중이에요"
+                title= "회원가입메롱메롱 공지사항을 어떻게 쓸까 고민중이에요"
                 noIcon={false}
                 rightIcon={<Icons name="left" size={20} />}
-                rightIconPress={() => navigation.goBack()}
+                //rightIconPress={() => getMeetingInfo(meetingId)}    // 여기 고치면 됨 
+                //rightIconPress={() => getMeetingUsers(meetingId)}
             />
             </View>
         <GiftedChat
@@ -247,5 +272,6 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
     </Container>
     );
 });
+
 
 export default InsideRoom;

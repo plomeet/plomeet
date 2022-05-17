@@ -13,8 +13,8 @@ const ChattingList = React.memo(()=> {
     const [meeting, setMeeting] = useState();
     const [chatRooms, setChatRooms] = useState([]);
 
-    const _handleChattingRoomPress = async ( item ) => {
-        navigation.navigate('InChatRoom', {meeting: item.meeting, userId});
+    const _handleChattingRoomPress = async ( item ) => {   
+        navigation.navigate('InChatRoom', {meeting: item.meeting, userId});     // navigation.navigate('InChatRoom', {item});
     }
 
     const renderChattingRoom = ({ item }) => {

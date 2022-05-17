@@ -25,6 +25,8 @@ import HomeScreen from './MainPage';
 import Chat from '../index';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerActions } from '@react-navigation/native';
+import ChatRoom from './inside_room';
+
 import {
   ChattingRoomComp,
   ChattingRoomInfoComp,
@@ -56,7 +58,7 @@ const CustomDrawer = props => {
               justifyContent: 'space-between',
               alignItems: 'center',
               padding: 15,
-              //backgroundColor: '#f6f6f6',
+              backgroundColor: '#f6f6f6',
               marginBottom: 10,
             }}
           >
@@ -67,12 +69,13 @@ const CustomDrawer = props => {
           </View>
 
           <View>
-            <ChattingRoomComp>
-              <ChattingRoomImg  />
-              <ChattingRoomLastChat>
-               채팅인원
-              </ChattingRoomLastChat>
-            </ChattingRoomComp>
+              <ChattingRoomComp>
+                <ChattingRoomImg  />
+                <ChattingRoomLastChat>
+                채팅인원
+                </ChattingRoomLastChat>
+              </ChattingRoomComp>
+
           </View>
 
 
@@ -98,13 +101,53 @@ const CustomDrawer = props => {
     );
 }
 
+    // 윤수 추가 : 채팅방에 멤버 띄우는 함수
+    /*
+    const getMeetingUsers = async(meetingId) => {
+        const meetingUsers = {};
+        await firestore().collection('meetings')
+            .doc(meetingId).collection('members')
+            .doc(userId).get().then((doc)=>{
+                for(document in doc){
+                    meetingUsers._id = document.data().userId;
+                    console.log(document.data());
+                }
+                
+            });
+        return meetingUsers;
+    }*/
+    const getMeetingUsers = async(meetingId) => {
+      const meetingUsers = {};
+      try {
+          await axiosInstance.get(`/chat/${meetingId}`)
+          //await axios.get(`127.0.0.1:8000/chat/${meetingId}`)
+              .then((response) => {
+                  if (response.status === 200) {
+                      meetingUsers = response.data;        // 여기 더 수정!!! 
+                      //console.log(meetingInfo);
+                      //console.log(meetingInfo.item);
+                      //console.log(meetingInfo.registerDate);
+                  } else {
+                      console.log("error");
+                  }
+              })
+              .catch((response) => { console.log(response); });
+      } catch (err) { console.log(err); }
+      return meetingUsers;
+  }
+
+
 function HeaderR() {
     return ( <Ionicons name="notifications-outline"size={30}></Ionicons>);
    
 }
 
-const DrawerNavigator = ({item}) => {  
-    // 윤수가 추가함 
+const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {  
+  const meeting = props.data.route.params.meeting;
+  const userId = props.data.route.params.userId;
+  //console.log("하이하이하이"+ meeting,userId);
+
+  // 윤수가 추가함 
     const navigation = useNavigation();
     useEffect(()=>{
         navigation.setOptions({
@@ -123,18 +166,15 @@ const DrawerNavigator = ({item}) => {
         }}
         drawerContent={props => <CustomDrawer {...props} /> } 
         >
-          <Drawer.Screen name='Menu' component={InsideRoom} initialParams={{item:{item}}} />
+          <Drawer.Screen name='Menu' component={InsideRoom} initialParams={{meeting:meeting, userId:userId}}/>
         </Drawer.Navigator >
     );
-    //<Drawer.Screen name='Menu' component={InsideRoom} initialParams={{item:{item}}} />
-    //<Drawer.Screen name='Menu' component={AppHeader} />
-    //<Drawer.Screen name='Menu' component={InsideRoom} />
-}   //<Drawer.Screen name='Menu' component={HomeScreen} />
 
+}   
 
-export function SideBar_(){
+export function SideBar_(props){
     return (
-        <DrawerNavigator />
+        <DrawerNavigator data={props} />
     );
 }
 
