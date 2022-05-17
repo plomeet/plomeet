@@ -2,8 +2,10 @@ import React, { Component, Node, Button, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity } from "react-native";
 import { useSelector } from 'react-redux';
 import { ProfileContainer, ProfileImage } from "./styles";
+import axiosInstance from '../../../../utils/API';
 
 const Profile = () => {
+    const userId = useSelector(state => state.userId)
     const nickname = useSelector(state => state.nickname)
     const img = useSelector(state => state.img)
     const email = useSelector(state => state.email)
@@ -17,9 +19,23 @@ const Profile = () => {
         setIndex2(false);
     }
 
+    //완료 버튼 누를때
     const confirmNickname = () => {
+        console.log(userId);
+        axiosInstance.put("/user" + userId, {
+            userId : userId,
+            userNickName : value,
+        })
+            .then((response) => {
+                if(response.status === 200) {
+                    console.log(response)
+                } else {
+                    console.log("error");
+                }
+            })
         setIndex(true);
         setIndex2(true);
+        console.log(nickname);
     }
 
     var input = null;
