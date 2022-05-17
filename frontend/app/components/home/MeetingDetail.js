@@ -1,6 +1,6 @@
-import React, { Component, Node, useEffect, useState } from 'react';
+import React, { Component, Node, useEffect, useState, useRef, useCallback } from 'react';
 import 'react-native-gesture-handler';
-import { StyleSheet, Text, View, Alert, TextInput, Button, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
+import { StyleSheet, Text, View, Alert, TextInput, Button, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity, Dimensions  } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
