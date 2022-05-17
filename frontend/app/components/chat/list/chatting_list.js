@@ -77,27 +77,6 @@ const ChattingList = React.memo(()=> {
             })
         return lastReadChat;
     };
-
-    const getLastChatInfoAll = async (docRef) => {
-        const lastChatInfo = {};
-        await docRef
-                .collection('chattings')
-                .orderBy('createdAt', 'desc')
-                .get().then((docs) => {            
-                    const chatDocs = docs.docs;
-                    if(chatDocs.length==0){
-                        lastChatInfo.unReadCnt=0;
-                        lastChatInfo.lastTime=null;
-                        lastChatInfo.lastMsg="";
-                    }else{
-                        lastChatInfo.unReadCnt=chatDocs.length;
-                        const lastChat = chatDocs[0];
-                        lastChatInfo.lastTime=lastChat.data().createdAt;
-                        lastChatInfo.lastMsg=lastChat.data().text;
-                    }
-                });
-        return lastChatInfo;
-    }
     
     const getLastChatInfo = async (docRef, lastReadChatTime) => {
         const lastChatInfo = {};
@@ -112,11 +91,14 @@ const ChattingList = React.memo(()=> {
                     lastChatInfo.lastTime=null;
                     lastChatInfo.lastMsg="";
                 }else{
-                    lastChatInfo.unReadCnt=chatDocs.length-1;
+                    lastChatInfo.unReadCnt = (lastReadChatTime==lastChatInfo.lastTime) ? chatDocs.length : chatDocs.length-1;
                     const lastChatData = chatDocs[0].data();
                     lastChatInfo.lastTime=lastChatData.createdAt;
                     lastChatInfo.lastMsg=lastChatData.text;
-                    if(lastChatInfo.unReadCnt==1&& lastReadChatTime==lastChatInfo.lastTime) lastChatInfo.unReadCnt=0;
+                    /*
+                    lastChatInfo.unReadCnt=chatDocs.length;
+                    if(lastReadChatTime!=lastChatInfo.lastTime) lastChatInfo.unReadCnt-=1;
+                    */
                 }
             });
         return lastChatInfo;
