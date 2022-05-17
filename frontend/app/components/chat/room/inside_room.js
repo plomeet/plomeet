@@ -123,7 +123,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
             });
         
         return () => {
-            subscriberUser();
+            //subscriberUser();
             subscriberChatting();
         }
     }, []);
