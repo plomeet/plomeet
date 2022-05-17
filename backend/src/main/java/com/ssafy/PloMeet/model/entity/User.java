@@ -1,6 +1,7 @@
 package com.ssafy.PloMeet.model.entity;
 
 import com.ssafy.PloMeet.api.request.ProfileReq;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Getter
 @ToString
 @DynamicInsert

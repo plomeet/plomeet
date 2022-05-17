@@ -5,11 +5,12 @@ import { FlatList } from 'react-native-gesture-handler';
 import { Container } from '../styles';
 import firestore from '@react-native-firebase/firestore';
 import axiosInstance from '../../../../utils/API';
+import { useSelector } from 'react-redux';
 
 
 const ChattingList = React.memo(()=> {
     const navigation = useNavigation();
-    const userId="1";
+    const userId = useSelector(state => state.userId).toString();
     const [meeting, setMeeting] = useState();
     const [chatRooms, setChatRooms] = useState([]);
 
@@ -34,14 +35,16 @@ const ChattingList = React.memo(()=> {
             const meetingDocRef = firestore()
                             .collection('meetings').doc(meetingId);
             const lastReadChat=  await getLastReadChat(meetingDocRef);
-
+            
+            /*
             var chat;
             if(lastReadChat.id == 0){
                 chat = await getLastChatInfoAll(meetingDocRef);
             }else{
                 chat = await getLastChatInfo(meetingDocRef, lastReadChat.time);
             }
-
+            */
+            const chat = await getLastChatInfo(meetingDocRef, lastReadChat.time);
             const meetingInfo = await getMeetingInfo(meetingId);
 
             const chatRoom = {
@@ -104,11 +107,17 @@ const ChattingList = React.memo(()=> {
             .where('createdAt', '>=', lastReadChatTime)
             .get().then((docs) => {
                 const chatDocs = docs.docs;
-                lastChatInfo.unReadCnt=chatDocs.length-1;
-                const lastChatData = chatDocs[0].data();
-                lastChatInfo.lastTime=lastChatData.createdAt;
-                lastChatInfo.lastMsg=lastChatData.text;
-                if(lastChatInfo.unReadCnt==1&& lastReadChatTime==lastChatInfo.lastTime) lastChatInfo.unReadCnt=0;
+                if(chatDocs.length==0){
+                    lastChatInfo.unReadCnt=0;
+                    lastChatInfo.lastTime=null;
+                    lastChatInfo.lastMsg="";
+                }else{
+                    lastChatInfo.unReadCnt=chatDocs.length-1;
+                    const lastChatData = chatDocs[0].data();
+                    lastChatInfo.lastTime=lastChatData.createdAt;
+                    lastChatInfo.lastMsg=lastChatData.text;
+                    if(lastChatInfo.unReadCnt==1&& lastReadChatTime==lastChatInfo.lastTime) lastChatInfo.unReadCnt=0;
+                }
             });
         return lastChatInfo;
     }
@@ -134,7 +143,7 @@ const ChattingList = React.memo(()=> {
             .collectionGroup('members')
             .where('userId', "==", userId.toString())
             .onSnapshot(querySnapShot => {                  
-                const meetingIds = [];
+                const meetingIds = ["0"];
                 querySnapShot.forEach((docs) => {
                     meetingIds.push(docs.ref.parent.parent._documentPath._parts[1]);
                 });

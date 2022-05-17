@@ -16,6 +16,7 @@ const initialState = {
     img: "",
     name: "",
     email: "",
+    firstPlogging: false,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -56,6 +57,8 @@ const rootReducer = (state = initialState, action) => {
             return { ...state, name: action.payload }
         case "SET_EMAIL":
             return { ...state, email: action.payload }
+        case "SET_FIRSTPLOGGING":
+            return {...state, firstPlogging: action.payload }
         default:
             return state;
     }

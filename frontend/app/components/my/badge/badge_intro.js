@@ -12,11 +12,12 @@ import {
     BadgeMoreText
 } from "./styles";
 import axiosInstance from '../../../../utils/API';
+import { useSelector } from 'react-redux';
 
 
 const BadgeIntro = () => {
     const navigation = useNavigation();
-    const userId = 1;
+    const userId = useSelector(state => state.userId);
     const [badges, setBadges] = useState([]);
 
     const _handleBadgeMorePress = () => {

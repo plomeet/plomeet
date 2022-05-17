@@ -36,5 +36,15 @@ public class BadgeServiceImpl implements  BadgeService{
         return badgesRes;
     }
 
+    @Override
+    public BadgeRes findBadgeInfoByUserId(Long userId, Long badgeId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 사용자 번호입니다:: "+userId));
+        Badge badge = badgeRepository.findById(badgeId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 뱃지 번호입니다:: "+badgeId));
+        boolean isOwned = myBadgeRepository.existsByUserIdAndBadgeId(user, badge);
+        return new BadgeRes(badge, isOwned);
+    }
+
 
 }

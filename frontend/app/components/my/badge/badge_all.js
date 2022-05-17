@@ -8,10 +8,11 @@ import {
     BadgeComponentTouchchable
 } from "./styles"
 import axiosInstance from '../../../../utils/API';
+import { useSelector } from 'react-redux';
 
 
 const BadgeList = () => {
-    const userId = 1;
+    const userId = useSelector(state => state.userId);
     const [badges, setBadges] = useState([]);
     const [badgeSelete, setBadgeSelete] = useState();
     const [ modalVisible, setModalVisible ] = useState(false);
