@@ -8,6 +8,9 @@ import CustomInputToolbar from './custom/custom_inputtoolbar';
 import firestore from '@react-native-firebase/firestore';
 import { saveChatting, updateUserLastReadChatTime } from '../../../../utils/firestore';
 import { useSelector } from 'react-redux';
+import { NativeModules } from 'react-native'
+
+const { StatusBarManager } = NativeModules
 
 
 const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
@@ -18,6 +21,8 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     const img = useSelector(state => state.img);
     const members = {};
     const [messages, setMessages] = useState([]);
+    const [statusBarHeight, setStatusBarHeight] = useState(0);
+
 
     
     const _handleMessageSend = async messageList => {
@@ -100,6 +105,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
                 <Icon name="menu" size={20} color={color.black} style={{marginRight: 10}} />
             ),
         });
+        
     }, []);
     
     
@@ -127,6 +133,12 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
             subscriberChatting();
         }
     }, []);
+
+    useEffect(() => { 
+        Platform.OS == 'ios' ? StatusBarManager.getHeight((statusBarFrameData) => {
+            setStatusBarHeight(statusBarFrameData.height)
+        }) : null;
+    },[])
 
     /*
     useEffect(() => {
@@ -164,7 +176,9 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     
 
     return (
-        <Container>
+        // <KeyboardAvoidingView style={styles.container} behavior={"padding"} keyboardVerticalOffset={statusBarHeight+44}>
+
+        <Container behavior={"padding"} keyboardVerticalOffset={statusBarHeight-165}>
             <GiftedChat
                 listViewProps={{
                     style: { 
@@ -190,7 +204,8 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
                 onSend={_handleMessageSend}
                 alwaysShowSend={true}
             />
-        </Container>
+            </Container>
+            // </KeyboardAvoidingView>
     );
 });
 

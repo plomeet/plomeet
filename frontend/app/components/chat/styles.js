@@ -13,7 +13,7 @@ export const color = {
     redBadge: '#FF5442',
 };
 
-export const Container = styled.View`
+export const Container = styled.KeyboardAvoidingView`
     flex: 1;
     background-color: ${color.white};
 `;
