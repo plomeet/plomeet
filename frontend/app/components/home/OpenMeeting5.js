@@ -1,7 +1,7 @@
-import React, { Component, Node, useEffect, useState } from 'react';
+import React, { Component, Node, useEffect, useState, useRef, useCallback } from 'react';
 import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { StyleSheet, Text, View, TextInput, Image, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
+import { StyleSheet, Text, View, Dimensions, TextInput, Image, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
 import { ScrollView } from 'react-native-gesture-handler';
@@ -59,6 +59,23 @@ const OpenMeeting5 = () => {
     });
   }
 
+  const thisIsMyMeeting = async (mId) => {
+    try {
+      await axiosInstance.post("/meetings", {
+        userId: userId,
+        meetingId: mId,
+        isLeader: true,
+      })
+        .then(async (response) => {
+          if (response.status === 200) {
+            console.log(response); 
+          } else {
+            console.log(response);
+          }
+        })
+        .catch((response) => { console.log(response); });
+    } catch (err) { console.log(err); }
+  };
 
   const creatMeeting = async () => {
     uploadImg();
@@ -78,6 +95,7 @@ const OpenMeeting5 = () => {
         .then(async (response) => {
           if (response.status === 200) {
             console.log(response);
+            thisIsMyMeeting(response.data.meetingId);
             const userIdStr = userId.toString();
             const meeting = {
               meetingId: response.data.meetingId.toString(),
