@@ -7,6 +7,7 @@ import firestore from '@react-native-firebase/firestore';
 import axiosInstance from '../../../../utils/API';
 import { useSelector } from 'react-redux';
 import PlomeetSpinner from '../../../../utils/PlomeetSpinner';
+import NoContent from '../no_content';
 
 
 const ChattingList = React.memo(()=> {
@@ -131,7 +132,7 @@ const ChattingList = React.memo(()=> {
                 .collectionGroup('members')
                 .where('userId', "==", userId.toString())
                 .onSnapshot(querySnapShot => {
-                    const meetingIds = [];
+                    const meetingIds = ["0"];
                     querySnapShot.forEach((docs) => {
                         meetingIds.push(docs.ref.parent.parent._documentPath._parts[1]);
                     });
@@ -160,11 +161,16 @@ const ChattingList = React.memo(()=> {
             { showSpinner &&
                 <PlomeetSpinner isVisible={showSpinner} size={50}/>
             }
+            { chatRooms.length == 0
+            ?
+            <NoContent/>
+            :
             <FlatList
                 keyExtractor={item => item.meeting.meetingId}
                 data={chatRooms}
                 renderItem={renderChattingRoom}
             />
+            }
         </Container>
     );
 });
