@@ -123,9 +123,8 @@ const styles = StyleSheet.create({
   },
   recentListTxt: {
     fontSize: 14,
-    marginTop: 20,
-    marginBottom: 10,
-    marginLeft: 20,
+    marginTop: 40,
+    marginLeft: 25,
     color: "#000"
   },
   buttonText: {
@@ -408,6 +407,7 @@ const Home = () => {
       <Modal animationType="slide"
         transparent={false}
         activeOpacity={0.8}
+        onRequestClose={() => setVisibleSearch(false)}
         visible={visibleSearch}>
         <KeyboardAvoidingView style={styles.container} behavior={"padding"} keyboardVerticalOffset={statusBarHeight + 44}>
 
@@ -425,22 +425,22 @@ const Home = () => {
             />
             {visibleSearch && recentKeyWord !== undefined && recentKeyWord.length > 0 ? <>
               <Text style={styles.recentListTxt}>최근검색</Text>
-              <View style={[styles.row, { marginLeft: 20 }, { marginBottom: 5 }, { marginTop: 5 }]}>
+              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, {marginTop: -10}]}>
                 {recentKeyWord[11] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[11])}><Text>{recentKeyWord[11]}</Text></Chip>}
                 {recentKeyWord[10] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[10])}><Text>{recentKeyWord[10]}</Text></Chip>}
                 {recentKeyWord[9] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[9])}><Text>{recentKeyWord[9]}</Text></Chip>}
               </View>
-              <View style={[styles.row, { marginLeft: 20 }, { marginBottom: 5 }, { marginTop: 5 }]}>
+              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, { marginTop: 5 }]}>
                 {recentKeyWord[8] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[8])}><Text>{recentKeyWord[8]}</Text></Chip>}
                 {recentKeyWord[7] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[7])}><Text>{recentKeyWord[7]}</Text></Chip>}
                 {recentKeyWord[6] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[6])}><Text>{recentKeyWord[6]}</Text></Chip>}
               </View>
-              <View style={[styles.row, { marginLeft: 20 }, { marginBottom: 5 }, { marginTop: 5 }]}>
+              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, { marginTop: 5 }]}>
                 {recentKeyWord[5] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[5])}><Text>{recentKeyWord[5]}</Text></Chip>}
                 {recentKeyWord[4] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[4])}><Text>{recentKeyWord[4]}</Text></Chip>}
                 {recentKeyWord[3] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[3])}><Text>{recentKeyWord[3]}</Text></Chip>}
               </View>
-              <View style={[styles.row, { marginLeft: 20 }, { marginBottom: 5 }, { marginTop: 5 }]}>
+              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, { marginTop: 5 }]}>
                 {recentKeyWord[2] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[2])}><Text>{recentKeyWord[2]}</Text></Chip>}
                 {recentKeyWord[1] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[1])}><Text>{recentKeyWord[1]}</Text></Chip>}
                 {recentKeyWord[0] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[0])}><Text>{recentKeyWord[0]}</Text></Chip>}
