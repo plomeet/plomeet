@@ -1,10 +1,10 @@
 import React from 'react';
 import { NoContentContainer, NoContentText } from './styles';
 
-const NoContent = ({content}) => {
+const NoContent = () => {
     return (
         <NoContentContainer>
-            <NoContentText>{content}이(가) 존재하지 않습니다.</NoContentText>
+            <NoContentText>채팅방이 존재하지 않습니다.</NoContentText>
         </NoContentContainer>
     )
 };

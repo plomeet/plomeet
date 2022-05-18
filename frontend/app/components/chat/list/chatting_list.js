@@ -163,7 +163,7 @@ const ChattingList = React.memo(()=> {
             }
             { chatRooms.length == 0
             ?
-            <NoContent content={"채팅방"}/>
+            <NoContent/>
             :
             <FlatList
                 keyExtractor={item => item.meeting.meetingId}
