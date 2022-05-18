@@ -52,11 +52,12 @@ const OpenMeeting3 = () => {
     }
   };
   const isDone = () => {
-    console.log("확인");
-    if((memberMax>0) && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택')){
-      setNextDisable(false);
+    if(item != [false, false, false, false, false, false, false]){
+      if((memberMax>0) && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택')){
+        setNextDisable(false);
+      }
+      if(isOverZero && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택') ) {setNextDisable(false);}
     }
-    if(isOverZero && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택') ) {setNextDisable(false);}
   }
 
   // Modal을 표시하거나 숨기기 위한 변수 
