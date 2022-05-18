@@ -1,48 +1,23 @@
 import { useState, useEffect } from 'react';
-import { GiftedChat  } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/Entypo'
-import { color, Container } from '../styles';
-import CustomBubble from './custom/custom_bubble';
-import CustomSend from './custom/custom_send';
-import CustomInputToolbar from './custom/custom_inputtoolbar';
-import msg from './dump_data_msg';
-//import { createMessage } from '../../../../utils/firestore';
+import { color} from '../styles';
+
 import {View, StyleSheet, Button, Alert} from "react-native";
-import { SidebarData } from './SidebarData';
 import {TouchableOpacity, Text} from "react-native";
 
 import * as React from 'react';
-//import { Button, View } from 'react-native';
+
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { initializeApp } from 'firebase/app';
-import {DrawerContentScrollView, DrawerItemList, DrawerItem} from '@react-navigation/drawer';
-import {   Extrapolate,interpolateColors,interpolateNode, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+
 import InsideRoom from './inside_room';
-import AppHeader from './customheader';
-import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './MainPage';
-import Chat from '../index';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerActions } from '@react-navigation/native';
-import ChatRoom from './inside_room';
 
 import {
   ChattingRoomComp,
-  ChattingRoomInfoComp,
-  ChattingRoomInfoAddComp,
-  ChattingRoomInfoUpLineComp,
-  ChattingRoomInfoDownLineComp,
   ChattingRoomImg,
-  ChattingRoomName,
-  ChattingRoomMember,
-  ChattingRoomLastTime,
-  ChattingRoomLastChat,
-  ChattingRoomUnReadBadge,
-  ChattingRoomUnRead,
+
 } from '../list/styles';
-import CollapsibleView from './CollapsibleView';
-import CollapsibleViewTestScreen from './CollapsibleViewTestScreen';
 import axiosInstance from '../../../../utils/API';
 import { FlatList } from 'react-native-gesture-handler';
 

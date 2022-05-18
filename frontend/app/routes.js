@@ -19,7 +19,6 @@ import LogDetail from './components/record/plogDetail/index';
 import InsideRoom from './components/chat/room/inside_room';
 import {SideBar_} from './components/chat/room/DrawerNavigator';
 import {DrawerNavigator} from './components/chat/room/DrawerNavigator'
-import CollapsibleViewTestScreen from './components/chat/room/CollapsibleViewTestScreen';
 
 const Stack = createStackNavigator();
 const MainScreenTab = createBottomTabNavigator();

@@ -8,24 +8,15 @@ import CustomInputToolbar from './custom/custom_inputtoolbar';
 
 import firestore from '@react-native-firebase/firestore';
 import { saveChatting, updateUserLastReadChatTime } from '../../../../utils/firestore';
-import msg from './dump_data_msg';
-//import { createMessage } from '../../../../utils/firestore';
+
 import {View, StyleSheet, Button, Alert} from "react-native";
-import { SidebarData } from './SidebarData';
-import {TouchableOpacity, Text, TouchableWithoutFeedback} from "react-native";
+
 
 import * as React from 'react';
-//import { Button, View } from 'react-native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { initializeApp } from 'firebase/app';
-import {DrawerContentScrollView, DrawerItemList, DrawerItem} from '@react-navigation/drawer';
-//import { SideBar_, DrawerNavigator } from './DrawerNavigator';
+
 import AppHeader from './customheader';
 import Icons from 'react-native-vector-icons/AntDesign';
-import {doc, getDoc} from "firebase/firestore";
 import axiosInstance from '../../../../utils/API';
-import axios from 'axios';
 
 
 const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} }) => {   // 윤수가 한거
