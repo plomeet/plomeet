@@ -19,6 +19,7 @@ const OpenMeeting5 = () => {
   const [meetingImgFileName, setMeetingImgFileName] = useState("");
   const [meetingName, setMeetingName] = useState("");
   const [detail, setDetail] = useState("");
+  const [item, setItem] = useState("");
   const [meetingPlace, setMeetingPlace] = useState("");
   const [memberMax, setMemberMax] = useState(1);
   // const [memberCnt, setMemberCnt] = useState(1);
@@ -90,7 +91,7 @@ const OpenMeeting5 = () => {
         lng: longitude,
         memberMax: memberMax,
         meetingDate: meetingDate,
-        item: "쓰레기봉투"
+        item: item
       })
         .then(async (response) => {
           if (response.status === 200) {
@@ -144,6 +145,10 @@ const OpenMeeting5 = () => {
     AsyncStorage.getItem('meetingDate', (err, result) => {
       console.log(result);
       setMeetingDate(result);
+    })
+    AsyncStorage.getItem('item', (err, result) => {
+      console.log(result);
+      setItem(result);
     })
     AsyncStorage.getItem('address', (err, result) => {
       console.log(result);

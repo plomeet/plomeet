@@ -158,13 +158,6 @@ const MeetingDetail = ({route}) => {
     getMeetingById(meetingId);
   }, [isFocused]);
 
-  //내가 참여한 모임인지 아닌지
-  useEffect(() => {
-    AsyncStorage.getItem('myMeeting', (err, result) => {
-      console.log(JSON.parse(result));
-    })
-  }, [])
-
   async function getMeetingById(meetingId) {
     try {
         await axiosInstance.get("/meetings/"+meetingId)
