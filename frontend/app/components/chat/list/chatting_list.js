@@ -20,7 +20,7 @@ const ChattingList = React.memo(()=> {
     const [showSpinner, setShowSpinner] = useState(true);
 
     const _handleChattingRoomPress = async ( item ) => {   
-        navigation.navigate('InChatRoom', {meeting: item.meeting, userId});     // navigation.navigate('InChatRoom', {item});
+        navigation.navigate('InChatRoom', {meeting: item.meeting, userId});  //navigation.navigate('InChatRoom', {meeting: item.meeting, userId});
     }
 
     const renderChattingRoom = ({ item }) => {
