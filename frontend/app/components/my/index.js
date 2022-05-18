@@ -34,6 +34,7 @@ const MyMeetingIntro = () => {
     const navigation = useNavigation();
     const [myMeetingListInfo, setMyMeetingListInfo] = useState([]);
     const [myMeetingList, setMyMeetingList] = useState([]);
+    const [imLeaderList, setImLeaderList] = useState([]);
     const isFocused = useIsFocused();
     const week = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -60,16 +61,18 @@ const MyMeetingIntro = () => {
             date={parse(item.meetingDate)}
             meetingId={item.meetingId}
             meetingDesc={item.meetingDesc}
+            isVisible = {imLeaderList.indexOf(item.meetingId)}
             index={item.meetingId} />
     );
 
-    const Item = ({ meetingId, meetingDesc, img, title, place, numMember, maxMember, date, index, lat, lng, placeDetail }) => (
+    const Item = ({ meetingId, meetingDesc, isVisible, img, title, place, numMember, maxMember, date, index, lat, lng, placeDetail }) => (
         <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => navigation.navigate('MeetingDetail', { meetingId: meetingId, myMeetingList: myMeetingList })}
             // style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles2.card, styles2.elevation]}>
             style={[styles2.card, styles2.elevation]}>
             <Image source={{ uri: img }} style={styles2.img} />
+            <View style={isVisible>=0 ? styles2.chipLeader : styles2.invisible}><Text style={styles2.textLeader}>운영중</Text></View>
             <Text style={styles2.title}>{title}</Text>
             <View style={styles2.row} >
                 <Icon name='person-outline' size={14} color='#292D32' />
@@ -86,10 +89,14 @@ const MyMeetingIntro = () => {
 
     useEffect(() => {
         AsyncStorage.getItem('myMeeting', (err, result) => {
-            setMyMeetingListInfo(JSON.parse(result));
+            setMyMeetingListInfo(JSON.parse(result).reverse());
+
         })
         AsyncStorage.getItem('myMeetingList', (err, result) => {
             setMyMeetingList(JSON.parse(result));
+        })
+        AsyncStorage.getItem('imLeaderList', (err, result) => {
+            setImLeaderList(JSON.parse(result));
         })
     }, [isFocused]);
 
@@ -189,6 +196,29 @@ const styles2 = StyleSheet.create({
         fontSize: 18,
         color: "#fff"
     },
+    chipLeader : {
+      position: 'absolute',
+      right: 5,
+      top: 5,
+      backgroundColor : "#FFEB81",
+      opacity: 0.8,
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderRadius: 15,
+      width: 60,
+      paddingVertical: 1,
+      justifyContent: "center"
+    },
+    textLeader : {
+      color: "#000",
+      alignItems: "center",
+    },
+    invisible : {
+      position: 'absolute',
+      right: 5,
+      top: 5,
+      opacity: 0
+    }
 });
 
 const styles = StyleSheet.create({

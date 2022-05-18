@@ -138,6 +138,7 @@ const Home = () => {
   const [meetingList, setMeetingList] = useState([]);
   const [myMeetingList, setMyMeetingList] = useState([]);
   const [myMeetingListInfo, setMyMeetingListInfo] = useState([]);
+  // const [imLeaderList, setImLeaderList] = useState([]);
   const isFocused = useIsFocused();
   const current = getToday(); //오늘 날짜
   const week = ['일', '월', '화', '수', '목', '금', '토'];
@@ -241,7 +242,7 @@ const Home = () => {
     getAllMeeting();
     getMyMeeting();
     setKeywordTxt();
-  }, [isFocused]);
+  }, [isFocused==true]);
 
   useEffect(() => {
     getMyMeeting();
@@ -296,18 +297,23 @@ const Home = () => {
             var mList = response.data;
             var test = [];
             var testId = [];
+            var imLeader = [];
 
             for (var i = 0; i < mList.length; i++) {
+              if(mList[i].isLeader){
+                imLeader.push(mList[i].meetingId.meetingId);
+              }
               test.push(mList[i].meetingId);
               testId.push(mList[i].meetingId.meetingId);
             }
             setMyMeetingListInfo(test);
             setMyMeetingList(testId);
+            // setImLeaderList(imLeader);
             AsyncStorage.setItem('myMeeting', JSON.stringify(test), () => {
-              console.log('[SetItem 완료] : myMeeting');
             });
             AsyncStorage.setItem('myMeetingList', JSON.stringify(testId), () => {
-              console.log('[SetItem 완료] : myMeetingList');
+            });
+            AsyncStorage.setItem('imLeaderList', JSON.stringify(imLeader), () => {
             });
             console.log("[내가 참여한 모임 정보 조회 성공]");
           } else {
