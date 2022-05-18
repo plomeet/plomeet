@@ -17,3 +17,17 @@ export const Container = styled.View`
     flex: 1;
     background-color: ${color.white};
 `;
+
+//no_content
+export const NoContentContainer = styled.View`
+    flex: 1;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: ${color.white};
+`;
+
+export const NoContentText = styled.Text`
+    font-size: 13px;
+    color: ${color.greyFont};
+`;

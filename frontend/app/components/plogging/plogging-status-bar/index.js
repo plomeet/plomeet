@@ -15,7 +15,7 @@ import Config from 'react-native-config'
 import AWS from 'aws-sdk';
 import { resetPloggingPath } from '../../../actions/action';
 
-const PloggingStatusBar = ({ mm = 0, ss = 0, isPlogging, setTimeSum, timeSumString, setIsSave, setDistSum, handleShowEndPage, saveLogs, islogDetail, logDetailWeather }) => {
+const PloggingStatusBar = ({ mm = 0, ss = 0, distSumLog, isLogDetail, isPlogging, setTimeSum, timeSumString, setIsSave, setDistSum, handleShowEndPage, saveLogs, islogDetail, logDetailWeather }) => {
   const layout = useWindowDimensions();
   const countInterval = useRef(null);
   const [minutes, setMinutes] = useState(parseInt(mm));
@@ -208,7 +208,11 @@ const PloggingStatusBar = ({ mm = 0, ss = 0, isPlogging, setTimeSum, timeSumStri
       <PloggingStatusBarBlock width={layout.width}>
         <View style={styles.statusView}>
           <MapSvg width={20} height={20} fill={"#FFF"} />
-          <Text style={styles.statusText}>{distSum}km</Text>
+          {isLogDetail ?
+            <Text style={styles.statusText}>{distSumLog}km</Text>
+            :
+            <Text style={styles.statusText}>{distSum}km</Text>
+          }
         </View>
         <View style={styles.statusView}>
           <TimeSvg width={20} height={20} fill={"#FFF"} />

@@ -9,6 +9,8 @@ import axiosInstance from "../../../utils/API";
 import { useSelector } from "react-redux"
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Spinner from 'react-native-spinkit'
+import { useDispatch } from 'react-redux'
+import { setFirstPlogging } from '../../actions/badgeAction';
 
 const Record = ({ saveLogs, setListMonth }) => {
     const [plogLists, setPlogLists] = useState([]);
@@ -24,6 +26,7 @@ const Record = ({ saveLogs, setListMonth }) => {
     const scrollViewRef = useRef();
     const [showSpinner, setShowSpinner] = useState(true);
     const firstPlogging = useSelector(state => state.firstPlogging);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (isFocused) {
@@ -46,7 +49,10 @@ const Record = ({ saveLogs, setListMonth }) => {
             };
 
             const checkFirstLog = () => { 
-                if (firstPlogging) alert("첫 플로깅 뱃지 획득 성공!");
+                if (firstPlogging) {
+                    alert("첫 플로깅 뱃지 획득 성공!");
+                    dispatch(setFirstPlogging(false))
+                }
             }
             getSavedLogs();
             checkFirstLog();
