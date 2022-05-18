@@ -25,6 +25,7 @@ import MeetingList from './components/my/MeetingList';
 import CameraPage from './components/plogging/button/CameraPage';
 import LogDetail from './components/record/plogDetail/index';
 import Preference from './components/my/preference/index'
+import PreferenceAuth from './components/my/preference/auth/index'
 import PolicyDoc from './components/my/preference/policyDoc/index'
 
 //Chatting
@@ -123,6 +124,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="logDetail" component={LogDetail} options={{ title: '' }} />
             <Stack.Screen name="BadgeList" component={BadgeList} options={{ title: '배지' }} />
             <Stack.Screen name="Preference" component={Preference} options={{ title: '환경설정' }} />
+            <Stack.Screen name="PreferenceAuth" component={PreferenceAuth} options={{ title: '계정' }} />
             <Stack.Screen name="PolicyDoc" component={PolicyDoc} options={{ title: '' }} />
         </Stack.Navigator>
     )

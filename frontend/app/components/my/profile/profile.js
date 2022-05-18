@@ -1,34 +1,45 @@
 import React, { Component, Node, Button, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity } from "react-native";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ProfileContainer, ProfileImage } from "./styles";
 import axiosInstance from '../../../../utils/API';
+import * as actions from '../../../actions/userActions';
 
 const Profile = () => {
+    const dispatch = useDispatch();
     const userId = useSelector(state => state.userId)
     const nickname = useSelector(state => state.nickname)
     const img = useSelector(state => state.img)
-    const email = useSelector(state => state.email)
+    let email = useSelector(state => state.email)
 
     const [index, setIndex] = useState(true);
     const [index2, setIndex2] = useState(true);
     const [value, onChangeText] = useState("");
 
+    if(email === null){
+        email = '어서오세요!';
+    }
     const updateNickname = () => {
         setIndex(false);
         setIndex2(false);
     }
 
+    const NicknameUpdate = () => {
+        dispatch(actions.setNickname(value));
+        console.log("hey",nickname);
+      }
+
     //완료 버튼 누를때
     const confirmNickname = () => {
         console.log(userId);
-        axiosInstance.put("/user" + userId, {
+        axiosInstance.put("/user/" + userId, {
             userId : userId,
             userNickName : value,
         })
             .then((response) => {
                 if(response.status === 200) {
                     console.log(response)
+                    NicknameUpdate()
                 } else {
                     console.log("error");
                 }
@@ -105,8 +116,8 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     Text: {
-        paddingTop: 5,
-        paddingBottom: 16,
+        paddingTop: 4,
+        paddingBottom: 13,
         paddingLeft: 4,
         flex: 0.3,
         fontSize: 20,
@@ -118,6 +129,7 @@ const styles = StyleSheet.create({
     },
     Text2: {
         flex: 0.5,
+        paddingLeft: 5,
         fontSize: 14,
     },
     TouchableOpacityStyle: {
