@@ -33,11 +33,20 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
     const [user, setUser] = useState();
     const members = {};
     const [messages, setMessages] = useState([]);
+    const [notice, setNotice] = useState(
+        "["+{title}.title + "]모임의 플로깅방입니다."
+    );
 
     const meetingId = meeting.meetingId;
-    
+    const [meetingInfo, setMeetingInfo] = useState({
+        meetingPlace:"",
+        meetingMem:"",
+        meetingDate:"",
+        meetingItem:"",
+    });
 
-    
+ 
+
     const _handleMessageSend = async messageList => {
         const newMessage = messageList[0];
         const message = {
@@ -79,19 +88,16 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
         )
     };
 
-    function popup(){
-        Alert.alert("니 띄웠다ㅋ","ㅇ");
-    }
 
-    // 윤수 추가 : 공지방에 상세정보 띄우는 함수 
-    const getMeetingInfo = async(meetingId) => {
-        var meetingInfo = {};
+        
+    // 윤수 추가 : 공지에 상세정보 띄우는 함수 
+    const getMeetingInfo = async() => {
+        var meetingInfo = [];
         try {
             await axiosInstance.get(`/meetings/${meetingId}`)
                 .then((response) => {
                     if (response.status === 200) {
-                        meetingInfo = response.data;        // 여기 더 수정!!! 
-                        //console.log(meetingInfo);
+                        meetingInfo = response.data;                              
                         //console.log(meetingInfo.item);
                         //console.log(meetingInfo.registerDate);
                     } else {
@@ -100,12 +106,18 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
                 })
                 .catch((response) => { console.log(response); });
         } catch (err) { console.log(err); }
-        return meetingInfo;
+
+        setMeetingInfo(preState=>({
+            ...preState,
+            meetingName: meetingInfo.meetingName,
+            meetingPlace: meetingInfo.meetingPlace,
+            meetingMem: meetingInfo.memberCnt,
+            meetingDate: meetingInfo.meetingDate,
+            meetingItem: meetingInfo.item,
+        }));
     }
 
-
-
-
+    
 
     const setMessagesData = async(queryArray) => {
         const list = [];
@@ -114,7 +126,6 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
             var userInfo = {};
             if(members[userId] == undefined) members[userId] = await getUserInfo(messageData.userId);
             userInfo = members[userId];
-            //userInfo = await getUserInfo(messageData.userId);
             const messageInfo = {
                 _id: messageData._id,
                 text: messageData.text,
@@ -138,35 +149,10 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
             });
         return userInfo;
     };
-
-
-
-    
     
 
-    useEffect(() => {
-        // 윤수가 없앰
-        /*
-        navigation.setOptions({
-            headerTitle: "hi",//title,
-            headerRight: () => (
-                <Icon onPress = {()=> navigation.openDrawer() } 
-                 name="menu" size={20} color={color.black} style={{marginRight: 10}} />
-            ),
-        });*/
 
-
-        // 윤수 코드 
-        /*
-        const list = [];
-        msg.forEach(m => {
-            list.push(m);
-        })
-        setMessages(list);*/
-        //});   //
-    }, []);
-    
-    
+    // [자동실행] 기본 UI 표출용 데이터 받아오는 부분 
     useEffect(() => {
         const subscriberUser = firestore()
             .collection('users')
@@ -198,28 +184,6 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
 
     }, []);
 
-    /*
-    useEffect(() => {
-        console.log("meetingId::"+ meeting.meetingId);        
-        const subscriberMember = firestore()
-            .collection('meetings')
-            .doc(meeting.meetingId)
-            .collection('members')
-            .onSnapshot(querySnapShot => {
-                const memberInfos = {};
-                querySnapShot.forEach(async (member) => {
-                    const memberData = member.data();
-                    const memberId = memberData.userId;
-                    const userInfo = await getUserInfo(memberId);
-                    memberInfos[memberData.userId] = userInfo;
-                });
-                setMembers(memberInfos);
-            });
-        return () => subscriberMember();
-    }, []);
-    */
-
-    
     useEffect(() => {
         if(messages.length != 0){
             const updateUserLastReadChatTimeData = {
@@ -233,17 +197,22 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} 
     }, [messages]);
     
 
+
+    // [렌더링] 화면 구성
     return (
         <Container>
             <View>
             <AppHeader
-                title= "회원가입메롱메롱 공지사항을 어떻게 쓸까 고민중이에요"
+                title= {notice}
                 noIcon={false}
-                rightIcon={<Icons name="left" size={20} />}
-                //rightIconPress={() => getMeetingInfo(meetingId)}    // 여기 고치면 됨 
-                //rightIconPress={() => getMeetingUsers(meetingId)}
+                leftIcon={<Icons name="notification" size={20} marginLeft={30} />} 
+                rightIcon={<Icons name="left" size={20} />} 
+                rightIconPress={() => getMeetingInfo()}
+                meeting={meetingInfo}
+                //height={5}      // 여기서 공지 toggle
             />
             </View>
+            
         <GiftedChat
         listViewProps={{
             style: { 
