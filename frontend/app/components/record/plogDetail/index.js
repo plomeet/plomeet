@@ -50,7 +50,7 @@ const LogDetail = ({ route }) => {
                 </NaverMapView>
             </View>
             <View style={styles.containerState} >
-                <PloggingStatusBar distSum={log.plogDist} isPlogging={false} timeSumString={log.plogTime} islogDetail={true} logDetailWeather={log.plogWeather}></PloggingStatusBar>
+                <PloggingStatusBar isLogDetail={true} distSumLog={log.plogDist} isPlogging={false} timeSumString={log.plogTime} islogDetail={true} logDetailWeather={log.plogWeather}></PloggingStatusBar>
             </View>
         </View>
     )
