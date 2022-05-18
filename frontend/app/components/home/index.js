@@ -4,7 +4,7 @@ import { Chip } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
-import { LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, BackHandler, KeyboardAvoidingView } from "react-native";
+import { LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, BackHandler, KeyboardAvoidingView, NativeModules } from "react-native";
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -12,6 +12,8 @@ import { Align } from '../plogging/map';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 import AsyncStorage from '@react-native-community/async-storage';
+
+const { StatusBarManager } = NativeModules
 
 LogBox.ignoreAllLogs();
 
@@ -407,7 +409,7 @@ const Home = () => {
         transparent={false}
         activeOpacity={0.8}
         visible={visibleSearch}>
-        <KeyboardAvoidingView style={styles.container} behavior={"padding"} keyboardVerticalOffset={statusBarHeight + 44}>
+      <KeyboardAvoidingView style={styles.container} behavior={"padding"} keyboardVerticalOffset={statusBarHeight-20}>
 
           <View style={styles.searchInput}>
             <TextInput
