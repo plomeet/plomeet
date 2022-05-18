@@ -43,7 +43,7 @@ const AppTabComponent = () => {
 
     return (
         <MainScreenTab.Navigator
-        
+
             screenOptions={({ route }) => ({
                 tabBarStyle: { height: 55, paddingBottom: 5 },
                 tabBarIcon: ({ focused, color, size }) => {
@@ -81,7 +81,7 @@ const AppTabComponent = () => {
         >
             <MainScreenTab.Screen name="홈" component={Home} />
             <MainScreenTab.Screen name="기록" component={RecordContainer} />
-            <MainScreenTab.Screen name="플로깅" component={Plogging} />
+            <MainScreenTab.Screen name="플로깅" component={Plogging} options={{ headerShown: false }} />
             <MainScreenTab.Screen name="채팅 목록" component={Chat} />
             <MainScreenTab.Screen name="MY" component={MyPage} options={{ title: 'MY', headerShown: false }} />
         </MainScreenTab.Navigator>
