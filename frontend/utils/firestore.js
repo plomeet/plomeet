@@ -46,6 +46,14 @@ export const createUser = async ({userId, userNickName, userProfileImg}) => {
     await usersRef.doc(userId).set(newUser);
 }
 
+//닉네임 변경
+export const changeUserNickName = async({userId, userNickName}) => {
+    const userDocRef = firestore().collection('users').doc(userId);
+    await userDocRef.update({
+        userNickName,
+    });
+}
+
 //새로운 모임 생성 > 채팅방 생성
 export const createMeeting = async ({meeting, userId}) => {
     console.log("채팅방...", meeting);
