@@ -42,7 +42,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
         meetingItem:"",
     });
 
- 
+
     const [showSpinner, setShowSpinner] = useState(true);
 
     const _handleMessageSend = async messageList => {
@@ -197,6 +197,9 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     return (
         <Container>
             <View>
+            { showSpinner &&
+                <PlomeetSpinner isVisible={showSpinner} size={50}/>
+            }
             <AppHeader
                 title= {notice}
                 noIcon={false}
@@ -207,9 +210,6 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
                 //height={5}      // 여기서 공지 toggle
             />
 
-            { showSpinner &&
-                <PlomeetSpinner isVisible={showSpinner} size={50}/>
-            }
             <GiftedChat
                 listViewProps={{
                     style: { 

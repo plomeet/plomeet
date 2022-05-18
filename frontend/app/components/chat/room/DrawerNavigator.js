@@ -101,7 +101,7 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
       <View >
         <ChattingRoomComp>
           <ChattingRoomImg source={{uri: img}} />
-            <Text>
+            <Text style={{fontSize: 20, marginTop:15, marginLeft:20}}>
               {title}
             </Text>
         </ChattingRoomComp>
@@ -165,7 +165,7 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
         }}
         drawerContent={props => <CustomDrawer {...props} /> } 
         >
-          <Drawer.Screen name='Menu' component={InsideRoom} initialParams={{meeting:meeting, userId:userId}}/>
+          <Drawer.Screen name='Menu' component={InsideRoom} initialParams={{meeting:meeting}}/>
         </Drawer.Navigator >
     );
 
