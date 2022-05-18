@@ -12,7 +12,7 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
     return {
-
+        firstPlogging: state.firstPlogging,
     }
 }
 

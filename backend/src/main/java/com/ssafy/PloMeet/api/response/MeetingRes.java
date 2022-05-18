@@ -21,7 +21,6 @@ public class MeetingRes {
     private Double lng;
     private int memberMax;
     private Boolean isActivate;
-
     private String  meetingDate;
     private LocalDateTime  registerDate;
     private String item;

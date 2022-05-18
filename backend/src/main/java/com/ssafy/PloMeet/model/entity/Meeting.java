@@ -4,7 +4,6 @@ import com.ssafy.PloMeet.api.request.MeetingReq;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -20,7 +19,7 @@ public class Meeting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long meetingId;
 
-    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'https://i.postimg.cc/QtNKqGGJ/default-Meeting-Img.png'")
+    @Column(columnDefinition = "VARCHAR(500) DEFAULT 'https://i.postimg.cc/QtNKqGGJ/default-Meeting-Img.png'")
     private String meetingImg;
 
     @Column(nullable = false, length = 25)
@@ -68,6 +67,7 @@ public class Meeting {
         this.lat = lat;
         this.lng = lng;
         this.memberMax = memberMax;
+        this.memberCnt = memberCnt;
         this.meetingDate = meetingDate;
         this.item = item;
     }
@@ -81,6 +81,7 @@ public class Meeting {
         this.lat = meetingReq.getLat();
         this.lng = meetingReq.getLng();
         this.memberMax = meetingReq.getMemberMax();
+        this.memberCnt = meetingReq.getMemberCnt();
         this.meetingDate = meetingReq.getMeetingDate();
         this.item = meetingReq.getItem();
     }

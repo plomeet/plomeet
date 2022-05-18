@@ -2,6 +2,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,intellij,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,intellij,visualstudiocode
 
+node_modules/**
+
 # 2022-05-09 추가 by 수림
 node_modules/
 .idea
@@ -209,7 +211,11 @@ fabric.properties
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,intellij,visualstudiocode
+.idea/S06P31A205.iml
+.idea/modules.xml
+.idea/inspectionProfiles/Project_Default.xml
 
 #firebase
 frontend/android/app/google-services.json
+frontend/android/app/src/google-services.json
 frontend/ios/GoogleService-Info.plist

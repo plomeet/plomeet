@@ -36,3 +36,41 @@ export const updateUserLastReadChatTime = async ({meetingId, userId, lastChatId,
         lastReadChatTime: lastChatTime,
     });
 }
+
+//신규 사용자 추가
+export const createUser = async ({userId, userNickName, userProfileImg}) => {
+    const usersRef = firestore().collection('users');
+    const newUser = {
+        userId,
+        userNickName,
+        userProfileImg,
+    }
+    await usersRef.doc(userId).set(newUser);
+}
+
+//새로운 모임 생성 > 채팅방 생성
+export const createMeeting = async ({meeting, userId}) => {
+    console.log("채팅방...", meeting);
+    const meetingId = meeting.meetingId;
+    const meetingsRef = firestore().collection('meetings');
+    const newMeeting = {
+        meetingId,
+        lastChatTime: meeting.createdAt,
+        notice: meeting.notice,
+    }
+    await meetingsRef.doc(meetingId).set(newMeeting);
+    await joinMember({meetingId, userId, lastChatTime: meeting.createdAt});
+}
+
+//채팅방 사용자 추가
+export const joinMember = async ({meetingId, userId, lastChatTime}) => {
+    const meetingMembersRef = firestore()
+        .collection('meetings').doc(meetingId)
+        .collection('members');
+    const newMember = {
+        userId: userId,
+        lastReadChatId: "0",
+        lastReadChatTime: lastChatTime, 
+    }
+    await meetingMembersRef.doc(userId).set(newMember);
+}

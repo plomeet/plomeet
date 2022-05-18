@@ -18,8 +18,8 @@ const LogDetail = ({ route }) => {
     }, []);
 
     useEffect(() => {
-        if (ploggingPathJson !== undefined && ploggingPathJson[(ploggingPathJson.length / 2)] !== undefined && ploggingPathJson.length >= 2) {
-            const { latitude, longitude } = ploggingPathJson[(ploggingPathJson.length / 2)];
+        if (ploggingPathJson !== undefined && ploggingPathJson[parseInt(ploggingPathJson.length / 2)] !== undefined && ploggingPathJson.length >= 2) {
+            const { latitude, longitude } = ploggingPathJson[parseInt(ploggingPathJson.length / 2)];
             setMiddle({
                 ...middle,
                 latitude,
@@ -50,7 +50,7 @@ const LogDetail = ({ route }) => {
                 </NaverMapView>
             </View>
             <View style={styles.containerState} >
-                <PloggingStatusBar distSum={log.plogDist} isPlogging={false} timeSumString={log.plogTime} islogDetail={true} logDetailWeather={log.plogWeather}></PloggingStatusBar>
+                <PloggingStatusBar isLogDetail={true} distSumLog={log.plogDist} isPlogging={false} timeSumString={log.plogTime} islogDetail={true} logDetailWeather={log.plogWeather}></PloggingStatusBar>
             </View>
         </View>
     )
