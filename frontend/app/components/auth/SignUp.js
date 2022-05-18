@@ -117,19 +117,19 @@ const SignUp = () => {
   //       console.log(`### Login Error : ${JSON.stringify(err)}`);
   //     });
   // }
-
-  // function logout() {
-  //   AsyncStorage.clear();
-  //   KakaoLogins.logout()
-  //     .then(result => {
-  //       console.log(`### Logout Result : ${JSON.stringify(result)}`);
-  //     })
-  //     .catch(err => {
-  //       console.log(`### Logout Error : ${JSON.stringify(err)}`);
-  //     });
-  //     console.log('여기서걸리나?')
-  //   KakaoLogins.unlink();
-  // }
+  
+  function logout() {
+    AsyncStorage.clear();
+    KakaoLogins.logout()
+      .then(result => {
+        console.log(`### Logout Result : ${JSON.stringify(result)}`);
+      })
+      .catch(err => {
+        console.log(`### Logout Error : ${JSON.stringify(err)}`);
+      });
+      console.log('여기서걸리나?')
+    KakaoLogins.unlink();
+  }
 
   BackHandler.addEventListener('hardwareBackPress', () => {
     return true;
@@ -157,6 +157,7 @@ const SignUp = () => {
           <Text style={styles.title3}>카카오톡으로 시작하기</Text>
         </View>
       </TouchableOpacity>
+      <Text onPress={logout}>로그아웃</Text>
       <View style={styles.logo}>
         <Image
           source={LogoImage}
