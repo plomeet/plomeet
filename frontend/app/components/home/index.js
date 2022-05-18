@@ -4,7 +4,7 @@ import { Chip } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
-import { LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, BackHandler, KeyboardAvoidingView } from "react-native";
+import { LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -12,6 +12,7 @@ import { Align } from '../plogging/map';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 import AsyncStorage from '@react-native-community/async-storage';
+import PlomeetSpinner from '../../../utils/PlomeetSpinner'
 
 LogBox.ignoreAllLogs();
 
@@ -103,11 +104,10 @@ const styles = StyleSheet.create({
     marginLeft: 3
   },
   closeSearchModalButton: {
-    height: 42,
-    borderRadius: 8,
+    height: 55,
     backgroundColor: "#1BE58D",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   deleteButton: {
     height: 42,
@@ -149,6 +149,7 @@ const Home = () => {
   const [statusBarHeight, setStatusBarHeight] = useState(-400);
   const [keywordTxt, setKeywordTxt] = useState();
   const [recentKeyWord, setRecentKeyWord] = useState();
+  const [showSpinner, setShowSpinner] = useState(true);
   //const [textInputValue, setTextInputValue] = useState();
 
   function deleteDate() {
@@ -254,6 +255,7 @@ const Home = () => {
           if (response.status === 200) {
             setMeetingList(response.data);
             console.log("[모임 정보 조회 성공]");
+            setShowSpinner(false);
           } else {
             console.log("[모임 정보 조회 실패]]");
           }
@@ -461,12 +463,15 @@ const Home = () => {
         <Chip style={{ marginRight: 10 }} icon="clock" mode="outlined" selectedColor='#232732' onPress={() => setVisibleCalendar(true)}><Text>{selectedDate}</Text></Chip>
         <Chip icon="align-vertical-center" mode="outlined" selectedColor='#232732' onPress={() => console.log('정렬')}><Text>정렬</Text></Chip>
       </View>
+      { showSpinner &&
+                <PlomeetSpinner isVisible={showSpinner} size={50}/>
+            }
       <FlatList
         columnWrapperStyle={[{ justifyContent: 'space-between' }, { marginHorizontal: 20 }]}
         data={meetingList}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.meetingId}
-        windowSize={3}
+        windowSize={50}
         numColumns={2}
       />
       <TouchableOpacity onPress={() => navigation.navigate('OpenMeeting')} activeOpacity={0.5} style={styles.TouchableOpacityStyle} >

@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 import { Chip } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { LogBox , SafeAreaView, Modal, StyleSheet, Text, View, FlatList, Image, StatusBar, TouchableOpacity, BackHandler } from "react-native";
+import { LogBox , SafeAreaView, Modal, StyleSheet, Text, View, FlatList, Image, StatusBar, TouchableOpacity } from "react-native";
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
