@@ -126,7 +126,6 @@ export const RootNavigator = () => {
             <Stack.Screen name="PolicyDoc" component={PolicyDoc} options={{ title: '' }} />
         </Stack.Navigator>
     )
-    //<Stack.Screen name="InChatRoom" component={InsideRoom} /> 
 }
 
 const style = StyleSheet.create({

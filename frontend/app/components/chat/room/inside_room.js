@@ -21,8 +21,8 @@ import Icons from 'react-native-vector-icons/AntDesign';
 import axiosInstance from '../../../../utils/API';
 
 
-const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} }) => {   // 윤수가 한거
-//const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
+//const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} }) => {   // 윤수가 한거
+const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     const title = meeting.meetingName;
     const [user, setUser] = useState();
     const userId = useSelector(state => state.userId).toString();
