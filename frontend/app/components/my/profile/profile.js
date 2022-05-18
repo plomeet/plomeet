@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ProfileContainer, ProfileImage } from "./styles";
 import axiosInstance from '../../../../utils/API';
 import * as actions from '../../../actions/userActions';
+import { changeUserNickName } from '../../../../utils/firestore';
 
 const Profile = () => {
     const dispatch = useDispatch();
@@ -40,6 +41,8 @@ const Profile = () => {
                 if(response.status === 200) {
                     console.log(response)
                     NicknameUpdate()
+                    const userIdStr = userId.toString();
+                    changeUserNickName({userId: userIdStr, userNickName: value});
                 } else {
                     console.log("error");
                 }
