@@ -17,6 +17,7 @@
 		1978927E281A24ED009CDEB2 /* geoSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1978927D281A24ED009CDEB2 /* geoSetting.swift */; };
 		199420722831279D0091AB58 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 199420712831279D0091AB58 /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		FD5692A8572E9AAE0A1432E8 /* libPods-frontend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CDE3E4D35625077C9FE1A65 /* libPods-frontend.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 			files = (
 				1925147A2820B7C500033847 /* libreact-native-nmap.a in Frameworks */,
 				192514782820B5A200033847 /* libreact-native-nmap.a in Frameworks */,
+				FD5692A8572E9AAE0A1432E8 /* libPods-frontend.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
