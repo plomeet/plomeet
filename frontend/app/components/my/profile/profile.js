@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     Text: {
-        paddingTop: 5,
-        paddingBottom: 16,
+        paddingTop: 4,
+        paddingBottom: 13,
         paddingLeft: 4,
         flex: 0.3,
         fontSize: 20,
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     },
     Text2: {
         flex: 0.5,
+        paddingLeft: 5,
         fontSize: 14,
     },
     TouchableOpacityStyle: {
