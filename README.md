@@ -1,5 +1,8 @@
 # README.md
 
+
+![Frame 15](https://user-images.githubusercontent.com/67628725/169354967-41626adb-41a9-4ac2-9587-f6a7252855af.png)
+
 ## ploMeet!
 
 > 플로밋은 플로깅(Plogging) + 만남(Meeting) 의 합성어로
