@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import 'react-native-gesture-handler';
 import { TouchableOpacity, StyleSheet, Text, View, Modal, Pressable} from "react-native";
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Feather';
 
 
 const TrashcanInfo = ({ showInfoDetail, setShowInfoDetail, setShowThisNum, trashInfoDetail }) => {
@@ -17,7 +17,7 @@ const TrashcanInfo = ({ showInfoDetail, setShowInfoDetail, setShowThisNum, trash
                 <View style={styles.leftView}>
                     <View style={styles.modalView}>
                         <View style={styles.img}>
-                            <Icon name="trash" size={65} color="#1BE58D" />
+                            <Icon name="trash-2" size={50} color="white" style={{marginTop: 5, marginLeft: 8}}/>
                         </View>
                         <View style={styles.text}>
                             <Text style={styles.modalText1}>{trashInfoDetail.cityName} {trashInfoDetail.streetName}</Text>
@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
         height: 80,
         borderRadius: 40,
         padding: 8,
-        backgroundColor: "#E5E4E4",
+        //backgroundColor: "#E5E4E4",
+        backgroundColor: "#1BE58D",
         elevation: 0
     },
     text: {
@@ -95,17 +96,18 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     modalText1: {
+        marginTop: 1,
         fontWeight: "bold",
         color: "black",
-        fontSize: 17
+        fontSize: 15
     },
     modalText2: {
         textAlign: "left",
-        fontSize: 14
+        fontSize: 12
     },
     modalText3: {
-        marginTop: 15,
-        fontSize: 17,
+        marginTop: 9,
+        fontSize: 13,
         color: "#12D3DD",
     }
 });
