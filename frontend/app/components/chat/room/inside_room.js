@@ -1,4 +1,4 @@
-import { useState, useEffect, memo, Component } from 'react';
+import { useState, useEffect, memo, Component, rotate } from 'react';
 import { GiftedChat  } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/Entypo'
 import { color, Container } from '../styles';
@@ -17,6 +17,7 @@ import {View, StyleSheet, Button, Alert, Text} from "react-native";
 import * as React from 'react';
 
 import AppHeader from './customheader';
+import AppHeaderOpen from './customOpenHeader';
 import Icons from 'react-native-vector-icons/AntDesign';
 import axiosInstance from '../../../../utils/API';
 
@@ -41,7 +42,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     const meetingId = meeting.meetingId;
     const [meetingInfo, setMeetingInfo] = useState({
         meetingPlace:"",
-        meetingMem:"",
+        meetingMem:"난기본값이다",
         meetingDate:"",
         meetingItem:"",
     });
@@ -114,6 +115,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
             meetingName: meetingInfo.meetingName,
             meetingPlace: meetingInfo.meetingPlace,
             meetingMem: meetingInfo.memberCnt,
+            meetingMemMax: meetingInfo.memberMax,
             meetingDate: meetingInfo.meetingDate,
             meetingItem: meetingInfo.item,
         }));
@@ -183,6 +185,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     }, []);
 
     useEffect(() => {
+        getMeetingInfo()
         if(messages.length != 0){
             const updateUserLastReadChatTimeData = {
                 meetingId: meeting.meetingId,
@@ -213,7 +216,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
             <AppHeader
                 title= {notice}
                 noIcon={false}
-                leftIcon={<Icons name="notification" size={20} marginLeft={30} />} 
+                leftIcon={<Icons name="notification" size={20} marginLeft={30}/>} 
                 rightIcon={<Icons name="down" size={20} />} 
                 rightIconPress={() => getMeetingInfo()}
                 meeting={meetingInfo}
@@ -222,12 +225,9 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
         }
         _renderContent(section) {
           return (
-            <View>
-                <Text> 장소: {meeting.meetingPlace}</Text>
-                <Text> 인원수: {meeting.meetingMem} </Text>
-                <Text> 날짜: {meeting.meetingDate} </Text>
-                <Text> 준비물: {meeting.meetingItem} </Text>
-            </View>
+            <AppHeaderOpen
+                meeting={meetingInfo}
+            />
           );
         }
         _updateSections = (activeSections) => {
@@ -256,13 +256,11 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
             { showSpinner &&
                 <PlomeetSpinner isVisible={showSpinner} size={50}/>
             }
-
             <AccordionView
                 sections={SECTIONS}
                 //renderHeader={AccordionView._renderHeader}      //AccordionView._renderHeader
                 //renderContent={AccordionView._renderContent}    //AccordionView._renderContent
             />
-
             <GiftedChat
                 listViewProps={{
                     style: { 

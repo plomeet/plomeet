@@ -4,6 +4,7 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import React, { Component } from 'react';
 import Accordion from 'react-native-collapsible/Accordion';
+import { RotateInDownLeft } from 'react-native-reanimated';
 //import {AccordionView} from './test';
 
 const INITIAL_LINE =3;
@@ -37,7 +38,7 @@ const AppHeader = ({
                     onPress={titlePress}
                     disabled={titlePress ? false : true}
                 >
-                    <Text style={{ textAlign: 'left' , fontSize:15, margin:5}}> {title} </Text>
+                    <Text style={{ textAlign: 'left' , fontSize:15, margin:5, fontWeight:'bold'}}> {title} </Text>
 
                 </TouchableOpacity>
             </View>
@@ -64,7 +65,7 @@ const styles  = StyleSheet.create({
         //display: 'flex',
         //flexDirection: "row",
         position:'relative',
-        height: 50, //height * 32,
+        height: 50, 
         backgroundColor: '#f6f6f6',
         //borderColor: 'black',
         //borderWidth: 1,
