@@ -76,8 +76,9 @@
 
 ### 🏠 홈
 
-![Screen_Recording_20220520-003651_PloMeet!_2_1](https://user-images.githubusercontent.com/67628725/169382498-369dca97-bfc2-4e30-84b4-dd86d3a76def.gif)
-![타이틀_1_1](https://user-images.githubusercontent.com/67628725/169382480-da7c6849-a946-423d-8eb1-5331acd3a808.gif)
+![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/67628725/169386847-faa1b587-dc9a-4dcb-8d26-af8395cf483a.gif)
+
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/67628725/169386865-2000a920-2d4b-44a0-a617-5fdb3d54e352.gif)
 
 
 
