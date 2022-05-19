@@ -38,7 +38,7 @@ const AppHeader = ({
                     onPress={titlePress}
                     disabled={titlePress ? false : true}
                 >
-                    <Text style={{ textAlign: 'left' , fontSize:15, margin:5, fontWeight:'bold'}}> {title} </Text>
+                    <Text style={{ color:"#000", textAlign: 'left' , fontSize:15, margin:6, fontWeight:'bold', marginLeft:18}}> {title} </Text>
 
                 </TouchableOpacity>
             </View>
@@ -65,10 +65,11 @@ const styles  = StyleSheet.create({
         //display: 'flex',
         //flexDirection: "row",
         position:'relative',
-        height: 50, 
-        backgroundColor: '#f6f6f6',
-        //borderColor: 'black',
-        //borderWidth: 1,
+        height: 57, 
+        backgroundColor: '#fff',
+        // backgroundColor: '#f6f6f6',
+        borderColor: '#f6f6f6',
+        borderBottomWidth: 1,
     },
     titleContainer: {
         position:'absolute',
@@ -82,7 +83,7 @@ const styles  = StyleSheet.create({
     leftIcon: {
         position:'absolute',
         top:10,
-        left:10,
+        left:25,
         margin:5,
     },
     rightIcon: {
