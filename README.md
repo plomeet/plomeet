@@ -77,8 +77,7 @@
 ### 🏠 홈
 
 ![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/67628725/169386847-faa1b587-dc9a-4dcb-8d26-af8395cf483a.gif)
-
-![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/67628725/169386865-2000a920-2d4b-44a0-a617-5fdb3d54e352.gif)
+![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/67628725/169388166-163a4cda-7695-4f67-aca3-c5cc9acfc879.gif)
 
 
 
