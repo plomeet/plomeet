@@ -157,7 +157,7 @@ const Record = ({ saveLogs, setListMonth }) => {
                 </ScrollView>
                 {showSpinner &&
                     <View style={styles.containerSpinner}>
-                        <Spinner isVisible={true} size={80} type={'ThreeBounce'} color={"#1BE58D"} />
+                        <Spinner isVisible={true} size={50} type={'ThreeBounce'} color={"#1BE58D"} />
                     </View>
                 }
             </View>

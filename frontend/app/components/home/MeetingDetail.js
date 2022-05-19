@@ -2,6 +2,8 @@ import React, { Component, Node, useEffect, useState, useRef, useCallback } from
 import 'react-native-gesture-handler';
 import { StyleSheet, Text, View, Alert, TextInput, Button, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity, Dimensions  } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+import { Chip } from 'react-native-paper';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
@@ -26,6 +28,8 @@ const MeetingDetail = ({route}) => {
   const [memberCnt, setMemberCnt] = useState(0);
   const [meetingDate, setMeetingDate] = useState("");
   const [placeDetail, setPlaceDetail] = useState("");
+  const [item, setItem] = useState("");
+  const [items, setItems] = useState([]);
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
   var loc = {latitude: lat, longitude: lng};
@@ -139,7 +143,7 @@ const MeetingDetail = ({route}) => {
         memberMax: memberMax,
         memberCnt: memberCnt+1,
         meetingDate: meetingDate,
-        item: "쓰레기봉투&집게",
+        item: item,
       })
         .then(async (response) => {
           if (response.status === 200) {
@@ -158,13 +162,6 @@ const MeetingDetail = ({route}) => {
     getMeetingById(meetingId);
   }, [isFocused]);
 
-  //내가 참여한 모임인지 아닌지
-  useEffect(() => {
-    AsyncStorage.getItem('myMeeting', (err, result) => {
-      console.log(JSON.parse(result));
-    })
-  }, [])
-
   async function getMeetingById(meetingId) {
     try {
         await axiosInstance.get("/meetings/"+meetingId)
@@ -182,6 +179,9 @@ const MeetingDetail = ({route}) => {
                     setPlaceDetail(response.data.meetingPlaceDetail);
                     setLat(response.data.lat);
                     setLng(response.data.lng);
+                    setItem(response.data.item);
+                    setItems(response.data.item.split('&'));
+                    console.log(items);
                     if(response.data.memberMax == response.data.memberCnt){
                       setJoinDisable(true);
                       setBtnText("마감된 모임");
@@ -274,9 +274,27 @@ const MeetingDetail = ({route}) => {
                 <Text style={styles.subtext}>{memberCnt} / {memberMax}</Text>
               </View>
               <View style={styles.row}>
-                <Icon name='ios-calendar-sharp' size={20} color='#313333' />
+                <Icon2 name='calendar' size={17} style={[{marginLeft:2}, {marginRight:1}]} color='#313333' />
                 <Text style={styles.subtitle}>날짜</Text>
                 <Text style={styles.subtext}>{parse(meetingDate)}</Text>
+              </View>
+              <View style={styles.row}>
+                <Icon2 name='magnifier-add' size={17} style={[{marginLeft:2}, {marginRight:1}]} color='#313333' />
+                <Text style={styles.subtitle}>주소</Text>
+                <Text style={styles.subtext}>{placeDetail}</Text>
+              </View>
+              <View style={[styles.row, {marginTop : 20}]}>
+                <Icon2 name='bag' size={20} color='#313333' />
+                <Text style={[styles.subtitle, {marginRight:30}]}>준비물</Text>
+                {items[0] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[0]}</Text></View>}
+                {items[1] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[1]}</Text></View>}
+                {items[2] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[2]}</Text></View>}
+              </View>
+              <View style={[styles.row, { marginLeft: 125 }, { marginTop: 7 }]}>
+                {items[3] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[3]}</Text></View>}
+                {items[4] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[4]}</Text></View>}
+                {items[5] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[5]}</Text></View>}
+                {items[6] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[6]}</Text></View>}
               </View>
 
               <View style={styles.tempMap}>
@@ -324,7 +342,7 @@ const styles = StyleSheet.create({
   row: {
     alignItems:"center",
     flexDirection:"row",
-    marginTop: 15,
+    marginTop: 18,
   },
   subtitle: {
     width:65,
@@ -335,7 +353,7 @@ const styles = StyleSheet.create({
   },
   subtext: {
     fontSize: 14,
-    marginLeft: 50,
+    marginLeft: 30,
     color: "#545454"
   },
   button: {
@@ -379,6 +397,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
+  itemChip : {
+    backgroundColor: "#1BE58D",
+    borderRadius: 20,
+    paddingHorizontal:12,
+    paddingVertical: 5,
+    marginHorizontal: 3
+  }
 });
 
 export default MeetingDetail;
