@@ -10,6 +10,7 @@ export const BadgeContainerTitleLine = styled.View`
     justify-content: space-between;
     align-items: center;
     margin: 10px;
+    margin-left: 15px;
 `;
 
 export const BadgeContainerTitle = styled.Text`
@@ -29,9 +30,9 @@ export const BadgeMoreText = styled.Text`
 export const BadgeComponent = styled.View`
     flex-direction: column;
     align-items: center;
-    margin-left: 10px;
-    margin-right: 10px;
-    width: 80px;
+    margin-left: ${props => props.margin}px;
+    margin-right: ${props => props.margin}px;
+    width: ${props => props.width}px;
     height: 120px;
 `;
 

@@ -55,10 +55,10 @@ const BadgeIntro = () => {
               showsHorizontalScrollIndicator={false}>
                 {   
                     badges.map((badge, idx) => (
-                        <Badge key={badge.badgeId} badge={badge}></Badge>
+                        <Badge key={badge.badgeId} badge={badge} margin={3} width={80}></Badge>
                     ))
                 }
-                <Icon name="dots-three-horizontal" size={20} color={color.primaryDark} style={{alignSelf: 'center', marginLeft: 20, marginRight: 20}}/>
+                <Icon name="dots-three-horizontal" size={15} color={color.primaryDark} style={{alignSelf: 'center', marginLeft: 15, marginRight: 20, marginBottom: 51}}/>
             </ScrollView>
         </BadgesContainer>
     )

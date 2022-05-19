@@ -20,7 +20,7 @@ const BadgeList = () => {
     const renderBadges = ({ item }) => {
         return(
             <BadgeComponentTouchchable onPress={() => _handleBadgePress({badge: item})}>
-                <Badge badge={item}></Badge>
+                <Badge badge={item} margin={5} width={100}></Badge>
             </BadgeComponentTouchchable>
         )
     }
