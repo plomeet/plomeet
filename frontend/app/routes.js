@@ -85,7 +85,14 @@ const AppTabComponent = () => {
             <MainScreenTab.Screen name="기록" component={RecordContainer} />
             <MainScreenTab.Screen name="플로깅" component={Plogging} options={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { height: 0 } }} />
             <MainScreenTab.Screen name="채팅 목록" component={Chat} />
-            <MainScreenTab.Screen name="MY" component={MyPage} options={{ title: 'MY', headerShown: false }} />
+            <MainScreenTab.Screen name="MY" component={MyPage} options={{
+                title: 'MY', headerRight: () => (
+                    <TouchableOpacity onPress={() => navigation.navigate('Preference', { msg: "go Preference screen" })}>
+                    <View style={style.preferencBtn}>
+                        <Icon name="settings-outline" size={27} color="#000000" />
+                    </View>
+                </TouchableOpacity>                
+            ) }} />
         </MainScreenTab.Navigator>
     )
 }
@@ -144,5 +151,9 @@ const style = StyleSheet.create({
         zIndex: 100,
         width: 30,
         height: 30
-    }
+    },
+    preferencBtn: {
+        paddingRight: 20,
+    },
+
 });
