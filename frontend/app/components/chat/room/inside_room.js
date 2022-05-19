@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo, Component } from 'react';
 import { GiftedChat  } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/Entypo'
 import { color, Container } from '../styles';
@@ -11,7 +11,7 @@ import { saveChatting, updateUserLastReadChatTime } from '../../../../utils/fire
 import { useSelector } from 'react-redux';
 import PlomeetSpinner from '../../../../utils/PlomeetSpinner';
 
-import {View, StyleSheet, Button, Alert} from "react-native";
+import {View, StyleSheet, Button, Alert, Text} from "react-native";
 
 
 import * as React from 'react';
@@ -19,6 +19,10 @@ import * as React from 'react';
 import AppHeader from './customheader';
 import Icons from 'react-native-vector-icons/AntDesign';
 import axiosInstance from '../../../../utils/API';
+
+import Accordion from 'react-native-collapsible/Accordion';
+
+
 
 
 //const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} }) => {   // 윤수가 한거
@@ -173,7 +177,6 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
             });
         
         return () => {
-            //subscriberUser();
             subscriberChatting();
         }
 
@@ -193,21 +196,71 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     
 
 
-    // [렌더링] 화면 구성
-    return (
-        <Container>
-            <View>
-            { showSpinner &&
-                <PlomeetSpinner isVisible={showSpinner} size={50}/>
-            }
+    // collapsible 관련 const
+    const SECTIONS = [
+        {
+          title: 'First',
+          content: 'Lorem ipsum…'
+        }
+    ];
+      
+    class AccordionView extends Component {
+        state = {
+            activeSections: [],
+          };
+        _renderHeader(section) {
+          return (
             <AppHeader
                 title= {notice}
                 noIcon={false}
                 leftIcon={<Icons name="notification" size={20} marginLeft={30} />} 
-                rightIcon={<Icons name="left" size={20} />} 
+                rightIcon={<Icons name="down" size={20} />} 
                 rightIconPress={() => getMeetingInfo()}
                 meeting={meetingInfo}
-                //height={5}      // 여기서 공지 toggle
+            />
+          );
+        }
+        _renderContent(section) {
+          return (
+            <View>
+                <Text> 장소: {meeting.meetingPlace}</Text>
+                <Text> 인원수: {meeting.meetingMem} </Text>
+                <Text> 날짜: {meeting.meetingDate} </Text>
+                <Text> 준비물: {meeting.meetingItem} </Text>
+            </View>
+          );
+        }
+        _updateSections = (activeSections) => {
+            this.setState({ activeSections });
+          };
+        
+          render() {
+            return (
+              <Accordion
+                sections={SECTIONS}
+                activeSections={this.state.activeSections}
+                renderSectionTitle={this._renderSectionTitle}
+                renderHeader={this._renderHeader}
+                renderContent={this._renderContent}
+                onChange={this._updateSections}
+              />
+            );
+          }
+      
+    }
+
+
+    // [렌더링] 화면 구성
+    return (
+        <Container>
+            { showSpinner &&
+                <PlomeetSpinner isVisible={showSpinner} size={50}/>
+            }
+
+            <AccordionView
+                sections={SECTIONS}
+                //renderHeader={AccordionView._renderHeader}      //AccordionView._renderHeader
+                //renderContent={AccordionView._renderContent}    //AccordionView._renderContent
             />
 
             <GiftedChat
@@ -235,7 +288,6 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
                 onSend={_handleMessageSend}
                 alwaysShowSend={true}
             />
-            </View>
         
     </Container>
     );
