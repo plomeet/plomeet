@@ -160,7 +160,7 @@ MY는 내 계정 / 모임 / 배지 크게 세가지로 나뉩니다.
 
 ### 📲 화면정의서
 
-![image 76](https://user-images.githubusercontent.com/67628725/169357474-8fcdfe76-5c1f-4c7b-9404-8bb63c3f6d2c.png)
+![image 76 (1)](https://user-images.githubusercontent.com/67628725/169357973-ea597ee3-b622-4838-ab6c-0bc02dceef44.png)
 
 ### 📄 ERD
 
