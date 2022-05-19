@@ -1,10 +1,9 @@
 import React, { Component, Node, Button, useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import { Chip } from 'react-native-paper';
-import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
-import { LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, BackHandler, KeyboardAvoidingView, NativeModules } from "react-native";
+import { BackHandler, Alert , LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, KeyboardAvoidingView, NativeModules } from "react-native";
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -47,8 +46,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 20,
     paddingBottom: 10,
-    borderColor: "#bbbbbb",
-    borderWidth: 0.4,
   },
   elevation: {
     elevation: 5,
@@ -369,6 +366,7 @@ const Home = () => {
 
       <Modal animationType="slide"
         transparent={false}
+        onRequestClose={() => setVisibleCalendar(false)}
         activeOpacity={0.8}
         visible={visibleCalendar}>
         <View style={{

@@ -11,7 +11,7 @@ const LogCalendar = ({ dateArr, setListMonth, setShowSpinner }) => {
         let markObj = dateArr.reduce(
             (c, v, i) =>
                 Object.assign(c, {
-                    [v]: { marked: true, dotColor: 'white', startingDay: true, color: '#1BE58D', endingDay: true },
+                    [v]: { marked: true, dotColor: '#1BE58D', startingDay: true, color: '#1BE58D', endingDay: true, textColor: 'white' },
                 })
             ,
             {}
@@ -43,6 +43,7 @@ const LogCalendar = ({ dateArr, setListMonth, setShowSpinner }) => {
 
     return (
         <View style={styles.container}>
+          <View style={[{backgroundColor:"#fff"}, {width: "100%"}, {paddingHorizontal:10}, {paddingBottom:15}]}>
             <Calendar
                 markingType={'period'}
                 markedDates={markedDates}
@@ -52,6 +53,7 @@ const LogCalendar = ({ dateArr, setListMonth, setShowSpinner }) => {
                 scrollEnabled={true}
                 onMonthChange={month => (makeDs(month.dateString))}
             />
+          </View>
         </View>
     )
 }
