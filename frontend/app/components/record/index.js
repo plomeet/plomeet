@@ -51,7 +51,16 @@ const Record = ({ saveLogs, setListMonth }) => {
 
             const checkFirstLog = () => { 
                 if (firstPlogging) {
-                    alert("첫 플로깅 뱃지 획득 성공!");
+                    Alert.alert( 
+                        "",
+                        "'플로깅의 시작' 뱃지 획득!",
+                        [
+                            {
+                                text: '닫기'
+                            }
+                        ],
+                        { cancelable: true }
+                    );
                     dispatch(setFirstPlogging(false))
                 }
             }

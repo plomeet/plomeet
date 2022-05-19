@@ -238,7 +238,7 @@ const MeetingDetail = ({route}) => {
       if (isFirstMeeting) {
         Alert.alert( 
           "", 
-          "첫 모임 가입 뱃지 획득!", 
+          "'모임의 시작' 뱃지 획득!", 
           [ 
             {
               text: '닫기', onPress: () => { 
