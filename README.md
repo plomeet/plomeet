@@ -94,8 +94,8 @@
 
 ### 📝 기록
 
+![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/67628725/169386563-9f67df4c-c0cb-41a4-84ae-affd57278cf2.gif)
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/67628725/169386161-0d2f637f-b7cb-41b9-a55c-6242ab1eb393.gif)
-![월넘기기gif](https://user-images.githubusercontent.com/67628725/169379638-26403a05-639a-4d9d-a708-75b6b16a0d9f.gif)
 
 기록 화면에서 월별 캘린더로 내 ‘플로깅 기록’을 한눈에 확인하세요!
 
