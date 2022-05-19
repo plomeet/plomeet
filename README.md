@@ -3,7 +3,7 @@
 ![Frame 43 (1)](https://user-images.githubusercontent.com/67628725/169356318-72fe2040-2593-407d-a2f6-1c04d0d7e732.png)
 
 
-## ploMeet!
+## PloMeet!
 
 > 플로밋은 플로깅(Plogging) + 만남(Meeting) 의 합성어로
 >
