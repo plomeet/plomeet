@@ -334,7 +334,7 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
 
                         :
 
-                        <PlomeetSpinner isVisible={true} size={130} />
+                        <PlomeetSpinner isVisible={true} size={50} />
 
                     }
                     {/*<TouchableOpacity style={{ position: 'absolute', bottom: '10%', right: 8 }} onPress={() => navigation.navigate('stack')}>

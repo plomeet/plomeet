@@ -1,7 +1,7 @@
-import React, { Component, Node, useEffect, useState } from 'react';
+import React, { Component, Node, useEffect, useState, useRef, useCallback } from 'react';
 import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { StyleSheet, Text, View, TextInput, Image, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
+import { StyleSheet, Text, View, Dimensions, TextInput, Image, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
 import { ScrollView } from 'react-native-gesture-handler';
@@ -19,6 +19,7 @@ const OpenMeeting5 = () => {
   const [meetingImgFileName, setMeetingImgFileName] = useState("");
   const [meetingName, setMeetingName] = useState("");
   const [detail, setDetail] = useState("");
+  const [item, setItem] = useState("");
   const [meetingPlace, setMeetingPlace] = useState("");
   const [memberMax, setMemberMax] = useState(1);
   // const [memberCnt, setMemberCnt] = useState(1);
@@ -59,6 +60,23 @@ const OpenMeeting5 = () => {
     });
   }
 
+  const thisIsMyMeeting = async (mId) => {
+    try {
+      await axiosInstance.post("/meetings", {
+        userId: userId,
+        meetingId: mId,
+        isLeader: true,
+      })
+        .then(async (response) => {
+          if (response.status === 200) {
+            console.log(response); 
+          } else {
+            console.log(response);
+          }
+        })
+        .catch((response) => { console.log(response); });
+    } catch (err) { console.log(err); }
+  };
 
   const creatMeeting = async () => {
     uploadImg();
@@ -73,11 +91,12 @@ const OpenMeeting5 = () => {
         lng: longitude,
         memberMax: memberMax,
         meetingDate: meetingDate,
-        item: "쓰레기봉투"
+        item: item
       })
         .then(async (response) => {
           if (response.status === 200) {
             console.log(response);
+            thisIsMyMeeting(response.data.meetingId);
             const userIdStr = userId.toString();
             const meeting = {
               meetingId: response.data.meetingId.toString(),
@@ -126,6 +145,10 @@ const OpenMeeting5 = () => {
     AsyncStorage.getItem('meetingDate', (err, result) => {
       console.log(result);
       setMeetingDate(result);
+    })
+    AsyncStorage.getItem('item', (err, result) => {
+      console.log(result);
+      setItem(result);
     })
     AsyncStorage.getItem('address', (err, result) => {
       console.log(result);
