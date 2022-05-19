@@ -210,6 +210,8 @@ MY는 내 계정 / 모임 / 배지 크게 세가지로 나뉩니다.
  ┣ 📜gradlew
  ┣ 📜gradlew.bat
  ┗ 📜settings.gradle
+ ```
+ ```markdown
 📦app
  ┣ 📂actions
  ┣ 📂components
