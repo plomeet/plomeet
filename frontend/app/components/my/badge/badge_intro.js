@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import Badge from './badge';
 import Icon from 'react-native-vector-icons/Entypo';
 import { ScrollView, Text, View } from "react-native";
@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 
 const BadgeIntro = () => {
     const navigation = useNavigation();
+    const isFocused = useIsFocused();
     const userId = useSelector(state => state.userId);
     const [badges, setBadges] = useState([]);
 
@@ -38,8 +39,10 @@ const BadgeIntro = () => {
                     .catch((response) => { console.log(response); });
             } catch (err) { console.log(err); }
         }
-        getBadges();
-    }, []);
+        if(isFocused){
+            getBadges();
+        }
+    }, [isFocused]);
 
     return(
         <BadgesContainer>
