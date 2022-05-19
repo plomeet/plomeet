@@ -48,7 +48,7 @@ const Record = ({ saveLogs, setListMonth }) => {
                 } catch (err) { console.log(err); }
             };
 
-            const checkFirstLog = () => { 
+            const checkFirstLog = () => {
                 if (firstPlogging) {
                     alert("첫 플로깅 뱃지 획득 성공!");
                     dispatch(setFirstPlogging(false))
@@ -65,7 +65,7 @@ const Record = ({ saveLogs, setListMonth }) => {
         if (listMonth.length > 1) {
             const mm = parseInt(listMonth.substring(5, 7));
             setMonth(mm);
-            if (savedLogs[0] !== undefined)
+            if (savedLogs[0] !== undefined) {
                 savedLogs.map((data, i) => {
                     if (i === savedLogs.length - 1) setShowSpinner(false);
                     const min = parseInt(data.plogTime.substring(0, data.plogTime.indexOf(' ')));
@@ -79,6 +79,10 @@ const Record = ({ saveLogs, setListMonth }) => {
                         }
                     }
                 });
+            } else {
+                setShowSpinner(false);
+            }
+
         }
     }, [listMonth, savedLogs]);
 
