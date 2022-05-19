@@ -32,7 +32,6 @@ target 'frontend' do
 
   pod 'react-native-version-check', :path => '../node_modules/react-native-version-check'
 
-
   # Flags change depending on the env values.
   flags = get_default_flags()
 

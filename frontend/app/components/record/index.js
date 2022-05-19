@@ -151,30 +151,32 @@ const Record = ({ saveLogs, setListMonth }) => {
     }, [savedLogs]);
 
     useEffect(() => { 
-        const checkTotalDistTen = async () => { 
-            try {
-                await axiosInstance.get(`/badges/${userId}/23`)
-                    .then((response) => {
-                        if (response.status === 200) {
-                            console.log("뱃지!!!!", response.data.isOwned)
-                            if (!response.data.isOwned) {
-                                setIsTotalDistTen(true);
-                                console.log("나 누적10키로 뱃지 첨받아봄!")
+        if (isFocused) {
+            const checkTotalDistTen = async () => {
+                try {
+                    await axiosInstance.get(`/badges/${userId}/23`)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                console.log("뱃지!!!!", response.data.isOwned)
+                                if (!response.data.isOwned) {
+                                    setIsTotalDistTen(true);
+                                    console.log("나 누적10키로 뱃지 첨받아봄!")
+                                }
+                                else {
+                                    setIsTotalDistTen(false);
+                                }
+                            } else {
+                                console.log("error" + response.status);
                             }
-                            else {
-                                setIsTotalDistTen(false);
-                            }
-                        } else {
-                            console.log("error" + response.status);
-                        }
-                    })
+                        })
+                }
+                catch (err) {
+                    console.log(err);
+                }
             }
-            catch (err) {
-                console.log(err);
-            }
-        }
         
-        checkTotalDistTen();
+            checkTotalDistTen();
+        }
     }, [isFocused])
 
 
