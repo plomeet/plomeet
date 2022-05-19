@@ -44,6 +44,7 @@ const Record = ({ saveLogs, setListMonth }) => {
                             else {
                                 console.log("log insert FAIL " + response.status);
                             }
+                            setShowSpinner(false);
                         })
                         .catch((response) => { console.log(response); });
                 } catch (err) { console.log(err); }
@@ -51,7 +52,7 @@ const Record = ({ saveLogs, setListMonth }) => {
 
             const checkFirstLog = () => {
                 if (firstPlogging) {
-                    Alert.alert( 
+                    Alert.alert(
                         "",
                         "'플로깅의 시작' 뱃지 획득!",
                         [
@@ -137,16 +138,16 @@ const Record = ({ saveLogs, setListMonth }) => {
 
             if (isTotalDistTen) {
                 if (totalDist >= 10.0) {
-                        Alert.alert( 
-                            "",
-                            "'제법 걸었네요' 뱃지 획득!",
-                            [
-                                {
-                                    text: '닫기'
-                                }
-                            ],
-                            { cancelable: true }
-                        );
+                    Alert.alert(
+                        "",
+                        "'제법 걸었네요' 뱃지 획득!",
+                        [
+                            {
+                                text: '닫기'
+                            }
+                        ],
+                        { cancelable: true }
+                    );
 
                     saveBadgeTotalDistTen();
                 }
@@ -154,8 +155,8 @@ const Record = ({ saveLogs, setListMonth }) => {
         }
     }, [savedLogs]);
 
-    useEffect(() => { 
-        const checkTotalDistTen = async () => { 
+    useEffect(() => {
+        const checkTotalDistTen = async () => {
             try {
                 await axiosInstance.get(`/badges/${userId}/23`)
                     .then((response) => {
@@ -177,7 +178,7 @@ const Record = ({ saveLogs, setListMonth }) => {
                 console.log(err);
             }
         }
-        
+
         checkTotalDistTen();
     }, [isFocused])
 
