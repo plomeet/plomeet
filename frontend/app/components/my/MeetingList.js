@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 import { Chip } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { LogBox , SafeAreaView, Modal, StyleSheet, Text, View, FlatList, Image, StatusBar, TouchableOpacity, BackHandler } from "react-native";
+import { LogBox , SafeAreaView, Modal, StyleSheet, Text, View, FlatList, Image, StatusBar, TouchableOpacity } from "react-native";
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -102,12 +102,36 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff"
   },
+  chipLeader : {
+    position: 'absolute',
+    right: 5,
+    top: 5,
+    backgroundColor : "#FFEB81",
+    opacity: 0.8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 15,
+    width: 60,
+    paddingVertical: 1,
+    justifyContent: "center"
+  },
+  textLeader : {
+    color: "#000",
+    alignItems: "center",
+  },
+  invisible : {
+    position: 'absolute',
+    right: 5,
+    top: 5,
+    opacity: 0
+  }
 });
 
 const MeetingList = () => {
   const navigation = useNavigation();
   const [myMeetingListInfo, setMyMeetingListInfo] = useState([]);
   const [myMeetingList, setMyMeetingList] = useState([]);
+  const [imLeaderList, setImLeaderList] = useState([]);
   const isFocused = useIsFocused();
   const week = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -124,20 +148,24 @@ const MeetingList = () => {
   //모임 정보 세팅
   useEffect(() => {
     AsyncStorage.getItem('myMeeting', (err, result) => {
-      setMyMeetingListInfo(JSON.parse(result));
+      setMyMeetingListInfo(JSON.parse(result).reverse());
     })
     AsyncStorage.getItem('myMeetingList', (err, result) => {
       setMyMeetingList(JSON.parse(result));
     })
+    AsyncStorage.getItem('imLeaderList', (err, result) => {
+      setImLeaderList(JSON.parse(result));
+  })
   }, []);
 
-  const Item = ({ meetingId, meetingDesc, img, title, place, numMember, maxMember, date, index, lat, lng, placeDetail}) => (
+  const Item = ({ meetingId, meetingDesc, isVisible, img, title, place, numMember, maxMember, date, index, lat, lng, placeDetail}) => (
     <TouchableOpacity
     activeOpacity={0.7}
     onPress={() => navigation.navigate('MeetingDetail', {meetingId:meetingId, myMeetingList:myMeetingList})}
     // style={[ index%2===0? {marginRight:20} : {marginRight:0}, styles.card, styles.elevation]}>
     style={[styles.card, styles.elevation]}>
       <Image source={{uri: img}} style={styles.img} />
+      <View style={isVisible>=0 ? styles.chipLeader : styles.invisible}><Text style={styles.textLeader}>운영중</Text></View>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.row } >
         <Icon name='person-outline' size={14} color='#292D32' />
@@ -165,6 +193,7 @@ const MeetingList = () => {
     date = {parse(item.meetingDate)}
     meetingId = {item.meetingId}
     meetingDesc = {item.meetingDesc}
+    isVisible = {imLeaderList.indexOf(item.meetingId)}
     index = {item.meetingId} />
   );
 
@@ -175,7 +204,7 @@ const MeetingList = () => {
         data={myMeetingListInfo}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.meetingId}
-        windowSize={3}
+        windowSize={50}
         numColumns = {2}
       />
     </SafeAreaView>

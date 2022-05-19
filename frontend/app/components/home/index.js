@@ -4,7 +4,7 @@ import { Chip } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
-import { LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, BackHandler, KeyboardAvoidingView } from "react-native";
+import { LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -12,6 +12,7 @@ import { Align } from '../plogging/map';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 import AsyncStorage from '@react-native-community/async-storage';
+import PlomeetSpinner from '../../../utils/PlomeetSpinner'
 
 LogBox.ignoreAllLogs();
 
@@ -103,11 +104,10 @@ const styles = StyleSheet.create({
     marginLeft: 3
   },
   closeSearchModalButton: {
-    height: 42,
-    borderRadius: 8,
+    height: 55,
     backgroundColor: "#1BE58D",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   deleteButton: {
     height: 42,
@@ -123,9 +123,8 @@ const styles = StyleSheet.create({
   },
   recentListTxt: {
     fontSize: 14,
-    marginTop: 20,
-    marginBottom: 10,
-    marginLeft: 20,
+    marginTop: 40,
+    marginLeft: 25,
     color: "#000"
   },
   buttonText: {
@@ -139,6 +138,7 @@ const Home = () => {
   const [meetingList, setMeetingList] = useState([]);
   const [myMeetingList, setMyMeetingList] = useState([]);
   const [myMeetingListInfo, setMyMeetingListInfo] = useState([]);
+  // const [imLeaderList, setImLeaderList] = useState([]);
   const isFocused = useIsFocused();
   const current = getToday(); //오늘 날짜
   const week = ['일', '월', '화', '수', '목', '금', '토'];
@@ -149,6 +149,7 @@ const Home = () => {
   const [statusBarHeight, setStatusBarHeight] = useState(-400);
   const [keywordTxt, setKeywordTxt] = useState();
   const [recentKeyWord, setRecentKeyWord] = useState();
+  const [showSpinner, setShowSpinner] = useState(true);
   //const [textInputValue, setTextInputValue] = useState();
 
   function deleteDate() {
@@ -241,7 +242,7 @@ const Home = () => {
     getAllMeeting();
     getMyMeeting();
     setKeywordTxt();
-  }, [isFocused]);
+  }, [isFocused==true]);
 
   useEffect(() => {
     getMyMeeting();
@@ -254,6 +255,7 @@ const Home = () => {
           if (response.status === 200) {
             setMeetingList(response.data);
             console.log("[모임 정보 조회 성공]");
+            setShowSpinner(false);
           } else {
             console.log("[모임 정보 조회 실패]]");
           }
@@ -295,18 +297,23 @@ const Home = () => {
             var mList = response.data;
             var test = [];
             var testId = [];
+            var imLeader = [];
 
             for (var i = 0; i < mList.length; i++) {
+              if(mList[i].isLeader){
+                imLeader.push(mList[i].meetingId.meetingId);
+              }
               test.push(mList[i].meetingId);
               testId.push(mList[i].meetingId.meetingId);
             }
             setMyMeetingListInfo(test);
             setMyMeetingList(testId);
+            // setImLeaderList(imLeader);
             AsyncStorage.setItem('myMeeting', JSON.stringify(test), () => {
-              console.log('[SetItem 완료] : myMeeting');
             });
             AsyncStorage.setItem('myMeetingList', JSON.stringify(testId), () => {
-              console.log('[SetItem 완료] : myMeetingList');
+            });
+            AsyncStorage.setItem('imLeaderList', JSON.stringify(imLeader), () => {
             });
             console.log("[내가 참여한 모임 정보 조회 성공]");
           } else {
@@ -406,6 +413,7 @@ const Home = () => {
       <Modal animationType="slide"
         transparent={false}
         activeOpacity={0.8}
+        onRequestClose={() => setVisibleSearch(false)}
         visible={visibleSearch}>
         <KeyboardAvoidingView style={styles.container} behavior={"padding"} keyboardVerticalOffset={statusBarHeight + 44}>
 
@@ -423,22 +431,22 @@ const Home = () => {
             />
             {visibleSearch && recentKeyWord !== undefined && recentKeyWord.length > 0 ? <>
               <Text style={styles.recentListTxt}>최근검색</Text>
-              <View style={[styles.row, { marginLeft: 20 }, { marginBottom: 5 }, { marginTop: 5 }]}>
+              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, {marginTop: -10}]}>
                 {recentKeyWord[11] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[11])}><Text>{recentKeyWord[11]}</Text></Chip>}
                 {recentKeyWord[10] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[10])}><Text>{recentKeyWord[10]}</Text></Chip>}
                 {recentKeyWord[9] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[9])}><Text>{recentKeyWord[9]}</Text></Chip>}
               </View>
-              <View style={[styles.row, { marginLeft: 20 }, { marginBottom: 5 }, { marginTop: 5 }]}>
+              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, { marginTop: 5 }]}>
                 {recentKeyWord[8] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[8])}><Text>{recentKeyWord[8]}</Text></Chip>}
                 {recentKeyWord[7] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[7])}><Text>{recentKeyWord[7]}</Text></Chip>}
                 {recentKeyWord[6] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[6])}><Text>{recentKeyWord[6]}</Text></Chip>}
               </View>
-              <View style={[styles.row, { marginLeft: 20 }, { marginBottom: 5 }, { marginTop: 5 }]}>
+              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, { marginTop: 5 }]}>
                 {recentKeyWord[5] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[5])}><Text>{recentKeyWord[5]}</Text></Chip>}
                 {recentKeyWord[4] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[4])}><Text>{recentKeyWord[4]}</Text></Chip>}
                 {recentKeyWord[3] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[3])}><Text>{recentKeyWord[3]}</Text></Chip>}
               </View>
-              <View style={[styles.row, { marginLeft: 20 }, { marginBottom: 5 }, { marginTop: 5 }]}>
+              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, { marginTop: 5 }]}>
                 {recentKeyWord[2] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[2])}><Text>{recentKeyWord[2]}</Text></Chip>}
                 {recentKeyWord[1] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[1])}><Text>{recentKeyWord[1]}</Text></Chip>}
                 {recentKeyWord[0] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[0])}><Text>{recentKeyWord[0]}</Text></Chip>}
@@ -461,12 +469,15 @@ const Home = () => {
         <Chip style={{ marginRight: 10 }} icon="clock" mode="outlined" selectedColor='#232732' onPress={() => setVisibleCalendar(true)}><Text>{selectedDate}</Text></Chip>
         <Chip icon="align-vertical-center" mode="outlined" selectedColor='#232732' onPress={() => console.log('정렬')}><Text>정렬</Text></Chip>
       </View>
+      { showSpinner &&
+                <PlomeetSpinner isVisible={showSpinner} size={50}/>
+            }
       <FlatList
         columnWrapperStyle={[{ justifyContent: 'space-between' }, { marginHorizontal: 20 }]}
         data={meetingList}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.meetingId}
-        windowSize={3}
+        windowSize={50}
         numColumns={2}
       />
       <TouchableOpacity onPress={() => navigation.navigate('OpenMeeting')} activeOpacity={0.5} style={styles.TouchableOpacityStyle} >
