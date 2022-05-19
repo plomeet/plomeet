@@ -11,7 +11,7 @@ const OpenMeeting3 = () => {
   var [memberMaxValid, setMemberMaxValid] = useState(false);
   const [nextDisable, setNextDisable] = useState(true);
   var isOverZero = false;
-  const itemList = ["쓰레기 봉투", "집게", "뮬티슈", "면장갑", "운동화", "물", "도시락"];
+  const itemList = ["쓰레기 봉투", "집게", "물티슈", "목장갑", "운동화", "물", "도시락"];
 
   function goNext() {
     var items = [];

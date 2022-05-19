@@ -51,9 +51,9 @@ const AppTabComponent = () => {
                     let iconName;
 
                     if (route.name === '홈') {
-                        iconName = focused ? 'home' : 'home-outline';
+                        iconName = focused ? 'home-sharp' : 'home-outline';
                     } else if (route.name === '기록') {
-                        iconName = focused ? 'calendar' : 'calendar-outline';
+                        iconName = focused ? 'calendar' : 'calendar-sharp';
                     } else if (route.name === '채팅 목록') {
                         iconName = focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline';
                     } else if (route.name === 'MY') {
