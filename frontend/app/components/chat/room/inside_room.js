@@ -1,6 +1,6 @@
 import { useState, useEffect, memo, Component, rotate } from 'react';
 import { GiftedChat  } from 'react-native-gifted-chat';
-import Icon from 'react-native-vector-icons/Entypo'
+import Icon from 'react-native-vector-icons/Feather'
 import { color, Container } from '../styles';
 import CustomBubble from './custom/custom_bubble';
 import CustomSend from './custom/custom_send';
@@ -30,6 +30,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     const title = meeting.meetingName;
     const [user, setUser] = useState();
+    const [isOpen, setIsOpen] = useState(false);
     const userId = useSelector(state => state.userId).toString();
     const name = useSelector(state => state.name);
     const img = useSelector(state => state.img);
@@ -216,7 +217,7 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
             <AppHeader
                 title= {notice}
                 noIcon={false}
-                leftIcon={<Icons name="notification" size={20} marginLeft={30}/>} 
+                leftIcon={<Icon name="volume-2" size={25} marginLeft={30} color="#000"/>} 
                 rightIcon={<Icons name="down" size={20} />} 
                 rightIconPress={() => getMeetingInfo()}
                 meeting={meetingInfo}

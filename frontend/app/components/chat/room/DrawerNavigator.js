@@ -128,7 +128,7 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
                 }}
               >
                 
-                  <Text style={{fontSize: 20, marginLeft:10}}>
+                  <Text style={[{fontSize: 20}, {marginLeft:10}, {color:"#000"}, {marginTop:20}, {marginBottom:-10}]}>
                     모임인원
                   </Text>
                 
