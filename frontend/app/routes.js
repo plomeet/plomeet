@@ -30,6 +30,8 @@ import PolicyDoc from './components/my/preference/policyDoc/index'
 
 //Chatting
 import InsideRoom from './components/chat/room/inside_room';
+import {SideBar_} from './components/chat/room/DrawerNavigator';
+import {DrawerNavigator} from './components/chat/room/DrawerNavigator'
 
 //My
 import BadgeList from './components/my/badge/badge_all';
@@ -91,6 +93,7 @@ const AppTabComponent = () => {
 
 export const RootNavigator = () => {
     return (
+
         <Stack.Navigator>
             <Stack.Screen
                 name="Splash"
@@ -110,7 +113,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="M" component={AppTabComponent} options={{ title: ' ', headerShown: false }} />
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: false, gestureEnabled: false }} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
-            <Stack.Screen name="InChatRoom" component={InsideRoom} />
+            <Stack.Screen name="InChatRoom" component={SideBar_}/>
             <Stack.Screen name="OpenMeeting" component={OpenMeeting} options={{ title: '플로깅 모임 생성(1/5)' }} />
             <Stack.Screen name="OpenMeeting2" component={OpenMeeting2} options={{ animationEnabled: false, title: '플로깅 모임 생성(2/5)' }} />
             <Stack.Screen name="OpenMeeting3" component={OpenMeeting3} options={{ animationEnabled: false, title: '플로깅 모임 생성(3/5)' }} />

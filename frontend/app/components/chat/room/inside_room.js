@@ -1,16 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, memo, Component, rotate } from 'react';
 import { GiftedChat  } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/Entypo'
 import { color, Container } from '../styles';
 import CustomBubble from './custom/custom_bubble';
 import CustomSend from './custom/custom_send';
 import CustomInputToolbar from './custom/custom_inputtoolbar';
+
 import firestore from '@react-native-firebase/firestore';
 import { saveChatting, updateUserLastReadChatTime } from '../../../../utils/firestore';
 import { useSelector } from 'react-redux';
 import PlomeetSpinner from '../../../../utils/PlomeetSpinner';
 
+import {View, StyleSheet, Button, Alert, Text} from "react-native";
 
+
+import * as React from 'react';
+
+import AppHeader from './customheader';
+import AppHeaderOpen from './customOpenHeader';
+import Icons from 'react-native-vector-icons/AntDesign';
+import axiosInstance from '../../../../utils/API';
+
+import Accordion from 'react-native-collapsible/Accordion';
+
+
+
+
+//const InsideRoom = React.memo(({ navigation, route: {params: {meeting, userId}} }) => {   // 윤수가 한거
 const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     const title = meeting.meetingName;
     const [user, setUser] = useState();
@@ -19,9 +35,21 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     const img = useSelector(state => state.img);
     const members = {};
     const [messages, setMessages] = useState([]);
+    const [notice, setNotice] = useState(
+        "["+{title}.title + "]모임의 플로깅방입니다."
+    );
+
+    const meetingId = meeting.meetingId;
+    const [meetingInfo, setMeetingInfo] = useState({
+        meetingPlace:"",
+        meetingMem:"난기본값이다",
+        meetingDate:"",
+        meetingItem:"",
+    });
+
+
     const [showSpinner, setShowSpinner] = useState(true);
 
-    
     const _handleMessageSend = async messageList => {
         const newMessage = messageList[0];
         const message = {
@@ -29,7 +57,8 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
             createdAt: Date.now(),
             userId: newMessage.user._id,
         };
-        try{
+        try{    // 위에께 원래 내가 쓰던 거 
+            //await createMessage({  channelId: params.id, message: newMessage});       //channelId: params.id,
             await saveChatting({ meetingId: meeting.meetingId, message});
         }catch(e){
             Alert.alert('Send Message Error', e.message);
@@ -61,6 +90,38 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
             <CustomSend {...props} />
         )
     };
+
+
+        
+    // 윤수 추가 : 공지에 상세정보 띄우는 함수 
+    const getMeetingInfo = async() => {
+        var meetingInfo = [];
+        try {
+            await axiosInstance.get(`/meetings/${meetingId}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        meetingInfo = response.data;                              
+                        //console.log(meetingInfo.item);
+                        //console.log(meetingInfo.registerDate);
+                    } else {
+                        console.log("error");
+                    }
+                })
+                .catch((response) => { console.log(response); });
+        } catch (err) { console.log(err); }
+
+        setMeetingInfo(preState=>({
+            ...preState,
+            meetingName: meetingInfo.meetingName,
+            meetingPlace: meetingInfo.meetingPlace,
+            meetingMem: meetingInfo.memberCnt,
+            meetingMemMax: meetingInfo.memberMax,
+            meetingDate: meetingInfo.meetingDate,
+            meetingItem: meetingInfo.item,
+        }));
+    }
+
+    
 
     const setMessagesData = async(queryArray) => {
         const list = [];
@@ -95,17 +156,9 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
         return userInfo;
     };
     
-    
-    useEffect(() => {
-        navigation.setOptions({
-            headerTitle: title,
-            headerRight: () => (
-                <Icon name="menu" size={20} color={color.black} style={{marginRight: 10}} />
-            ),
-        });
-    }, []);
-    
-    
+
+
+    // [자동실행] 기본 UI 표출용 데이터 받아오는 부분 
     useEffect(() => {
         const userInfo = {
             _id: userId,
@@ -126,34 +179,13 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
             });
         
         return () => {
-            //subscriberUser();
             subscriberChatting();
         }
+
     }, []);
 
-    /*
     useEffect(() => {
-        console.log("meetingId::"+ meeting.meetingId);        
-        const subscriberMember = firestore()
-            .collection('meetings')
-            .doc(meeting.meetingId)
-            .collection('members')
-            .onSnapshot(querySnapShot => {
-                const memberInfos = {};
-                querySnapShot.forEach(async (member) => {
-                    const memberData = member.data();
-                    const memberId = memberData.userId;
-                    const userInfo = await getUserInfo(memberId);
-                    memberInfos[memberData.userId] = userInfo;
-                });
-                setMembers(memberInfos);
-            });
-        return () => subscriberMember();
-    }, []);
-    */
-
-    
-    useEffect(() => {
+        getMeetingInfo()
         if(messages.length != 0){
             const updateUserLastReadChatTimeData = {
                 meetingId: meeting.meetingId,
@@ -166,11 +198,69 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
     }, [messages]);
     
 
+
+    // collapsible 관련 const
+    const SECTIONS = [
+        {
+          title: 'First',
+          content: 'Lorem ipsum…'
+        }
+    ];
+      
+    class AccordionView extends Component {
+        state = {
+            activeSections: [],
+          };
+        _renderHeader(section) {
+          return (
+            <AppHeader
+                title= {notice}
+                noIcon={false}
+                leftIcon={<Icons name="notification" size={20} marginLeft={30}/>} 
+                rightIcon={<Icons name="down" size={20} />} 
+                rightIconPress={() => getMeetingInfo()}
+                meeting={meetingInfo}
+            />
+          );
+        }
+        _renderContent(section) {
+          return (
+            <AppHeaderOpen
+                meeting={meetingInfo}
+            />
+          );
+        }
+        _updateSections = (activeSections) => {
+            this.setState({ activeSections });
+          };
+        
+          render() {
+            return (
+              <Accordion
+                sections={SECTIONS}
+                activeSections={this.state.activeSections}
+                renderSectionTitle={this._renderSectionTitle}
+                renderHeader={this._renderHeader}
+                renderContent={this._renderContent}
+                onChange={this._updateSections}
+              />
+            );
+          }
+      
+    }
+
+
+    // [렌더링] 화면 구성
     return (
         <Container>
             { showSpinner &&
                 <PlomeetSpinner isVisible={showSpinner} size={50}/>
             }
+            <AccordionView
+                sections={SECTIONS}
+                //renderHeader={AccordionView._renderHeader}      //AccordionView._renderHeader
+                //renderContent={AccordionView._renderContent}    //AccordionView._renderContent
+            />
             <GiftedChat
                 listViewProps={{
                     style: { 
@@ -196,8 +286,10 @@ const InsideRoom = React.memo(({ navigation, route: {params: {meeting}} }) => {
                 onSend={_handleMessageSend}
                 alwaysShowSend={true}
             />
-        </Container>
+        
+    </Container>
     );
 });
+
 
 export default InsideRoom;

@@ -3,10 +3,13 @@ package com.ssafy.PloMeet.model.repository;
 import com.ssafy.PloMeet.model.entity.Meeting;
 import com.ssafy.PloMeet.model.entity.MyMeeting;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
+@Repository
 public interface MyMeetingRepository extends JpaRepository<MyMeeting, Long> {
 
     // 일반 SQL쿼리
