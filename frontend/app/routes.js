@@ -30,8 +30,8 @@ import PolicyDoc from './components/my/preference/policyDoc/index'
 
 //Chatting
 import InsideRoom from './components/chat/room/inside_room';
-import {SideBar_} from './components/chat/room/DrawerNavigator';
-import {DrawerNavigator} from './components/chat/room/DrawerNavigator'
+import { SideBar_ } from './components/chat/room/DrawerNavigator';
+import { DrawerNavigator } from './components/chat/room/DrawerNavigator'
 
 //My
 import BadgeList from './components/my/badge/badge_all';
@@ -63,7 +63,6 @@ const AppTabComponent = () => {
                     }
                     if (route.name === '플로깅') return (
                         <TouchableOpacity
-                            hitSlop={{ top: 5.5, bottom: 20, left: 10, right: 10 }}
                             onPress={() => navigation.navigate('ploggingActivity', { msg: "plogging start" })}>
                             <View style={style.backGround}>
                                 <Image
@@ -84,9 +83,16 @@ const AppTabComponent = () => {
         >
             <MainScreenTab.Screen name="홈" component={Home} />
             <MainScreenTab.Screen name="기록" component={RecordContainer} />
-            <MainScreenTab.Screen name="플로깅" component={Plogging} options={{ headerShown: false }} />
+            <MainScreenTab.Screen name="플로깅" component={Plogging} options={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { height: 0 } }} />
             <MainScreenTab.Screen name="채팅 목록" component={Chat} />
-            <MainScreenTab.Screen name="MY" component={MyPage} options={{ title: 'MY', headerShown: false }} />
+            <MainScreenTab.Screen name="MY" component={MyPage} options={{
+                title: 'MY', headerRight: () => (
+                    <TouchableOpacity onPress={() => navigation.navigate('Preference', { msg: "go Preference screen" })}>
+                    <View style={style.preferencBtn}>
+                        <Icon name="settings-outline" size={27} color="#000000" />
+                    </View>
+                </TouchableOpacity>                
+            ) }} />
         </MainScreenTab.Navigator>
     )
 }
@@ -113,7 +119,7 @@ export const RootNavigator = () => {
             <Stack.Screen name="M" component={AppTabComponent} options={{ title: ' ', headerShown: false }} />
             <Stack.Screen name="ploggingActivity" component={Plogging} options={{ title: '', headerShown: false, gestureEnabled: false }} />
             <Stack.Screen name="CameraPage" component={CameraPage} options={{ headerShown: false }} />
-            <Stack.Screen name="InChatRoom" component={SideBar_}/>
+            <Stack.Screen name="InChatRoom" component={SideBar_} />
             <Stack.Screen name="OpenMeeting" component={OpenMeeting} options={{ title: '플로깅 모임 생성(1/5)' }} />
             <Stack.Screen name="OpenMeeting2" component={OpenMeeting2} options={{ animationEnabled: false, title: '플로깅 모임 생성(2/5)' }} />
             <Stack.Screen name="OpenMeeting3" component={OpenMeeting3} options={{ animationEnabled: false, title: '플로깅 모임 생성(3/5)' }} />
@@ -145,5 +151,9 @@ const style = StyleSheet.create({
         zIndex: 100,
         width: 30,
         height: 30
-    }
+    },
+    preferencBtn: {
+        paddingRight: 20,
+    },
+
 });

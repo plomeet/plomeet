@@ -44,14 +44,15 @@ const Record = ({ saveLogs, setListMonth }) => {
                             else {
                                 console.log("log insert FAIL " + response.status);
                             }
+                            setShowSpinner(false);
                         })
                         .catch((response) => { console.log(response); });
                 } catch (err) { console.log(err); }
             };
 
-            const checkFirstLog = () => { 
+            const checkFirstLog = () => {
                 if (firstPlogging) {
-                    Alert.alert( 
+                    Alert.alert(
                         "",
                         "'플로깅의 시작' 뱃지 획득!",
                         [
@@ -75,7 +76,7 @@ const Record = ({ saveLogs, setListMonth }) => {
         if (listMonth.length > 1) {
             const mm = parseInt(listMonth.substring(5, 7));
             setMonth(mm);
-            if (savedLogs[0] !== undefined)
+            if (savedLogs[0] !== undefined) {
                 savedLogs.map((data, i) => {
                     if (i === savedLogs.length - 1) setShowSpinner(false);
                     const min = parseInt(data.plogTime.substring(0, data.plogTime.indexOf(' ')));
@@ -89,6 +90,10 @@ const Record = ({ saveLogs, setListMonth }) => {
                         }
                     }
                 });
+            } else {
+                setShowSpinner(false);
+            }
+
         }
     }, [listMonth, savedLogs]);
 
@@ -133,16 +138,16 @@ const Record = ({ saveLogs, setListMonth }) => {
 
             if (isTotalDistTen) {
                 if (totalDist >= 10.0) {
-                        Alert.alert( 
-                            "",
-                            "'제법 걸었네요' 뱃지 획득!",
-                            [
-                                {
-                                    text: '닫기'
-                                }
-                            ],
-                            { cancelable: true }
-                        );
+                    Alert.alert(
+                        "",
+                        "'제법 걸었네요' 뱃지 획득!",
+                        [
+                            {
+                                text: '닫기'
+                            }
+                        ],
+                        { cancelable: true }
+                    );
 
                     saveBadgeTotalDistTen();
                 }

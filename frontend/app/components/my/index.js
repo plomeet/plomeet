@@ -15,14 +15,6 @@ const MyPage = () => {
     const navigation = useNavigation();
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.containerTitle}>
-                <Text style={styles.titleText}>My</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Preference', { msg: "go Preference screen" })}>
-                    <View style={styles.preferencBtn}>
-                        <Icon name="settings-outline" size={27} color="#000000" />
-                    </View>
-                </TouchableOpacity>
-            </View>
             <Profile></Profile>
             <MyMeetingIntro></MyMeetingIntro>
             <BadgeIntro></BadgeIntro>
@@ -230,7 +222,7 @@ const styles = StyleSheet.create({
     containerTitle: {
         backgroundColor: "white",
         alignItems: 'center',
-        borderBottomWidth: 0.3,
+        // borderBottomWidth: 0.3,
         flexDirection: "row",
         height: '8%',
     },
