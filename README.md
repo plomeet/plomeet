@@ -1,7 +1,7 @@
 # README.md
 
 
-![Frame 15](https://user-images.githubusercontent.com/67628725/169354967-41626adb-41a9-4ac2-9587-f6a7252855af.png)
+![Frame 15](https://user-images.githubusercontent.com/67628725/169354967-41626adb-41a9-4ac2-9587-f6a7252855af.png){:WIDTH="100 HEIGHT="100"}
 
 ## ploMeet!
 
