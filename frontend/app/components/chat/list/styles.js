@@ -57,6 +57,7 @@ export const ChattingRoomName = styled.Text`
     font-weight: bold;
     color: ${color.blackFont};
 `;
+
 //채팅방 참여인원
 export const ChattingRoomMember = styled.Text`
     margin-left: 3px;

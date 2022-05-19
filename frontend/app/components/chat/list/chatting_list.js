@@ -19,8 +19,8 @@ const ChattingList = React.memo(()=> {
     const [chatRooms, setChatRooms] = useState([]);
     const [showSpinner, setShowSpinner] = useState(true);
 
-    const _handleChattingRoomPress = async ( item ) => {
-        navigation.navigate('InChatRoom', {meeting: item.meeting, userId});
+    const _handleChattingRoomPress = async ( item ) => {   
+        navigation.navigate('InChatRoom', {meeting: item.meeting, userId});  //navigation.navigate('InChatRoom', {meeting: item.meeting, userId});
     }
 
     const renderChattingRoom = ({ item }) => {
@@ -157,6 +157,7 @@ const ChattingList = React.memo(()=> {
     }, [isFocused]);
 
     return (
+        
         <Container>
             { showSpinner &&
                 <PlomeetSpinner isVisible={showSpinner} size={50}/>
