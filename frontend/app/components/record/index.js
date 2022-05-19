@@ -1,6 +1,6 @@
 import React, { Component, Node, Button, useEffect, useState, useRef } from 'react';
 import 'react-native-gesture-handler';
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View, Alert } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import RecordStatusBar from './record-status-bar/index'
 import LogCalendar from './calendar/index'
@@ -27,6 +27,7 @@ const Record = ({ saveLogs, setListMonth }) => {
     const [showSpinner, setShowSpinner] = useState(true);
     const firstPlogging = useSelector(state => state.firstPlogging);
     const dispatch = useDispatch();
+    const [isTotalDistTen, setIsTotalDistTen] = useState(false);
 
     useEffect(() => {
         if (isFocused) {
@@ -120,8 +121,67 @@ const Record = ({ saveLogs, setListMonth }) => {
             const now = new Date();
             const dateString = dateFormat(now);
             setListMonth(dateString);
+
+            if (isTotalDistTen) {
+                if (totalDist >= 10.0) {
+                        Alert.alert( 
+                            "",
+                            "'제법 걸었네요' 뱃지 획득!",
+                            [
+                                {
+                                    text: '닫기'
+                                }
+                            ],
+                            { cancelable: true }
+                        );
+
+                    saveBadgeTotalDistTen();
+                }
+            }
         }
     }, [savedLogs]);
+
+    useEffect(() => { 
+        const checkTotalDistTen = async () => { 
+            try {
+                await axiosInstance.get(`/badges/${userId}/23`)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            console.log("뱃지!!!!", response.data.isOwned)
+                            if (!response.data.isOwned) {
+                                setIsTotalDistTen(true);
+                                console.log("나 누적10키로 뱃지 첨받아봄!")
+                            }
+                            else {
+                                setIsTotalDistTen(false);
+                            }
+                        } else {
+                            console.log("error" + response.status);
+                        }
+                    })
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+        
+        checkTotalDistTen();
+    }, [isFocused])
+
+
+    const saveBadgeTotalDistTen = async () => {
+        try {
+            await axiosInstance.post('/badges/get', {
+                userId: userId,
+                badgeId: 23,
+            }).then((response) => {
+                if (response.status === 201) {
+                    console.log("뱃지 획득 성공!!");
+                    setIsTotalDistTen(false);
+                }
+            })
+        } catch (error) { console.log(error) }
+    }
 
     const dateFormat = (date) => {  //dateformat 마찬가지
         let month = date.getMonth() + 1;
