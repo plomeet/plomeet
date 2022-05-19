@@ -191,7 +191,7 @@ const EndPlogging = ({ saveLogs, ploggingPath, center, setImages, distSum, isPlo
                     {
                         imageSource.map((img, i) => (
                             <View>
-                                <Photo source={{ uri: img.uri }} key={{ i }} />
+                                <Photo source={{ uri: img.uri }} key={ i } />
                                 <TouchableOpacity onPress={() => deleteImg(img.id)} hitSlop={{ right: 12, bottom: -90, left: -90, top: 120 }}>
                                     <ImageDelete width={20} height={20} style={style.delBtn} />
                                 </TouchableOpacity>
