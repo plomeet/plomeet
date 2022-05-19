@@ -365,7 +365,7 @@ const Home = () => {
 
       <Modal animationType="slide"
         transparent={false}
-        onRequestClose={() => setVisibleCalender(false)}
+        onRequestClose={() => setVisibleCalendar(false)}
         activeOpacity={0.8}
         visible={visibleCalendar}>
         <View style={{
