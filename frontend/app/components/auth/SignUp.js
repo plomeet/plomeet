@@ -75,7 +75,26 @@ const SignUp = () => {
             KakaoLogins.getProfile()
               .then(result => {
                 console.log(`### Profile Result : ${JSON.stringify(result)}`);
-                navigation.navigate('NicknameRegister');
+                  kakaoUserId = result.id;
+                  axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
+                  .then((response) => {
+                    console.log(response.status);
+                    dispatch(actions.setNickname(response.data.userNickName));
+                    dispatch(actions.setUserId(response.data.userId));
+                    if(response.status == 200){ //홈으로, Redux 저장
+                      dispatch(actions.setkakaoId(result.id))
+                      dispatch(actions.setImg(result.profileImageUrl))
+                      dispatch(actions.setName(result.nickname))
+                      dispatch(actions.setEmail(result.email))
+                      navigation.replace('M');
+                    }else{ // 진행시켜
+                      console.log('토큰은있지만 가입한적없어?? ->말이안됨')
+                      navigation.navigate('NicknameRegister');
+                    }
+                  }).catch((error) => {
+                    console.log(error); 
+                  });
+                //navigation.navigate('NicknameRegister');
               })
               .catch(err => {
                 console.log(`### Profile Error : ${JSON.stringify(err)}`);
