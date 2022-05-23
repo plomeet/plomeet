@@ -81,8 +81,7 @@ const MyMeetingIntro = () => {
 
     useEffect(() => {
         AsyncStorage.getItem('myMeeting', (err, result) => {
-            setMyMeetingListInfo(JSON.parse(result).reverse());
-
+            if(result != null) setMyMeetingListInfo(JSON.parse(result).reverse());
         })
         AsyncStorage.getItem('myMeetingList', (err, result) => {
             setMyMeetingList(JSON.parse(result));
