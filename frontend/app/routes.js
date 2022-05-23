@@ -35,7 +35,6 @@ import { DrawerNavigator } from './components/chat/room/DrawerNavigator'
 
 //My
 import BadgeList from './components/my/badge/badge_all';
-import PloggingBottomTabSvg from './components/plogging/icons/ploggingBottomTap.svg'
 
 
 const Stack = createStackNavigator();
@@ -66,7 +65,10 @@ const AppTabComponent = () => {
                         <TouchableOpacity
                             onPress={() => navigation.navigate('ploggingActivity', { msg: "plogging start" })}>
                             <View style={style.backGround}>
-                                <PloggingBottomTabSvg />
+                                <Image
+                                    style={style.icon}
+                                    source={{ uri: "https://i.postimg.cc/p96ypGcJ/plogging-Bottom-Tap.png" }}
+                                />
                             </View>
                         </TouchableOpacity>
                     )
