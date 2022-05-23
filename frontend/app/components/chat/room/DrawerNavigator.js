@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Icon from 'react-native-vector-icons/Entypo'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { color} from '../styles';
 
 import {View, StyleSheet, Button, Alert} from "react-native";
@@ -43,7 +43,7 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
       nick:"",
       id:"",
       img:"",
-      ishost:""
+      isLeader:""
     }
   ]);
 
@@ -54,16 +54,18 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
       try {
           await axiosInstance.get(`/chat/${meetingId}`)
               .then((response) => {
+                console.log(response);
                   //console.log(response.data[0].userId)
                   if (response.status === 200) {
                       const meetingUsers = response.data;
-                      
+                      console.log(meetingUsers);
                       for(let i =0;i<meetingUsers.length;i++){
-                        
+
                         const userDetail = {
                           id: meetingUsers[i].userId,
                           nick: meetingUsers[i].userNickName,
                           img: meetingUsers[i].userProfileImg,
+                          isLeader: meetingUsers[i].isLeader,
                         };
                         list.push(userDetail)
                       }
@@ -92,18 +94,22 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
                 getMeetingUsers(); 
                 //console.log({meetingUser})
               } } 
-               name="menu" size={20} color={color.black} style={{marginRight: 10}} />
+                name="menu" size={20} color={color.black} style={{marginRight: 10}} />
           ),
         });
     }, []);
 
-    const Item =({title,img})=>(
+    const Item =({title,img, isLeader})=>(
       <View >
         <ChattingRoomComp>
           <ChattingRoomImg source={{uri: img}} />
             <Text style={{fontSize: 15, marginTop:15, marginLeft:20}}>
               {title}
             </Text>
+            {isLeader 
+            ? <Icon name="crown" size={15} color={color.crownYellow} style={{marginTop:17, marginLeft:5}}/>
+            : null
+            }
         </ChattingRoomComp>
       </View>
     );
@@ -112,9 +118,12 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
     const CustomDrawer = props => {
       const mt = {meetingUser}.meetingUser
 
-      const renderItem = ({ item }) => (
-        <Item title={item.nick} img={item.img}/>
-      );
+      const renderItem = ({ item }) => {
+        console.log(item);
+        return (
+          <Item title={item.nick} img={item.img} isLeader={item.isLeader}/>
+        );
+      }
         return(
             <View style={{ flex: 1 }}>
             <View {...props}>
