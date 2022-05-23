@@ -98,14 +98,14 @@ const MyMeetingIntro = () => {
                 <Text style={[{ marginLeft: 5 }, { marginVertical: 10 }, { fontSize: 20 }, { color: "#000" }]} >내 모임</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('MeetingList')}><View flexDirection="row"><Text style={[{ fontSize: 13 }, { color: "#000" }]}> 더보기 </Text><Icon2 name="chevron-thin-right" size={13} color="#000" style={[{ marginLeft: 5 }, { marginTop: 2 }, { marginRight: 10 }]} /></View></TouchableOpacity>
             </View>
-            <FlatList
+            {myMeetingListInfo !== undefined && <FlatList
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 data={myMeetingListInfo}
                 horizontal={true}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => item.meetingId}
-            />
+            />}
         </View>
     )
 };
