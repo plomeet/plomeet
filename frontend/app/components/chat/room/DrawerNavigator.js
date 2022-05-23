@@ -167,7 +167,7 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
                 
               }}onPress={() => Alert.alert(
                 "모임탈퇴",
-                "채팅방을 나가면 모임에서도 탈퇴됩니다. 정말나가시겠습니까?",[
+                "채팅방을 나가면 모임에서도 탈퇴됩니다.\n정말 나가시겠습니까?",[
                   {text:"남을게요"},
                   {text:"그래도 나갈래요",onPress:()=>leaveChattingRoom()}
               ]
