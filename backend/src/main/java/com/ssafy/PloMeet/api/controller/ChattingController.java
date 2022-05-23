@@ -1,5 +1,6 @@
 package com.ssafy.PloMeet.api.controller;
 
+import com.ssafy.PloMeet.api.response.ChattingMemberRes;
 import com.ssafy.PloMeet.api.response.MeetingRes;
 import com.ssafy.PloMeet.api.response.UserRes;
 import com.ssafy.PloMeet.api.service.ChattingService;
@@ -28,8 +29,8 @@ public class ChattingController {
     @GetMapping("/{meetingId}")
     public ResponseEntity<Object> findAllSubscriber(@PathVariable("meetingId") Meeting meetingId) {
         try {
-            List<User> users = chattingService.findAllSubscriber(meetingId);
-            return ResponseEntity.status(HttpStatus.OK).body(users);
+            List<ChattingMemberRes> chattingMembers = chattingService.findAllSubscriber(meetingId);
+            return ResponseEntity.status(HttpStatus.OK).body(chattingMembers);
         }catch(NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }
