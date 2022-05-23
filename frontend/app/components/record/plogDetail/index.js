@@ -45,7 +45,7 @@ const LogDetail = ({ route }) => {
                     center={{ ...middle, zoom: 16 }}
                     useTextureView>
                     {ploggingPathJson !== undefined && ploggingPathJson.length >= 2 &&
-                        <Path coordinates={ploggingPathJson} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
+                        <Path coordinates={ploggingPathJson} onClick={() => console.log('onClick! path')} width={5} outlineWidth={0} color={'#0F58F9'} />
                     }
                 </NaverMapView>
             </View>
