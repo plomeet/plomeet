@@ -35,6 +35,7 @@ import { DrawerNavigator } from './components/chat/room/DrawerNavigator'
 
 //My
 import BadgeList from './components/my/badge/badge_all';
+import PloggingBottomTabSvg from './components/plogging/icons/ploggingBottomTap.svg'
 
 
 const Stack = createStackNavigator();
@@ -65,10 +66,7 @@ const AppTabComponent = () => {
                         <TouchableOpacity
                             onPress={() => navigation.navigate('ploggingActivity', { msg: "plogging start" })}>
                             <View style={style.backGround}>
-                                <Image
-                                    style={style.icon}
-                                    source={require('./components/plogging/icons/ploggingBottomTap.png')}
-                                />
+                                <PloggingBottomTabSvg />
                             </View>
                         </TouchableOpacity>
                     )
@@ -88,11 +86,12 @@ const AppTabComponent = () => {
             <MainScreenTab.Screen name="MY" component={MyPage} options={{
                 title: 'MY', headerRight: () => (
                     <TouchableOpacity onPress={() => navigation.navigate('Preference', { msg: "go Preference screen" })}>
-                    <View style={style.preferencBtn}>
-                        <Icon name="settings-outline" size={27} color="#000000" />
-                    </View>
-                </TouchableOpacity>                
-            ) }} />
+                        <View style={style.preferencBtn}>
+                            <Icon name="settings-outline" size={27} color="#000000" />
+                        </View>
+                    </TouchableOpacity>
+                )
+            }} />
         </MainScreenTab.Navigator>
     )
 }
