@@ -53,4 +53,17 @@ public class MyMeetingController {
         return ResponseEntity.status(HttpStatus.OK).body(myMeetings);
     }
 
+    //가입한 모임 삭제
+    @DeleteMapping("/meetings/{meetingId}/{userId}")
+    public ResponseEntity<Object> deleteMyMeeting(@PathVariable Long meetingId, @PathVariable Long userId) {
+        try {
+            myMeetingService.deleteMyMeeting(meetingId, userId);
+        } catch (IllegalArgumentException e) {
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("errorMsg", "[잘못된 요청]" + userId + meetingId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMap);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
 }

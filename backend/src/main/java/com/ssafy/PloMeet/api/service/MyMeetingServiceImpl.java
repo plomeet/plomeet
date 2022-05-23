@@ -35,6 +35,12 @@ public class MyMeetingServiceImpl implements MyMeetingService{
         return myMeetingRepository.save(myMeeting).getMyMeetingId();
     }
 
+    //내 모임 탈퇴
+    @Transactional
+    public void deleteMyMeeting(Long meetingId, Long userId) {
+        myMeetingRepository.deleteMyMeeting(meetingId, userId);
+    }
+
     @Transactional
     public List<MyMeeting> findMeetingListByUserId(Long userId) {
         return myMeetingRepository.findAllByUserId(userId);
