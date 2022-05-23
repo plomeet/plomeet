@@ -76,6 +76,7 @@ const NicknameRegister = () => {
     },).then((response) => {
       console.log(response);
       NicknameUpdate();
+      dispatch(actions.setUserId(response.data.userId));
       const userIdRegister = response.data.userId.toString();
       createUser({userId: userIdRegister, userNickName: value, userProfileImg: img});
       getFirstRegisterBadge({userId: userIdRegister});

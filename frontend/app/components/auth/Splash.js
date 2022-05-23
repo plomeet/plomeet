@@ -24,20 +24,23 @@ const AuthComponent = () => {
   const name = useSelector(state => state.name)
   const img = useSelector(state => state.img)
   const email = useSelector(state => state.email)
-
-  AsyncStorage.getItem('refreshToken').then(res => {
+  
+  useEffect(()=>{
+    AsyncStorage.getItem('refreshToken').then( async res => {
+      console.log(res);
         if(res) {
-          KakaoLogins.getProfile().then(result => {
+          await KakaoLogins.getProfile().then(result => {
             kakaoUserId = result.id;
           });
-          setTimeout(() => {axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
-          .then((response) => {
+          //setTimeout(() => {axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
+          await axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
+          .then(async (response) => {
             // console.log(response.data.userId);
             dispatch(actions.setNickname(response.data.userNickName));
             dispatch(actions.setUserId(response.data.userId));
             if(response.status == 200){
               //store 저장
-              KakaoLogins.getProfile().then(result => {
+              await KakaoLogins.getProfile().then(result => {
                 // console.log(result)
                 dispatch(actions.setkakaoId(result.id))
                 dispatch(actions.setImg(result.profileImageUrl))
@@ -46,13 +49,15 @@ const AuthComponent = () => {
                 navigation.replace('M');
               });
             }
-          })},2000);
+          })
+          //})},2000);
         }else{
           console.log('조기')
-          setTimeout(() => {navigation.navigate('SignUp');},1000);
+          //setTimeout(() => {navigation.navigate('SignUp');},1000);
+          navigation.navigate('SignUp');
         }
       });
-
+  }, []);
 
   return (
     <LinearGradient
