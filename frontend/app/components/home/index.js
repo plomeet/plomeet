@@ -351,6 +351,13 @@ const Home = () => {
             console.log("[내가 참여한 모임 정보 조회 성공]");
           } else {
             console.log("[내가 참여한 모임 정보 조회 실패]");
+            AsyncStorage.setItem('myMeeting', JSON.stringify([]), () => {
+            });
+            AsyncStorage.setItem('myMeetingList', JSON.stringify([]), () => {
+            });
+            AsyncStorage.setItem('imLeaderList', JSON.stringify([]), () => {
+            });
+
           }
         })
         .catch((response) => { console.log(response); });
