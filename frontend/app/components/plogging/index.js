@@ -10,8 +10,11 @@ import axiosInstance from "../../../utils/API";
 import haversine from 'haversine';
 import TrashcanInfo from './trashcan-modal/index';
 import EndPlogging from './endScreen/index';
-import dfs_xy_conv from '../../../utils/IHateMeteorologicalAgency'
-import PlomeetSpinner from '../../../utils/PlomeetSpinner'
+import dfs_xy_conv from '../../../utils/IHateMeteorologicalAgency';
+import PlomeetSpinner from '../../../utils/PlomeetSpinner';
+import MyLocSvg from './icons/myLocMarker.svg';
+import ClickedMarkerSvg from './icons/clickedMaker.svg'
+import UnClickedMarkerSvg from './icons/unClickedMarker.svg';
 
 //테스트용으로 남겨둔 데이터 삭제 X
 const P0 = { latitude: 37.564362, longitude: 126.977011 };
@@ -277,8 +280,10 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                                     // mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_TRANSIT, enableLayerGroup);
                                     // setEnableLayerGroup(!enableLayerGroup)
                                 }}
-                                image={require("./icons/myLocMarker.png")}
-                            />
+                            //image={"./icons/myLocMarker.svg"}
+                            >
+                                <MyLocSvg />
+                            </Marker>
 
                             {ploggingPath.length >= 2 &&
                                 <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
@@ -291,12 +296,13 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                                         <Marker
                                             key={item.trashcanId}
                                             coordinate={{ latitude: parseFloat(item.latitude), longitude: parseFloat(item.longitude) }}
-                                            image={showThisNum === (parseInt(item.trashcanId) - 1) ?
-                                                require("./icons/clickedMaker.png") : require("./icons/unClickedMarker.png")}
                                             width={25}
                                             height={25}
                                             onClick={() => setShowThisNum(parseInt(item.trashcanId) - 1)}
-                                        />
+                                        >
+                                            {showThisNum === (parseInt(item.trashcanId) - 1) ?
+                                                <ClickedMarkerSvg /> : <UnClickedMarkerSvg />}
+                                        </Marker>
                                     );
                                 })
                             }
