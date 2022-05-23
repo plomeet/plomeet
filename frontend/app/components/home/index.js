@@ -1,7 +1,7 @@
 import React, { Component, Node, Button, useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import { Chip } from 'react-native-paper';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
 import { BackHandler, Alert, LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, KeyboardAvoidingView, NativeModules } from "react-native";
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -12,6 +12,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 import AsyncStorage from '@react-native-community/async-storage';
 import PlomeetSpinner from '../../../utils/PlomeetSpinner'
+import { setFirstMeeting } from '../../actions/badgeAction'
 
 const { StatusBarManager } = NativeModules
 
@@ -150,6 +151,8 @@ const Home = () => {
   const [recentKeyWord, setRecentKeyWord] = useState();
   const [showSpinner, setShowSpinner] = useState(true);
   //const [textInputValue, setTextInputValue] = useState();
+  const isFirstMeeting = useSelector(state => state.firstMeeting)
+  const dispatch = useDispatch();
 
   function deleteDate() {
     setSelectedDate('일시');
@@ -245,6 +248,38 @@ const Home = () => {
   useEffect(() => {
     getMyMeeting();
   }, [userId]);
+
+  useEffect(() => {
+    if (isFocused) { 
+      if (isFirstMeeting) { 
+        Alert.alert(
+          "",
+          "'너 내 동료가 되라' 뱃지 획득!",
+          [
+            {
+              text: '닫기'
+            }
+          ],
+          { cancelable: true }
+        )
+        saveBadgeFirstMeeting();
+      }
+    }
+  }, [isFocused])
+
+  const saveBadgeFirstMeeting = async () => { 
+    try {
+      await axiosInstance.post('badges/get', {
+        userId: userId,
+        badgeId: 3,
+      }).then((response) => { 
+        if (response.status === 201) { 
+          console.log("뱃지 획득 성공!!");
+          dispatch(setFirstMeeting(false));
+        }
+      })
+    } catch(error) {console.log(error)}
+  }
 
   async function getAllMeeting() {
     try {

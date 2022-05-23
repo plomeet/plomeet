@@ -1,10 +1,9 @@
 import React from 'react';
-import {View, Image} from 'react-native';
-
+import { View, Image } from 'react-native';
 import LogoImage from '../../../assets/imgs/6885.png';
 
 const LogoComponent = () => (
-  <View style={{alignItems: 'center'}}>
+  <View style={{ alignItems: 'center' }}>
     <Image
       source={LogoImage}
       resizeMode={'contain'}
