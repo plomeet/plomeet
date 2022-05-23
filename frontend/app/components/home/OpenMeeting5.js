@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import { StyleSheet, Text, View, Dimensions, TextInput, Image, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -11,7 +11,8 @@ import axiosInstance from '../../../utils/API';
 import Config from 'react-native-config'
 import AWS from 'aws-sdk';
 import { createMeeting } from '../../../utils/firestore';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFirstMeeting } from '../../actions/badgeAction'
 
 
 const OpenMeeting5 = () => {
@@ -31,6 +32,8 @@ const OpenMeeting5 = () => {
   const [longitude, setLongitude] = useState(126.977011);
   var loc = {latitude: latitude, longitude: longitude};
   const userId = useSelector(state => state.userId);
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
 
   var s3 = new AWS.S3({
     apiVersion: '2006-03-01',
@@ -126,6 +129,35 @@ const OpenMeeting5 = () => {
         .catch((response) => { console.log(response); });
     } catch (err) { console.log(err); }
   };
+
+  useEffect(() => {
+    if (isFocused){
+      const checkFirstMeeting = async () => { 
+        try {
+          await axiosInstance.get(`/badges/${userId}/3`)
+            .then((response) => {
+              if (response.status === 200) {
+                console.log("뱃지!!!!", response.data.isOwned)
+                if (!response.data.isOwned) {
+                  dispatch(setFirstMeeting(true))
+
+                  console.log("나 첫 모임게설 뱃지 첨받아봄!")
+                }
+                else {
+                  dispatch(setFirstMeeting(false))
+                }
+              }
+              else {
+                console.log("error" + response.status);
+              }
+            })
+        } catch (err) { 
+          console.log(err)
+        }
+      }
+      checkFirstMeeting()
+    }
+  }, [isFocused])
 
   useEffect(() => {
     AsyncStorage.getItem('meetingName', (err, result) => {

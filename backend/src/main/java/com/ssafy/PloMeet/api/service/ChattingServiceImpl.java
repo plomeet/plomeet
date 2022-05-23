@@ -3,6 +3,7 @@ package com.ssafy.PloMeet.api.service;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ssafy.PloMeet.api.request.MeetingReq;
 import com.ssafy.PloMeet.api.request.MyMeetingReq;
+import com.ssafy.PloMeet.api.response.ChattingMemberRes;
 import com.ssafy.PloMeet.api.response.UserRes;
 import com.ssafy.PloMeet.api.response.MeetingRes;
 import com.ssafy.PloMeet.model.entity.Meeting;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 public class ChattingServiceImpl implements ChattingService{
 
     private final UserRepository userRepository;
-    private final MyMeetingRepository mymeetingRepository;
+    private final MyMeetingRepository myMeetingRepository;
 
     /*
     @Transactional
@@ -39,14 +40,17 @@ public class ChattingServiceImpl implements ChattingService{
 
 
     @Transactional
-    public List<User> findAllSubscriber(Meeting meetingId) {
-        List<MyMeeting> mm = mymeetingRepository.findAllByMeetingId(meetingId);
-        List<User> user = new ArrayList<>();
-        mm.forEach(
-                us -> user.add(userRepository.findByUserId(us.getUserId().getUserId()))
-        );
+    public List<ChattingMemberRes> findAllSubscriber(Meeting meetingId) {
+        List<MyMeeting> myMeetings = myMeetingRepository.findAllByMeetingId(meetingId);
+        List<ChattingMemberRes> chattingMembers = new ArrayList<>();
+        for(MyMeeting myMeeting: myMeetings) {
+            Long userId = myMeeting.getUserId().getUserId();
+            User user = userRepository.findByUserId(userId);
+            ChattingMemberRes chattingMember = new ChattingMemberRes(user.getUserId(), user.getUserNickName(), user.getUserProfileImg(), myMeeting.getIsLeader());
+            chattingMembers.add(chattingMember);
+        }
 
-        return user;
+        return chattingMembers;
     }
 
 

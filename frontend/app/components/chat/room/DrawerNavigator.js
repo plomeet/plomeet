@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Icon from 'react-native-vector-icons/Entypo'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { color} from '../styles';
 
 import {View, StyleSheet, Button, Alert} from "react-native";
@@ -20,6 +20,7 @@ import {
 } from '../list/styles';
 import axiosInstance from '../../../../utils/API';
 import { FlatList } from 'react-native-gesture-handler';
+import { leaveMember } from '../../../../utils/firestore';
 
 const Drawer = createDrawerNavigator();
 
@@ -43,7 +44,7 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
       nick:"",
       id:"",
       img:"",
-      ishost:""
+      isLeader:""
     }
   ]);
 
@@ -57,13 +58,13 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
                   //console.log(response.data[0].userId)
                   if (response.status === 200) {
                       const meetingUsers = response.data;
-                      
                       for(let i =0;i<meetingUsers.length;i++){
-                        
+
                         const userDetail = {
                           id: meetingUsers[i].userId,
                           nick: meetingUsers[i].userNickName,
                           img: meetingUsers[i].userProfileImg,
+                          isLeader: meetingUsers[i].isLeader,
                         };
                         list.push(userDetail)
                       }
@@ -79,6 +80,12 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
       setMeetingUser(list);
     }
 
+    const leaveChattingRoom = async() => {
+      await leaveMember({meetingId, userId});
+      navigation.navigate('채팅 목록');
+      
+    }
+
 
   // 윤수가 추가함 
     const navigation = useNavigation();
@@ -92,18 +99,22 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
                 getMeetingUsers(); 
                 //console.log({meetingUser})
               } } 
-               name="menu" size={20} color={color.black} style={{marginRight: 10}} />
+                name="menu" size={20} color={color.black} style={{marginRight: 10}} />
           ),
         });
     }, []);
 
-    const Item =({title,img})=>(
+    const Item =({title,img, isLeader})=>(
       <View >
         <ChattingRoomComp>
           <ChattingRoomImg source={{uri: img}} />
             <Text style={{fontSize: 15, marginTop:15, marginLeft:20}}>
               {title}
             </Text>
+            {isLeader 
+            ? <Icon name="crown" size={15} color={color.crownYellow} style={{marginTop:17, marginLeft:5}}/>
+            : null
+            }
         </ChattingRoomComp>
       </View>
     );
@@ -112,9 +123,11 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
     const CustomDrawer = props => {
       const mt = {meetingUser}.meetingUser
 
-      const renderItem = ({ item }) => (
-        <Item title={item.nick} img={item.img}/>
-      );
+      const renderItem = ({ item }) => {
+        return (
+          <Item title={item.nick} img={item.img} isLeader={item.isLeader}/>
+        );
+      }
         return(
             <View style={{ flex: 1 }}>
             <View {...props}>
@@ -154,9 +167,9 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
                 
               }}onPress={() => Alert.alert(
                 "모임탈퇴",
-                "채팅방을 나가면 모임에서도 탈퇴됩니다. 정말나가시겠습니까?",[
+                "채팅방을 나가면 모임에서도 탈퇴됩니다.\n정말 나가시겠습니까?",[
                   {text:"남을게요"},
-                  {text:"그래도 나갈래요",onPress:()=>console.log("나간다")}
+                  {text:"그래도 나갈래요",onPress:()=>leaveChattingRoom()}
               ]
               )
             }
