@@ -82,3 +82,11 @@ export const joinMember = async ({meetingId, userId, lastChatTime}) => {
     }
     await meetingMembersRef.doc(userId).set(newMember);
 }
+
+//채팅방 사용자 삭제
+export const leaveMember = async({meetingId, userId}) => {
+    const meetingMemberDoc = firestore()
+        .collection('meetings').doc(meetingId)
+        .collection('members').doc(userId);
+    await meetingMemberDoc.delete();
+}

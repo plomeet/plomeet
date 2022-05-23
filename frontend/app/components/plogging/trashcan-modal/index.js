@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'react-native-gesture-handler';
-import { TouchableOpacity, StyleSheet, Text, View, Modal, Pressable} from "react-native";
+import { TouchableOpacity, StyleSheet, Text, View, Modal, Pressable } from "react-native";
 import Icon from 'react-native-vector-icons/Feather';
 
 
@@ -17,13 +17,13 @@ const TrashcanInfo = ({ showInfoDetail, setShowInfoDetail, setShowThisNum, trash
                 <View style={styles.leftView}>
                     <View style={styles.modalView}>
                         <View style={styles.img}>
-                            <Icon name="trash-2" size={50} color="white" style={{marginTop: 5, marginLeft: 8}}/>
+                            <Icon name="trash-2" size={50} color="white" style={{ marginTop: 5, marginLeft: 8 }} />
                         </View>
                         <View style={styles.text}>
-                            <Text style={styles.modalText1}>{trashInfoDetail.cityName} {trashInfoDetail.streetName}</Text>
-                            <Text style={styles.modalText1}>{trashInfoDetail.detailAddr}</Text>
-                            <Text style={styles.modalText2}>{trashInfoDetail.location}</Text>
-                            <Text style={styles.modalText3}>{trashInfoDetail.trashCanType}</Text>
+                            <Text style={styles.modalText1} numberOfLines={1} ellipsizeMode="tail">{trashInfoDetail.cityName} {trashInfoDetail.streetName}</Text>
+                            <Text style={styles.modalText1} numberOfLines={1} ellipsizeMode="tail">{trashInfoDetail.detailAddr}</Text>
+                            <Text style={styles.modalText2} numberOfLines={1} ellipsizeMode="tail">{trashInfoDetail.location}</Text>
+                            <Text style={styles.modalText3} numberOfLines={1} ellipsizeMode="tail">{trashInfoDetail.trashCanType}</Text>
                         </View>
                     </View>
                 </View>

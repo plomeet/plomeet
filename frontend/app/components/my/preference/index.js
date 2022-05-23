@@ -6,6 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import VersionCheck from "react-native-version-check";
 import * as KakaoLogins from '@react-native-seoul/kakao-login';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Preference = () => {
     const navigation = useNavigation();
@@ -18,6 +19,7 @@ const Preference = () => {
           .catch(err => {
             console.log(`### Logout Error : ${JSON.stringify(err)}`);
           });
+          AsyncStorage.clear();
           navigation.replace('SignUp');
       }
 

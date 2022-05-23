@@ -9,5 +9,6 @@ public interface MyMeetingService {
 
     Long joinMeeting(MyMeetingReq myMeetingReq);
     List<MyMeeting> findMeetingListByUserId(Long userId);
+    void deleteMyMeeting(Long meetingId, Long userId);
 
 }

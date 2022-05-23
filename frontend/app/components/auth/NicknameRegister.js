@@ -23,6 +23,8 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions/userActions';
 
 import { createUser } from '../../../utils/firestore';
+import axiosInstance from '../../../utils/API';
+import { setFirstRegister } from '../../actions/badgeAction'
 
 const kakaoHelper = require('./KakaoHelper.js');
 
@@ -71,16 +73,37 @@ const NicknameRegister = () => {
       userEmail: email,
     }, {
       "Content-Type": "application/json",
-    },).then((response) => {
+    },).then(async(response) => {
       console.log(response);
       NicknameUpdate();
+      dispatch(actions.setUserId(response.data.userId));
       const userIdRegister = response.data.userId.toString();
-      createUser({userId: userIdRegister, userNickName: value, userProfileImg: img});
+      await createUser({userId: userIdRegister, userNickName: value, userProfileImg: img});
+      await getFirstRegisterBadge({userId: userIdRegister});
       navigation.navigate('M');
     }).then((error) => {
       console.log(error);
     }); 
   };
+
+  const getFirstRegisterBadge = async({userId}) => {
+    try{
+      await axiosInstance.get(`/badges/${userId}/6`)
+      .then((response) => {
+        if(response.status === 200){
+          if(!response.data.isOwned) {
+            dispatch(setFirstRegister(true))
+          } else{
+            dispatch(setFirstRegister(false))
+          }
+        } else {
+          console.log("error"+response.status);
+        }
+      })
+    }catch(error) {
+      console.log(error);
+    }
+  }
 
   return (
     <KeyboardAvoidingView
