@@ -20,6 +20,7 @@ import {
 } from '../list/styles';
 import axiosInstance from '../../../../utils/API';
 import { FlatList } from 'react-native-gesture-handler';
+import { leaveMember } from '../../../../utils/firestore';
 
 const Drawer = createDrawerNavigator();
 
@@ -54,11 +55,9 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
       try {
           await axiosInstance.get(`/chat/${meetingId}`)
               .then((response) => {
-                console.log(response);
                   //console.log(response.data[0].userId)
                   if (response.status === 200) {
                       const meetingUsers = response.data;
-                      console.log(meetingUsers);
                       for(let i =0;i<meetingUsers.length;i++){
 
                         const userDetail = {
@@ -79,6 +78,11 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
       } catch (err) { console.log(err); }
       //console.log(meetingUsers);
       setMeetingUser(list);
+    }
+
+    const leaveChattingRoom = async() => {
+      await leaveMember({meetingId, userId});
+      
     }
 
 
@@ -119,7 +123,6 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
       const mt = {meetingUser}.meetingUser
 
       const renderItem = ({ item }) => {
-        console.log(item);
         return (
           <Item title={item.nick} img={item.img} isLeader={item.isLeader}/>
         );
@@ -165,7 +168,7 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
                 "모임탈퇴",
                 "채팅방을 나가면 모임에서도 탈퇴됩니다. 정말나가시겠습니까?",[
                   {text:"남을게요"},
-                  {text:"그래도 나갈래요",onPress:()=>console.log("나간다")}
+                  {text:"그래도 나갈래요",onPress:()=>leaveChattingRoom()}
               ]
               )
             }
