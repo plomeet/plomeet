@@ -277,12 +277,12 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                                     // mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_TRANSIT, enableLayerGroup);
                                     // setEnableLayerGroup(!enableLayerGroup)
                                 }}
-                                image={{ uri: "https://i.postimg.cc/qtRzBVw7/my-Loc-Marker.png" }}
+                                image={{ uri: "https://i.postimg.cc/sgn2NM4r/image.png" }}
                             />
 
 
                             {ploggingPath.length >= 2 &&
-                                <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
+                                <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={6} outlineWidth={0} color={'#0F58F9'} />
                             }
 
                             {/* 쓰레기통 마커 다 띄우기 */}
