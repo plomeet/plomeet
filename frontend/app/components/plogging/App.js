@@ -19,7 +19,7 @@ const App = ({ saveLogs, distSum, setDistSum, isPlogging, handleIsPlogging, show
                 <View style={styles.containerTitle}>
                     {!isPlogging &&
                         <TouchableOpacity onPress={navigation.goBack}>
-                            <BackSvg width={20} height={20} fill={"#FFF"} style={{ marginLeft: 5 }}></BackSvg>
+                            <BackSvg width={20} height={20} fill={"#FFF"} style={[{ marginLeft: 10}, {marginTop: 2}]}></BackSvg>
                         </TouchableOpacity>
                     }
                     <Text style={styles.titleText}>플로깅</Text>
@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
     titleText: {
         fontSize: 20,
         marginLeft: 40,
-        fontWeight: "bold",
         position: "absolute",
+        color: "#000"
     },
     containerResultTitle: {
         backgroundColor: "white",
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         alignItems: "center",
         justifyContent: 'center',
-        fontWeight: "bold",
+        color: "#000"
     }
 })
 
