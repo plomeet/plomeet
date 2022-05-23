@@ -82,6 +82,7 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
 
     const leaveChattingRoom = async() => {
       await leaveMember({meetingId, userId});
+      navigation.navigate('채팅 목록');
       
     }
 
