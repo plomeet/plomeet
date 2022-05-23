@@ -269,8 +269,8 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                             useTextureView>
                             <Marker
                                 coordinate={location}
-                                width={39}
-                                height={39}
+                                width={45}
+                                height={45}
                                 onClick={() => {
                                     console.log('onClick! myLoc')
                                     // mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_BICYCLE, enableLayerGroup);
