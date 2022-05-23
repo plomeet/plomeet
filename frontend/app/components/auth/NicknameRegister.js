@@ -73,13 +73,13 @@ const NicknameRegister = () => {
       userEmail: email,
     }, {
       "Content-Type": "application/json",
-    },).then((response) => {
+    },).then(async(response) => {
       console.log(response);
       NicknameUpdate();
       dispatch(actions.setUserId(response.data.userId));
       const userIdRegister = response.data.userId.toString();
-      createUser({userId: userIdRegister, userNickName: value, userProfileImg: img});
-      getFirstRegisterBadge({userId: userIdRegister});
+      await createUser({userId: userIdRegister, userNickName: value, userProfileImg: img});
+      await getFirstRegisterBadge({userId: userIdRegister});
       navigation.navigate('M');
     }).then((error) => {
       console.log(error);
