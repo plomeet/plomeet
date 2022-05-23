@@ -7,4 +7,8 @@ export const setFirstMeeting = (firstMeeting) => ({
     type: "SET_FIRSTMEETING",
     payload: firstMeeting
 })
-  
+
+export const setFirstRegister = (firstRegister) => ({
+    type: "SET_FIRSTREGISTER",
+    payload: firstRegister
+})

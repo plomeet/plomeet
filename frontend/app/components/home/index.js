@@ -12,7 +12,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 import AsyncStorage from '@react-native-community/async-storage';
 import PlomeetSpinner from '../../../utils/PlomeetSpinner'
-import { setFirstMeeting } from '../../actions/badgeAction'
+import { setFirstMeeting, setFirstRegister } from '../../actions/badgeAction'
 
 const { StatusBarManager } = NativeModules
 
@@ -151,7 +151,8 @@ const Home = () => {
   const [recentKeyWord, setRecentKeyWord] = useState();
   const [showSpinner, setShowSpinner] = useState(true);
   //const [textInputValue, setTextInputValue] = useState();
-  const isFirstMeeting = useSelector(state => state.firstMeeting)
+  const isFirstMeeting = useSelector(state => state.firstMeeting);
+  const isFirstRegister = useSelector(state => state.firstRegister);
   const dispatch = useDispatch();
 
   function deleteDate() {
@@ -264,6 +265,19 @@ const Home = () => {
         )
         saveBadgeFirstMeeting();
       }
+      if (isFirstRegister) {
+        Alert.alert(
+          "",
+          "'플로밋 해볼까?' 뱃지 획득!",
+          [
+            {
+              text: '닫기'
+            }
+          ],
+          { cancelable: true }
+        )
+        saveBadgeFirstRegister();
+      }
     }
   }, [isFocused])
 
@@ -276,6 +290,20 @@ const Home = () => {
         if (response.status === 201) { 
           console.log("뱃지 획득 성공!!");
           dispatch(setFirstMeeting(false));
+        }
+      })
+    } catch(error) {console.log(error)}
+  }
+
+  const saveBadgeFirstRegister = async() => {
+    try {
+      await axiosInstance.post('badges/get', {
+        userId: userId,
+        badgeId: 6,
+      }).then((response) => { 
+        if (response.status === 201) { 
+          console.log("뱃지 획득 성공!!");
+          dispatch(setFirstRegister(false));
         }
       })
     } catch(error) {console.log(error)}
