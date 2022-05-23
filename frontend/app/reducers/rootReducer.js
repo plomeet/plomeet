@@ -17,6 +17,7 @@ const initialState = {
     name: "",
     email: "",
     firstPlogging: false,
+    firstMeeting: false,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -58,7 +59,9 @@ const rootReducer = (state = initialState, action) => {
         case "SET_EMAIL":
             return { ...state, email: action.payload }
         case "SET_FIRSTPLOGGING":
-            return {...state, firstPlogging: action.payload }
+            return { ...state, firstPlogging: action.payload }
+        case "SET_FIRSTMEETING":
+            return {...state, firstMeeting: action.payload}
         default:
             return state;
     }
