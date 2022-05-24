@@ -153,10 +153,12 @@ const Home = () => {
   //const [textInputValue, setTextInputValue] = useState();
   const isFirstMeeting = useSelector(state => state.firstMeeting);
   const isFirstRegister = useSelector(state => state.firstRegister);
+  const [latestSort, setLatestSort] = useState(true);
   const dispatch = useDispatch();
 
   function deleteDate() {
     setSelectedDate('일시');
+    setLatestSort(true);
     setVisibleCalendar(false);
     getAllMeeting();
   }
@@ -168,6 +170,7 @@ const Home = () => {
         i--;
       }
     }
+    setLatestSort(true);
     setVisibleCalendar(false)
   }
 
@@ -184,6 +187,7 @@ const Home = () => {
   async function setKeyWordFunc() {
     setKeyWordList(keywordTxt);
     setVisibleSearch(false);
+    setLatestSort(true);
     await AsyncStorage.getItem('recentKeyword').then(res => {
       if (res) {
         if (keywordTxt === undefined || keywordTxt.length < 1) return;
@@ -223,6 +227,7 @@ const Home = () => {
 
   function resetKeywordFunc() {
     setKeywordTxt();
+    setLatestSort(true);
     getAllMeeting();
   }
 
@@ -251,8 +256,8 @@ const Home = () => {
   }, [userId]);
 
   useEffect(() => {
-    if (isFocused) { 
-      if (isFirstMeeting) { 
+    if (isFocused) {
+      if (isFirstMeeting) {
         Alert.alert(
           "",
           "'너 내 동료가 되라' 뱃지 획득!",
@@ -281,32 +286,32 @@ const Home = () => {
     }
   }, [isFocused])
 
-  const saveBadgeFirstMeeting = async () => { 
+  const saveBadgeFirstMeeting = async () => {
     try {
       await axiosInstance.post('badges/get', {
         userId: userId,
         badgeId: 3,
-      }).then((response) => { 
-        if (response.status === 201) { 
+      }).then((response) => {
+        if (response.status === 201) {
           console.log("뱃지 획득 성공!!");
           dispatch(setFirstMeeting(false));
         }
       })
-    } catch(error) {console.log(error)}
+    } catch (error) { console.log(error) }
   }
 
-  const saveBadgeFirstRegister = async() => {
+  const saveBadgeFirstRegister = async () => {
     try {
       await axiosInstance.post('badges/get', {
         userId: userId,
         badgeId: 6,
-      }).then((response) => { 
-        if (response.status === 201) { 
+      }).then((response) => {
+        if (response.status === 201) {
           console.log("뱃지 획득 성공!!");
           dispatch(setFirstRegister(false));
         }
       })
-    } catch(error) {console.log(error)}
+    } catch (error) { console.log(error) }
   }
 
   async function getAllMeeting() {
@@ -338,6 +343,37 @@ const Home = () => {
       }
     }
   };
+
+  const compareDateImmi = (A, B) => {
+    const arrA = A.meetingDate.split(/\/|\s|:/);
+    const arrB = B.meetingDate.split(/\/|\s|:/);
+    const dateA = new Date(arrA[0], arrA[1] - 1, arrA[2], arrA[3], arrA[4]);
+    const dateB = new Date(arrB[0], arrB[1] - 1, arrB[2], arrB[3], arrB[4]);
+    if (dateA > dateB) return 1;
+    else if (dateA < dateB) return -1;
+    else return 0;
+  }
+  const compareDateLatest = (A, B) => {
+    const dateA = A.registerDate
+    const dateB = B.registerDate
+    console.log(dateA);
+    console.log(dateB);
+    if (dateA > dateB) return 1;
+    else if (dateA < dateB) return -1;
+    else return 0;
+  }
+
+  const changeSort = () => {
+    if (latestSort) { //임박순으로 조회
+      const sortList = meetingList.sort(compareDateImmi);
+      setMeetingList(sortList);
+    } else { //최신순으로 조회
+      console.log("최신순으로 정렬");
+      const sortList = meetingList.sort(compareDateLatest);
+      setMeetingList(sortList);
+    }
+    setLatestSort(!latestSort);
+  }
 
   const setTextInputByChip = (txt) => {
     setKeywordTxt(txt);
@@ -536,7 +572,11 @@ const Home = () => {
         <Chip style={{ marginRight: 10 }} icon="card-search-outline" mode="outlined" selectedColor="#232732" onPress={() => search()}><Text>검색</Text></Chip>
         {keywordTxt !== undefined && keywordTxt.length > 0 && <Chip style={{ marginRight: 10 }} icon="close" mode="outlined" selectedColor="#232732" onPress={() => resetKeywordFunc()}><Text>{keywordTxt}</Text></Chip>}
         <Chip style={{ marginRight: 10 }} icon="clock" mode="outlined" selectedColor='#232732' onPress={() => setVisibleCalendar(true)}><Text>{selectedDate}</Text></Chip>
-        <Chip icon="align-vertical-center" mode="outlined" selectedColor='#232732' onPress={() => console.log('정렬')}><Text>정렬</Text></Chip>
+        {latestSort ?
+          <Chip icon="align-vertical-center" mode="outlined" selectedColor='#232732' onPress={() => changeSort()}><Text>최신순</Text></Chip>
+          :
+          <Chip icon="align-vertical-center" mode="outlined" selectedColor='#232732' onPress={() => changeSort()}><Text>임박순</Text></Chip>
+        }
       </View>
       {showSpinner &&
         <PlomeetSpinner isVisible={showSpinner} size={50} />
