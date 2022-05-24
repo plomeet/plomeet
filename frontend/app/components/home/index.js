@@ -242,11 +242,13 @@ const Home = () => {
         setRecentKeyWord();
       }
     });
+    setLatestSort(true);
     getAllMeeting();
   }
   //모임 정보 세팅
   useEffect(() => {
     getAllMeeting();
+    setLatestSort(true);
     getMyMeeting();
     setKeywordTxt();
   }, [isFocused == true]);
@@ -356,8 +358,6 @@ const Home = () => {
   const compareDateLatest = (A, B) => {
     const dateA = A.registerDate
     const dateB = B.registerDate
-    console.log(dateA);
-    console.log(dateB);
     if (dateA > dateB) return 1;
     else if (dateA < dateB) return -1;
     else return 0;
@@ -368,7 +368,6 @@ const Home = () => {
       const sortList = meetingList.sort(compareDateImmi);
       setMeetingList(sortList);
     } else { //최신순으로 조회
-      console.log("최신순으로 정렬");
       const sortList = meetingList.sort(compareDateLatest);
       setMeetingList(sortList);
     }
