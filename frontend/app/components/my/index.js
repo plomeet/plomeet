@@ -26,7 +26,7 @@ const MyMeetingIntro = () => {
     const navigation = useNavigation();
     const [myMeetingListInfo, setMyMeetingListInfo] = useState([]);
     const [myMeetingList, setMyMeetingList] = useState([]);
-    const [imLeaderList, setImLeaderList] = useState([]);
+    const [imLeaderList, setImLeaderList] = useState([0]);
     const isFocused = useIsFocused();
     const week = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -81,8 +81,7 @@ const MyMeetingIntro = () => {
 
     useEffect(() => {
         AsyncStorage.getItem('myMeeting', (err, result) => {
-            setMyMeetingListInfo(JSON.parse(result).reverse());
-
+            if(result != null) setMyMeetingListInfo(JSON.parse(result).reverse());
         })
         AsyncStorage.getItem('myMeetingList', (err, result) => {
             setMyMeetingList(JSON.parse(result));
@@ -94,18 +93,18 @@ const MyMeetingIntro = () => {
 
     return (
         <View style={[{ backgroundColor: "#ffffff" }, { paddingLeft: 10 }, { marginTop: 10 }]}>
-            <View flexDirection="row" style={[{ justifyContent: "space-between" }, { alignItems: "center" }]}>
+            {myMeetingListInfo.length > 0 && <View flexDirection="row" style={[{ justifyContent: "space-between" }, { alignItems: "center" }]}>
                 <Text style={[{ marginLeft: 5 }, { marginVertical: 10 }, { fontSize: 20 }, { color: "#000" }]} >내 모임</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('MeetingList')}><View flexDirection="row"><Text style={[{ fontSize: 13 }, { color: "#000" }]}> 더보기 </Text><Icon2 name="chevron-thin-right" size={13} color="#000" style={[{ marginLeft: 5 }, { marginTop: 2 }, { marginRight: 10 }]} /></View></TouchableOpacity>
-            </View>
-            <FlatList
+            </View>}
+            {myMeetingListInfo.length > 0 && <FlatList
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 data={myMeetingListInfo}
                 horizontal={true}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => item.meetingId}
-            />
+            />}
         </View>
     )
 };

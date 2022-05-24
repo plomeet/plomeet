@@ -11,6 +11,7 @@ export const color = {
     blackLightFont: '#292D32',
     greyFont: '#7A7A7A',
     redBadge: '#FF5442',
+    crownYellow: '#FEBD1A',
 };
 
 export const Container = styled.View`

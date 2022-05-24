@@ -10,8 +10,8 @@ import axiosInstance from "../../../utils/API";
 import haversine from 'haversine';
 import TrashcanInfo from './trashcan-modal/index';
 import EndPlogging from './endScreen/index';
-import dfs_xy_conv from '../../../utils/IHateMeteorologicalAgency'
-import PlomeetSpinner from '../../../utils/PlomeetSpinner'
+import dfs_xy_conv from '../../../utils/IHateMeteorologicalAgency';
+import PlomeetSpinner from '../../../utils/PlomeetSpinner';
 
 //테스트용으로 남겨둔 데이터 삭제 X
 const P0 = { latitude: 37.564362, longitude: 126.977011 };
@@ -269,19 +269,20 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                             useTextureView>
                             <Marker
                                 coordinate={location}
-                                width={39}
-                                height={39}
+                                width={45}
+                                height={45}
                                 onClick={() => {
                                     console.log('onClick! myLoc')
                                     // mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_BICYCLE, enableLayerGroup);
                                     // mapView.current.setLayerGroupEnabled(LayerGroup.LAYER_GROUP_TRANSIT, enableLayerGroup);
                                     // setEnableLayerGroup(!enableLayerGroup)
                                 }}
-                                image={require("./icons/myLocMarker.png")}
+                                image={{ uri: "https://i.postimg.cc/sgn2NM4r/image.png" }}
                             />
 
+
                             {ploggingPath.length >= 2 &&
-                                <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
+                                <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={6} outlineWidth={0} color={'#0F58F9'} />
                             }
 
                             {/* 쓰레기통 마커 다 띄우기 */}
@@ -292,7 +293,7 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                                             key={item.trashcanId}
                                             coordinate={{ latitude: parseFloat(item.latitude), longitude: parseFloat(item.longitude) }}
                                             image={showThisNum === (parseInt(item.trashcanId) - 1) ?
-                                                require("./icons/clickedMaker.png") : require("./icons/unClickedMarker.png")}
+                                                { uri: "https://i.postimg.cc/TKTKSWWg/clicked-Maker.png" } : { uri: "https://i.postimg.cc/k2w2dXxZ/un-Clicked-Marker.png" }}
                                             width={25}
                                             height={25}
                                             onClick={() => setShowThisNum(parseInt(item.trashcanId) - 1)}
@@ -301,28 +302,7 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                                 })
                             }
 
-                            {/* <Marker coordinate={P1} pinColor="blue" zIndex={1000} onClick={() => console.warn('onClick! p1')} />
-                    <Marker coordinate={P2} pinColor="red" zIndex={100} alpha={0.5} onClick={() => console.warn('onClick! p2')} />
-                    <Marker coordinate={P4} onClick={() => console.warn('onClick! p4')} image={require("../../../assets/imgs/marker.png")} width={48} height={48} /> 
-                    <Polyline coordinates={[P1, P2]} onClick={() => console.warn('onClick! polyline')} />
-                    <Circle coordinate={P0} color={"rgba(255,0,0,0.3)"} radius={200} onClick={() => console.warn('onClick! circle')} />
-                    <Polygon coordinates={[P0, P1, P2]} color={`rgba(0, 0, 0, 0.5)`} onClick={() => console.warn('onClick! polygon')} />
-                    <Marker coordinate={P5} onClick={() => console.warn('onClick! p0')} width={96} height={96}>
-                        <View style={{ backgroundColor: 'rgba(255,0,0,0.2)', borderRadius: 80 }}>
-                            <View style={{ backgroundColor: 'rgba(0,0,255,0.3)', borderWidth: 2, borderColor: 'black', flexDirection: 'row' }}>
-                                <Image source={require("../../../assets/imgs/marker.png")} style={{
-                                    width: 32, height: 32,
-                                    backgroundColor: 'rgba(0,0,0,0.2)', resizeMode: 'stretch',
-                                    borderWidth: 2, borderColor: 'black'
-                                }} fadeDuration={0} />
-                                <Text>Image</Text>
-                            </View>
-                            <ImageBackground source={require("../../../assets/imgs/marker.png")} style={{ width: 64, height: 64 }}>
-                                <Text>image background</Text>
-                            </ImageBackground>
-                        </View>
-                    </Marker>
-                */}
+
                         </NaverMapView>
                     }
                     {center ?

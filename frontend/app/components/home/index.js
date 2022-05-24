@@ -1,9 +1,9 @@
 import React, { Component, Node, Button, useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import { Chip } from 'react-native-paper';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
-import { BackHandler, Alert , LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, KeyboardAvoidingView, NativeModules } from "react-native";
+import { BackHandler, Alert, LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, KeyboardAvoidingView, NativeModules } from "react-native";
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -12,6 +12,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import axiosInstance from '../../../utils/API';
 import AsyncStorage from '@react-native-community/async-storage';
 import PlomeetSpinner from '../../../utils/PlomeetSpinner'
+import { setFirstMeeting, setFirstRegister } from '../../actions/badgeAction'
 
 const { StatusBarManager } = NativeModules
 
@@ -150,9 +151,14 @@ const Home = () => {
   const [recentKeyWord, setRecentKeyWord] = useState();
   const [showSpinner, setShowSpinner] = useState(true);
   //const [textInputValue, setTextInputValue] = useState();
+  const isFirstMeeting = useSelector(state => state.firstMeeting);
+  const isFirstRegister = useSelector(state => state.firstRegister);
+  const [latestSort, setLatestSort] = useState(true);
+  const dispatch = useDispatch();
 
   function deleteDate() {
     setSelectedDate('일시');
+    setLatestSort(true);
     setVisibleCalendar(false);
     getAllMeeting();
   }
@@ -164,6 +170,7 @@ const Home = () => {
         i--;
       }
     }
+    setLatestSort(true);
     setVisibleCalendar(false)
   }
 
@@ -180,11 +187,11 @@ const Home = () => {
   async function setKeyWordFunc() {
     setKeyWordList(keywordTxt);
     setVisibleSearch(false);
+    setLatestSort(true);
     await AsyncStorage.getItem('recentKeyword').then(res => {
       if (res) {
-        let arr = res.split('-')
         if (keywordTxt === undefined || keywordTxt.length < 1) return;
-
+        let arr = res.split('-')
         if (arr.length >= 12) {
           arr.shift();
         }
@@ -220,6 +227,7 @@ const Home = () => {
 
   function resetKeywordFunc() {
     setKeywordTxt();
+    setLatestSort(true);
     getAllMeeting();
   }
 
@@ -228,24 +236,85 @@ const Home = () => {
     setKeywordTxt();
     AsyncStorage.getItem('recentKeyword').then(res => {
       if (res) {
-        const arr = res.split('-');
+        const arr = res.split('-').reverse();
         setRecentKeyWord(arr);
       } else {
         setRecentKeyWord();
       }
     });
+    setLatestSort(true);
     getAllMeeting();
   }
   //모임 정보 세팅
   useEffect(() => {
     getAllMeeting();
+    setLatestSort(true);
     getMyMeeting();
     setKeywordTxt();
-  }, [isFocused==true]);
+  }, [isFocused == true]);
 
   useEffect(() => {
     getMyMeeting();
   }, [userId]);
+
+  useEffect(() => {
+    if (isFocused) {
+      if (isFirstMeeting) {
+        Alert.alert(
+          "",
+          "'너 내 동료가 되라' 뱃지 획득!",
+          [
+            {
+              text: '닫기'
+            }
+          ],
+          { cancelable: true }
+        )
+        saveBadgeFirstMeeting();
+      }
+      if (isFirstRegister) {
+        Alert.alert(
+          "",
+          "'플로밋 해볼까?' 뱃지 획득!",
+          [
+            {
+              text: '닫기'
+            }
+          ],
+          { cancelable: true }
+        )
+        saveBadgeFirstRegister();
+      }
+    }
+  }, [isFocused])
+
+  const saveBadgeFirstMeeting = async () => {
+    try {
+      await axiosInstance.post('badges/get', {
+        userId: userId,
+        badgeId: 3,
+      }).then((response) => {
+        if (response.status === 201) {
+          console.log("뱃지 획득 성공!!");
+          dispatch(setFirstMeeting(false));
+        }
+      })
+    } catch (error) { console.log(error) }
+  }
+
+  const saveBadgeFirstRegister = async () => {
+    try {
+      await axiosInstance.post('badges/get', {
+        userId: userId,
+        badgeId: 6,
+      }).then((response) => {
+        if (response.status === 201) {
+          console.log("뱃지 획득 성공!!");
+          dispatch(setFirstRegister(false));
+        }
+      })
+    } catch (error) { console.log(error) }
+  }
 
   async function getAllMeeting() {
     try {
@@ -277,6 +346,34 @@ const Home = () => {
     }
   };
 
+  const compareDateImmi = (A, B) => {
+    const arrA = A.meetingDate.split(/\/|\s|:/);
+    const arrB = B.meetingDate.split(/\/|\s|:/);
+    const dateA = new Date(arrA[0], arrA[1] - 1, arrA[2], arrA[3], arrA[4]);
+    const dateB = new Date(arrB[0], arrB[1] - 1, arrB[2], arrB[3], arrB[4]);
+    if (dateA > dateB) return 1;
+    else if (dateA < dateB) return -1;
+    else return 0;
+  }
+  const compareDateLatest = (A, B) => {
+    const dateA = A.registerDate
+    const dateB = B.registerDate
+    if (dateA > dateB) return 1;
+    else if (dateA < dateB) return -1;
+    else return 0;
+  }
+
+  const changeSort = () => {
+    if (latestSort) { //임박순으로 조회
+      const sortList = meetingList.sort(compareDateImmi);
+      setMeetingList(sortList);
+    } else { //최신순으로 조회
+      const sortList = meetingList.sort(compareDateLatest);
+      setMeetingList(sortList);
+    }
+    setLatestSort(!latestSort);
+  }
+
   const setTextInputByChip = (txt) => {
     setKeywordTxt(txt);
   }
@@ -299,7 +396,7 @@ const Home = () => {
             var imLeader = [];
 
             for (var i = 0; i < mList.length; i++) {
-              if(mList[i].isLeader){
+              if (mList[i].isLeader) {
                 imLeader.push(mList[i].meetingId.meetingId);
               }
               test.push(mList[i].meetingId);
@@ -317,6 +414,13 @@ const Home = () => {
             console.log("[내가 참여한 모임 정보 조회 성공]");
           } else {
             console.log("[내가 참여한 모임 정보 조회 실패]");
+            AsyncStorage.setItem('myMeeting', JSON.stringify([]), () => {
+            });
+            AsyncStorage.setItem('myMeetingList', JSON.stringify([]), () => {
+            });
+            AsyncStorage.setItem('imLeaderList', JSON.stringify([]), () => {
+            });
+
           }
         })
         .catch((response) => { console.log(response); });
@@ -415,7 +519,7 @@ const Home = () => {
         activeOpacity={0.8}
         onRequestClose={() => setVisibleSearch(false)}
         visible={visibleSearch}>
-      <KeyboardAvoidingView style={styles.container} behavior={"padding"} keyboardVerticalOffset={statusBarHeight-20}>
+        <KeyboardAvoidingView style={styles.container} behavior={"padding"} keyboardVerticalOffset={statusBarHeight - 20}>
 
           <View style={styles.searchInput}>
             <TextInput
@@ -431,25 +535,25 @@ const Home = () => {
             />
             {visibleSearch && recentKeyWord !== undefined && recentKeyWord.length > 0 ? <>
               <Text style={styles.recentListTxt}>최근검색</Text>
-              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, {marginTop: -10}]}>
-                {recentKeyWord[11] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[11])}><Text>{recentKeyWord[11]}</Text></Chip>}
-                {recentKeyWord[10] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[10])}><Text>{recentKeyWord[10]}</Text></Chip>}
-                {recentKeyWord[9] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[9])}><Text>{recentKeyWord[9]}</Text></Chip>}
-              </View>
               <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, { marginTop: 5 }]}>
-                {recentKeyWord[8] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[8])}><Text>{recentKeyWord[8]}</Text></Chip>}
-                {recentKeyWord[7] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[7])}><Text>{recentKeyWord[7]}</Text></Chip>}
-                {recentKeyWord[6] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[6])}><Text>{recentKeyWord[6]}</Text></Chip>}
-              </View>
-              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, { marginTop: 5 }]}>
-                {recentKeyWord[5] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[5])}><Text>{recentKeyWord[5]}</Text></Chip>}
-                {recentKeyWord[4] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[4])}><Text>{recentKeyWord[4]}</Text></Chip>}
-                {recentKeyWord[3] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[3])}><Text>{recentKeyWord[3]}</Text></Chip>}
-              </View>
-              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, { marginTop: 5 }]}>
-                {recentKeyWord[2] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[2])}><Text>{recentKeyWord[2]}</Text></Chip>}
-                {recentKeyWord[1] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[1])}><Text>{recentKeyWord[1]}</Text></Chip>}
                 {recentKeyWord[0] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[0])}><Text>{recentKeyWord[0]}</Text></Chip>}
+                {recentKeyWord[1] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[1])}><Text>{recentKeyWord[1]}</Text></Chip>}
+                {recentKeyWord[2] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[2])}><Text>{recentKeyWord[2]}</Text></Chip>}
+              </View>
+              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, { marginTop: 5 }]}>
+                {recentKeyWord[3] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[3])}><Text>{recentKeyWord[3]}</Text></Chip>}
+                {recentKeyWord[4] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[4])}><Text>{recentKeyWord[4]}</Text></Chip>}
+                {recentKeyWord[5] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[5])}><Text>{recentKeyWord[5]}</Text></Chip>}
+              </View>
+              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, { marginTop: 5 }]}>
+                {recentKeyWord[6] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[6])}><Text>{recentKeyWord[6]}</Text></Chip>}
+                {recentKeyWord[7] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[7])}><Text>{recentKeyWord[7]}</Text></Chip>}
+                {recentKeyWord[8] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[8])}><Text>{recentKeyWord[8]}</Text></Chip>}
+              </View>
+              <View style={[styles.row, { marginLeft: 25 }, { marginBottom: 5 }, { marginTop: 5 }]}>
+                {recentKeyWord[9] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[9])}><Text>{recentKeyWord[9]}</Text></Chip>}
+                {recentKeyWord[10] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[10])}><Text>{recentKeyWord[10]}</Text></Chip>}
+                {recentKeyWord[11] !== undefined && <Chip style={styles.recentKeyWord} mode="outlined" selectedColor='#232732' onPress={() => setTextInputByChip(recentKeyWord[11])}><Text>{recentKeyWord[11]}</Text></Chip>}
               </View>
             </>
               :
@@ -467,11 +571,15 @@ const Home = () => {
         <Chip style={{ marginRight: 10 }} icon="card-search-outline" mode="outlined" selectedColor="#232732" onPress={() => search()}><Text>검색</Text></Chip>
         {keywordTxt !== undefined && keywordTxt.length > 0 && <Chip style={{ marginRight: 10 }} icon="close" mode="outlined" selectedColor="#232732" onPress={() => resetKeywordFunc()}><Text>{keywordTxt}</Text></Chip>}
         <Chip style={{ marginRight: 10 }} icon="clock" mode="outlined" selectedColor='#232732' onPress={() => setVisibleCalendar(true)}><Text>{selectedDate}</Text></Chip>
-        <Chip icon="align-vertical-center" mode="outlined" selectedColor='#232732' onPress={() => console.log('정렬')}><Text>정렬</Text></Chip>
+        {latestSort ?
+          <Chip icon="align-vertical-center" mode="outlined" selectedColor='#232732' onPress={() => changeSort()}><Text>최신순</Text></Chip>
+          :
+          <Chip icon="align-vertical-center" mode="outlined" selectedColor='#232732' onPress={() => changeSort()}><Text>임박순</Text></Chip>
+        }
       </View>
-      { showSpinner &&
-                <PlomeetSpinner isVisible={showSpinner} size={50}/>
-            }
+      {showSpinner &&
+        <PlomeetSpinner isVisible={showSpinner} size={50} />
+      }
       <FlatList
         columnWrapperStyle={[{ justifyContent: 'space-between' }, { marginHorizontal: 20 }]}
         data={meetingList}

@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import Icon from 'react-native-vector-icons/Entypo'
+import { useState, useEffect, useRef } from 'react';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { color} from '../styles';
 
-import {View, StyleSheet, Button, Alert} from "react-native";
+import {View, StyleSheet, Button, Alert, Dimensions} from "react-native";
 import {TouchableOpacity, Text} from "react-native";
 
 import * as React from 'react';
@@ -20,7 +20,10 @@ import {
 } from '../list/styles';
 import axiosInstance from '../../../../utils/API';
 import { FlatList } from 'react-native-gesture-handler';
+import { leaveMember } from '../../../../utils/firestore';
 
+//모임탈퇴(내가 운영중인 모임)
+import AsyncStorage from '@react-native-community/async-storage';
 const Drawer = createDrawerNavigator();
 
 
@@ -36,14 +39,36 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
   const meeting = props.data.route.params.meeting;
   const userId = props.data.route.params.userId;
   const meetingId = meeting.meetingId;
+  const [imLeaderList, setImLeaderList] = useState([]);
+  const windowHeight = Dimensions.get('window').height;
+  const toastRef = useRef(); // toast ref 생성
 
+  //모임 정보 세팅
+  const [meetingDesc, setMeetingDesc] = useState("");
+  const [meetingImg, setMeetingImg] = useState("");
+  const [meetingName, setMeetingName] = useState("");
+  const [meetingPlace, setMeetingPlace] = useState("");
+  const [memberMax, setMemberMax] = useState(0);
+  const [memberCnt, setMemberCnt] = useState(0);
+  const [meetingDate, setMeetingDate] = useState("");
+  const [placeDetail, setPlaceDetail] = useState("");
+  const [item, setItem] = useState("");
+  const [items, setItems] = useState([]);
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
+  useEffect(() => {
+    AsyncStorage.getItem('imLeaderList', (err, result) => {
+      setImLeaderList(JSON.parse(result));
+    })
+    getMeetingById(meetingId);
+  }, []);
 
   const [meetingUser, setMeetingUser]= useState([
     {
       nick:"",
       id:"",
       img:"",
-      ishost:""
+      isLeader:""
     }
   ]);
 
@@ -57,13 +82,13 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
                   //console.log(response.data[0].userId)
                   if (response.status === 200) {
                       const meetingUsers = response.data;
-                      
                       for(let i =0;i<meetingUsers.length;i++){
-                        
+
                         const userDetail = {
                           id: meetingUsers[i].userId,
                           nick: meetingUsers[i].userNickName,
                           img: meetingUsers[i].userProfileImg,
+                          isLeader: meetingUsers[i].isLeader,
                         };
                         list.push(userDetail)
                       }
@@ -79,7 +104,110 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
       setMeetingUser(list);
     }
 
+    function amiLeader(){
+      if(imLeaderList.indexOf(Number(meetingId))>-1){
+        console.log("운영중인 모임은 탈퇴할 수 없습니다.")
+        Alert.alert(
+          "",
+          "운영중인 모임은 탈퇴할 수 없습니다.",[
+            {text:"확인"},
+        ]
+        )
+      }else {
+        Alert.alert(
+          "모임탈퇴",
+          "채팅방을 나가면 모임에서도 탈퇴됩니다.\n정말 나가시겠습니까?",[
+            {text:"남을게요"},
+            {text:"그래도 나갈래요",onPress:()=>leave()}
+        ]
+        )
+      }
+    }
 
+    function leave() {
+      leaveMyMeeting() //backend 탈퇴로직
+      updateMeeting() //모임 인원 수 반영
+      leaveChattingRoom(); //firestore
+    }
+
+    const leaveChattingRoom = async() => {
+      await leaveMember({meetingId, userId});
+      navigation.navigate('채팅 목록');
+    }
+
+    async function leaveMyMeeting() {
+      try {
+        await axiosInstance.delete("/meetings/"+meetingId+"/"+userId)
+          .then((response) => {
+            if (response.status === 200) {
+              setMeetingList(response.data);
+              console.log("[모임 탈퇴 성공]");
+            } else {
+              console.log("[모임 탈퇴 실패]");
+            }
+          })
+          .catch((response) => { console.log(response); });
+      } catch (err) { console.log(err); }
+    }
+
+    async function getMeetingById(meetingId) {
+      try {
+          await axiosInstance.get("/meetings/"+meetingId)
+              .then((response) => {
+                  if (response.status === 200) {
+                      console.log("[모임 정보 조회 성공] : "+meetingId);
+                      console.log(response.data);
+                      setMeetingDesc(response.data.meetingDesc);
+                      setMeetingImg(response.data.meetingImg);
+                      setMeetingName(response.data.meetingName);
+                      setMeetingPlace(response.data.meetingPlace);
+                      setMemberMax(response.data.memberMax);
+                      setMemberCnt(response.data.memberCnt);
+                      setMeetingDate(response.data.meetingDate);
+                      setPlaceDetail(response.data.meetingPlaceDetail);
+                      setLat(response.data.lat);
+                      setLng(response.data.lng);
+                      setItem(response.data.item);
+                      setItems(response.data.item.split('&'));
+                      console.log(items);
+                      if(response.data.memberMax == response.data.memberCnt){
+                        setJoinDisable(true);
+                        setBtnText("마감된 모임");
+                      }
+                  } else {
+                      console.log("[모임 정보 조회 실패] : "+meetingId);
+                  }
+              })
+              .catch((response) => { console.log(response); });
+      } catch (err) { console.log(err); }
+    };
+
+    const updateMeeting = async () => {
+      try {
+        await axiosInstance.put("/meetings/"+ meetingId, {
+          meetingImg: meetingImg,
+          meetingDesc: meetingDesc,
+          meetingName: meetingName,
+          meetingPlace: meetingPlace,
+          meetingPlaceDetail: placeDetail,
+          lat: lat,
+          lng: lng,
+          memberMax: memberMax,
+          memberCnt: memberCnt-1,
+          meetingDate: meetingDate,
+          item: item,
+        })
+          .then(async (response) => {
+            if (response.status === 200) {
+              console.log(response);
+            } else {
+              console.log(response);
+            }
+          })
+          .catch((response) => { console.log(response); });
+      } catch (err) { console.log(err); }
+    };
+  
   // 윤수가 추가함 
     const navigation = useNavigation();
     useEffect(()=>{
@@ -92,18 +220,22 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
                 getMeetingUsers(); 
                 //console.log({meetingUser})
               } } 
-               name="menu" size={20} color={color.black} style={{marginRight: 10}} />
+                name="menu" size={20} color={color.black} style={{marginRight: 10}} />
           ),
         });
     }, []);
 
-    const Item =({title,img})=>(
+    const Item =({title,img, isLeader})=>(
       <View >
         <ChattingRoomComp>
           <ChattingRoomImg source={{uri: img}} />
             <Text style={{fontSize: 15, marginTop:15, marginLeft:20}}>
               {title}
             </Text>
+            {isLeader 
+            ? <Icon name="crown" size={15} color={color.crownYellow} style={{marginTop:17, marginLeft:5}}/>
+            : null
+            }
         </ChattingRoomComp>
       </View>
     );
@@ -112,9 +244,11 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
     const CustomDrawer = props => {
       const mt = {meetingUser}.meetingUser
 
-      const renderItem = ({ item }) => (
-        <Item title={item.nick} img={item.img}/>
-      );
+      const renderItem = ({ item }) => {
+        return (
+          <Item title={item.nick} img={item.img} isLeader={item.isLeader}/>
+        );
+      }
         return(
             <View style={{ flex: 1 }}>
             <View {...props}>
@@ -152,14 +286,7 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
                 padding: 10,
                 borderRadius: 20
                 
-              }}onPress={() => Alert.alert(
-                "모임탈퇴",
-                "채팅방을 나가면 모임에서도 탈퇴됩니다. 정말나가시겠습니까?",[
-                  {text:"남을게요"},
-                  {text:"그래도 나갈래요",onPress:()=>console.log("나간다")}
-              ]
-              )
-            }
+              }}onPress={() => amiLeader()}
               
             >
               <Text style = {styles.logoutText}>나가기</Text>
