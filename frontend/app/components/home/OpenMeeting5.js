@@ -144,15 +144,12 @@ const OpenMeeting5 = () => {
               if (response.status === 200) {
                 console.log("뱃지!!!!", response.data.isOwned)
                 if (!response.data.isOwned) {
-                  // dispatch(setFirstMeeting(true))
                   setIsFirstMeeting(true)
 
                   console.log("나 첫 모임게설 뱃지 첨받아봄!")
                 }
                 else {
-                  // dispatch(setFirstMeeting(false))
-                  setIsFirstMeeting(true)
-
+                  setIsFirstMeeting(false)
                 }
               }
               else {
