@@ -78,7 +78,8 @@ const NicknameRegister = () => {
       NicknameUpdate();
       dispatch(actions.setUserId(response.data.userId));
       const userIdRegister = response.data.userId.toString();
-      await createUser({userId: userIdRegister, userNickName: value, userProfileImg: img});
+      const userProfileImg = (img==null)? "https://i.postimg.cc/G23gPzdy/profile-default.png":img;
+      await createUser({userId: userIdRegister, userNickName: value, userProfileImg: userProfileImg});
       await getFirstRegisterBadge({userId: userIdRegister});
       navigation.navigate('M');
     }).then((error) => {
