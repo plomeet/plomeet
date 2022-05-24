@@ -34,6 +34,7 @@ const OpenMeeting5 = () => {
   const userId = useSelector(state => state.userId);
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
+  const [isFirstMeeting, setIsFirstMeeting] = useState(false)
 
   var s3 = new AWS.S3({
     apiVersion: '2006-03-01',
@@ -120,7 +121,11 @@ const OpenMeeting5 = () => {
               createdAt: Date.now(),
               notice: "안녕하세요! "+meetingName+" 방 입니다.",
             };
-            createMeeting({meeting, userId: userIdStr});
+            createMeeting({ meeting, userId: userIdStr });
+            if (isFirstMeeting) dispatch(setFirstMeeting(true))
+            else dispatch(setFirstMeeting(false))
+
+
             navigation.popToTop()
           } else {
             console.log(response);
@@ -139,12 +144,15 @@ const OpenMeeting5 = () => {
               if (response.status === 200) {
                 console.log("뱃지!!!!", response.data.isOwned)
                 if (!response.data.isOwned) {
-                  dispatch(setFirstMeeting(true))
+                  // dispatch(setFirstMeeting(true))
+                  setIsFirstMeeting(true)
 
                   console.log("나 첫 모임게설 뱃지 첨받아봄!")
                 }
                 else {
-                  dispatch(setFirstMeeting(false))
+                  // dispatch(setFirstMeeting(false))
+                  setIsFirstMeeting(true)
+
                 }
               }
               else {
