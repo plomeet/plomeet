@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { color} from '../styles';
 
-import {View, StyleSheet, Button, Alert, Dimensions} from "react-native";
+import { Linking, View, StyleSheet, Button, Alert, Dimensions} from "react-native";
 import {TouchableOpacity, Text} from "react-native";
 
 import * as React from 'react';
@@ -208,6 +208,10 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
       } catch (err) { console.log(err); }
     };
   
+    function sendEmail() {
+      Linking.openURL('mailto:plomeet205@gmail.com?subject=[게시물 신고]&body=*스크린샷 첨부 시 신고 처리가 빨라집니다.\n*아래 양식을 맞춰 보내주세요.\n\n채팅방 제목 : \n신고 닉네임 : \n신고 사유 : \n스크린샷(선택) : ')
+    }
+  
   // 윤수가 추가함 
     const navigation = useNavigation();
     useEffect(()=>{
@@ -276,6 +280,19 @@ const DrawerNavigator = (props) => {  //const DrawerNavigator = ({item}) => {
               </FlatList>
 
             </View>
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                right: 10,
+                left: 10,
+                bottom: 80,//280,
+                backgroundColor: 'lightgray', //'#1BE58D', //'#009DAE',
+                padding: 10,
+                borderRadius: 20
+              }}
+              onPress={() => sendEmail()}>
+              <Text style = {styles.logoutText}>신고하기</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={{
                 position: 'absolute',
