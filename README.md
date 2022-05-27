@@ -159,13 +159,12 @@ MY는 내 계정 / 모임 / 배지 크게 세가지로 나뉩니다.
 
 ### 🗺 아키텍처
 
-![아키텍쳐](/uploads/4c99ed72fdf95e342d6b3d004032f86c/아키텍쳐.png)
+![아키텍쳐](https://user-images.githubusercontent.com/26523814/170639983-88a90d14-4652-4d7f-bf37-78e66c2d07d0.png)
 
 ### 📂 와이어 프레임
 
-![스크린샷_2022-05-19_오후_10.28.25](/uploads/c1d768a7c77ea8c7ebe2ae3a35229d77/스크린샷_2022-05-19_오후_10.28.25.png)
-![스크린샷_2022-05-19_오후_10.28.52](/uploads/bb9b07789ac9d2ede4ff8992ecf11446/스크린샷_2022-05-19_오후_10.28.52.png)
-
+![스크린샷 2022-05-19 오후 10 28 25](https://user-images.githubusercontent.com/26523814/170640090-75617ea0-32d7-4fc4-ab94-7cda9ff2d95a.png)
+![스크린샷 2022-05-19 오후 10 28 52](https://user-images.githubusercontent.com/26523814/170640144-23fac7bd-3e89-4e91-9ff0-6db42ec5d762.png)
 
 ### 📲 화면정의서
 
@@ -175,11 +174,11 @@ MY는 내 계정 / 모임 / 배지 크게 세가지로 나뉩니다.
 
 - MySQL
 
-![plomeetDB](/uploads/703f672c531ed9987ee3cb5fd93cffad/plomeetDB.png)
+![plomeetDB](https://user-images.githubusercontent.com/26523814/170640260-a580a977-307e-4213-a823-d164cd655883.png)
 
 - FireStore
 
-![스크린샷_2022-05-20_오전_1.23.17](/uploads/497a49c5a4e6937f3ee275bcd2100b64/스크린샷_2022-05-20_오전_1.23.17.png)
+![스크린샷 2022-05-20 오전 1 23 17](https://user-images.githubusercontent.com/26523814/170640321-a71c70b4-936b-48bf-bd0b-b154fb49d063.png)
 
 ### 📂 디렉토리 구조
 
@@ -252,15 +251,15 @@ MY는 내 계정 / 모임 / 배지 크게 세가지로 나뉩니다.
 
 - 기능 명세서
 
-![스크린샷_2022-05-19_오후_10.39.07](/uploads/e97e03917ff367229837b4e54e5e81ec/스크린샷_2022-05-19_오후_10.39.07.png)
+<img width="400" alt="스크린샷 2022-05-19 오후 10 39 07" src="https://user-images.githubusercontent.com/26523814/170640443-f2aaadab-9985-4676-a1f6-3517affa2a60.png">
 
 - REST API 명세서
 
-![스크린샷_2022-05-19_오후_10.39.54](/uploads/3ece192ec783ed22d250484c01c496ce/스크린샷_2022-05-19_오후_10.39.54.png)
+<img width="400" alt="스크린샷 2022-05-19 오후 10 39 54" src="https://user-images.githubusercontent.com/26523814/170640475-a9141fd8-3064-4fec-9bd9-cfce2341d736.png">
 
 - 데이터 전처리
 
-![스크린샷_2022-05-19_오후_10.39.34](/uploads/6dbf29a9ac3f38cf8b3a8bc7c140a973/스크린샷_2022-05-19_오후_10.39.34.png)
+<img width="400" alt="스크린샷 2022-05-19 오후 10 39 34" src="https://user-images.githubusercontent.com/26523814/170640463-41bb5696-a191-41ef-9d05-cf67e3077a2e.png">
 
 ### 🤙 컨벤션
 
