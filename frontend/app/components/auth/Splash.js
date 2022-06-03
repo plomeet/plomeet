@@ -32,8 +32,8 @@ const AuthComponent = () => {
           await KakaoLogins.getProfile().then(result => {
             kakaoUserId = result.id;
           });
-          //setTimeout(() => {axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
-          await axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
+         
+          await axios.get('http://plomeet-app.com:8000/user/' + kakaoUserId)
           .then(async (response) => {
             // console.log(response.data.userId);
             dispatch(actions.setNickname(response.data.userNickName));

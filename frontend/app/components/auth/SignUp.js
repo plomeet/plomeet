@@ -46,7 +46,7 @@ const SignUp = () => {
               console.log('프로필받음?')
               kakaoUserId = result.id;
               console.log(`### Profile Result : ${JSON.stringify(result)}`);
-              axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
+              axios.get('http://plomeet-app.com:8000/user/' + kakaoUserId)
               .then((response) => {
                 console.log(response.status);
                 dispatch(actions.setNickname(response.data.userNickName));
@@ -76,7 +76,7 @@ const SignUp = () => {
               .then(result => {
                 console.log(`### Profile Result : ${JSON.stringify(result)}`);
                   kakaoUserId = result.id;
-                  axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
+                  axios.get('http://plomeet-app.com:8000/user/' + kakaoUserId)
                   .then((response) => {
                     console.log(response.status);
                     dispatch(actions.setNickname(response.data.userNickName));
@@ -103,20 +103,7 @@ const SignUp = () => {
       }
     })
   }
-  // const isSignedUp = async (params) => {
-  //   axios.get('http://k6a205.p.ssafy.io:8000/user/' + kakaoUserId)
-  //    .then((response) => {
-  //      console.log(response.status);
-  //      if(response.status == 200){ //홈으로, Redux 저장
-  //       navigation.navigate('M');
-  //      }else{ // 진행시켜
-  //       login();
-  //       navigation.navigate('NicknameRegister');
-  //      }
-  //   }).catch((error) => {
-  //     console.log(error); 
-  //   });
-  // };
+ 
 
   // function login() {
   //   KakaoLogins.login()

@@ -50,7 +50,7 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>k6a205.p.ssafy.io</key>
+			<key>plomeet-app.com</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>

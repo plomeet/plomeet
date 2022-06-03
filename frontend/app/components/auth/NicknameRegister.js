@@ -65,7 +65,7 @@ const NicknameRegister = () => {
   
   // setTimeout(() => {},100);
   const Register = () => {
-    axios.post('http://k6a205.p.ssafy.io:8000/user', {
+    axios.post('http://plomeet-app.com:8000/user', {
       kakaoUserId: kakaoId,
       userNickName: value, // 입력받은값으로 변경
       userProfileImg: img,
