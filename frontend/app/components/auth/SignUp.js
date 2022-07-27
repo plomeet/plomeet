@@ -9,10 +9,10 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
-import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as KakaoLogins from '@react-native-seoul/kakao-login';
 
+import axiosInstance from "../../../utils/API";
 import LogoImage from '../../../assets/imgs/6881.png';
 import KakaoLogo from '../../../assets/imgs/kakao1.png';
 import LinearGradient from 'react-native-linear-gradient';
@@ -39,14 +39,11 @@ const SignUp = () => {
       if(res) { //토큰이있으면
         KakaoLogins.login()
           .then(result => {
-            console.log('갱신함')
             AsyncStorage.setItem('refreshToken', result.refreshToken);
             KakaoLogins.getProfile()
             .then(result => {
-              console.log('프로필받음?')
               kakaoUserId = result.id;
-              console.log(`### Profile Result : ${JSON.stringify(result)}`);
-              axios.get('http://plomeet-app.com:8000/user/' + kakaoUserId)
+              axiosInstance.get(`/user/${kakaoUserId}`)
               .then((response) => {
                 console.log(response.status);
                 dispatch(actions.setNickname(response.data.userNickName));
@@ -58,7 +55,6 @@ const SignUp = () => {
                   dispatch(actions.setEmail(result.email))
                   navigation.replace('M');
                 }else{ // 진행시켜
-                  console.log('토큰은있지만 가입한적없어?? ->말이안됨')
                   navigation.navigate('NicknameRegister');
                 }
               }).catch((error) => {
@@ -68,17 +64,14 @@ const SignUp = () => {
             
           })
       }else{ //토큰없으면
-        console.log('토큰없음')
         KakaoLogins.login()
           .then(result => {
             AsyncStorage.setItem('refreshToken', result.refreshToken);
             KakaoLogins.getProfile()
               .then(result => {
-                console.log(`### Profile Result : ${JSON.stringify(result)}`);
                   kakaoUserId = result.id;
-                  axios.get('http://plomeet-app.com:8000/user/' + kakaoUserId)
+                  axiosInstance.get(`/user/${kakaoUserId}`)
                   .then((response) => {
-                    console.log(response.status);
                     dispatch(actions.setNickname(response.data.userNickName));
                     dispatch(actions.setUserId(response.data.userId));
                     if(response.status == 200){ //홈으로, Redux 저장
@@ -88,13 +81,11 @@ const SignUp = () => {
                       dispatch(actions.setEmail(result.email))
                       navigation.replace('M');
                     }else{ // 진행시켜
-                      console.log('토큰은있지만 가입한적없어?? ->말이안됨')
                       navigation.navigate('NicknameRegister');
                     }
                   }).catch((error) => {
                     console.log(error); 
                   });
-                //navigation.navigate('NicknameRegister');
               })
               .catch(err => {
                 console.log(`### Profile Error : ${JSON.stringify(err)}`);
@@ -104,39 +95,6 @@ const SignUp = () => {
     })
   }
  
-
-  // function login() {
-  //   KakaoLogins.login()
-  //     .then(result => {
-  //       console.log(`### Login Result : ${JSON.stringify(result)}`);
-  //       AsyncStorage.setItem('refreshToken', result.refreshToken);
-  //       KakaoLogins.getProfile()
-  //         .then(result => {
-  //           console.log(`### Profile Result : ${JSON.stringify(result)}`);
-  //           navigation.navigate('NicknameRegister');
-  //         })
-  //         .catch(err => {
-  //           console.log(`### Profile Error : ${JSON.stringify(err)}`);
-  //         });
-  //     })
-  //     .catch(err => {
-  //       console.log(`### Login Error : ${JSON.stringify(err)}`);
-  //     });
-  // }
-
-  // function logout() {
-  //   AsyncStorage.clear();
-  //   KakaoLogins.logout()
-  //     .then(result => {
-  //       console.log(`### Logout Result : ${JSON.stringify(result)}`);
-  //     })
-  //     .catch(err => {
-  //       console.log(`### Logout Error : ${JSON.stringify(err)}`);
-  //     });
-  //     console.log('여기서걸리나?')
-  //   KakaoLogins.unlink();
-  // }
-
   BackHandler.addEventListener('hardwareBackPress', () => {
     return true;
   });

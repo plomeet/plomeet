@@ -62,18 +62,16 @@ const NicknameRegister = () => {
 
   // setTimeout(() => {console.log(img)},100);
   // setTimeout() 걸어줄것
-  
   // setTimeout(() => {},100);
-  const Register = () => {
-    axios.post('http://plomeet-app.com:8000/user', {
+  const Register = async () => {
+    await axiosInstance.post(`/user`, {
       kakaoUserId: kakaoId,
       userNickName: value, // 입력받은값으로 변경
       userProfileImg: img,
       userName: name,
       userEmail: email,
-    }, {
-      "Content-Type": "application/json",
-    },).then(async(response) => {
+    })
+    .then(async(response) => {
       console.log(response);
       NicknameUpdate();
       dispatch(actions.setUserId(response.data.userId));
