@@ -22,6 +22,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/userActions';
 
+import { createUser } from '../../../utils/firestore';
+import axiosInstance from '../../../utils/API';
+import { setFirstRegister } from '../../actions/badgeAction'
+
 const kakaoHelper = require('./KakaoHelper.js');
 
 
@@ -61,7 +65,7 @@ const NicknameRegister = () => {
   
   // setTimeout(() => {},100);
   const Register = () => {
-    axios.post('http://k6a205.p.ssafy.io:8000/user', {
+    axios.post('http://plomeet-app.com:8000/user', {
       kakaoUserId: kakaoId,
       userNickName: value, // 입력받은값으로 변경
       userProfileImg: img,
@@ -69,14 +73,38 @@ const NicknameRegister = () => {
       userEmail: email,
     }, {
       "Content-Type": "application/json",
-    },).then((response) => {
+    },).then(async(response) => {
       console.log(response);
-      NicknameUpdate()
+      NicknameUpdate();
+      dispatch(actions.setUserId(response.data.userId));
+      const userIdRegister = response.data.userId.toString();
+      const userProfileImg = (img==null)? "https://i.postimg.cc/G23gPzdy/profile-default.png":img;
+      await createUser({userId: userIdRegister, userNickName: value, userProfileImg: userProfileImg});
+      await getFirstRegisterBadge({userId: userIdRegister});
       navigation.navigate('M');
     }).then((error) => {
       console.log(error);
     }); 
   };
+
+  const getFirstRegisterBadge = async({userId}) => {
+    try{
+      await axiosInstance.get(`/badges/${userId}/6`)
+      .then((response) => {
+        if(response.status === 200){
+          if(!response.data.isOwned) {
+            dispatch(setFirstRegister(true))
+          } else{
+            dispatch(setFirstRegister(false))
+          }
+        } else {
+          console.log("error"+response.status);
+        }
+      })
+    }catch(error) {
+      console.log(error);
+    }
+  }
 
   return (
     <KeyboardAvoidingView

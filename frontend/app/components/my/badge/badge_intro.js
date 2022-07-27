@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import Badge from './badge';
 import Icon from 'react-native-vector-icons/Entypo';
 import { ScrollView, Text, View } from "react-native";
@@ -12,11 +12,13 @@ import {
     BadgeMoreText
 } from "./styles";
 import axiosInstance from '../../../../utils/API';
+import { useSelector } from 'react-redux';
 
 
 const BadgeIntro = () => {
     const navigation = useNavigation();
-    const userId = 1;
+    const isFocused = useIsFocused();
+    const userId = useSelector(state => state.userId);
     const [badges, setBadges] = useState([]);
 
     const _handleBadgeMorePress = () => {
@@ -37,8 +39,10 @@ const BadgeIntro = () => {
                     .catch((response) => { console.log(response); });
             } catch (err) { console.log(err); }
         }
-        getBadges();
-    }, []);
+        if(isFocused){
+            getBadges();
+        }
+    }, [isFocused]);
 
     return(
         <BadgesContainer>
@@ -49,13 +53,15 @@ const BadgeIntro = () => {
                     <Icon name="chevron-thin-right" size={13} color={color.black} style={{marginLeft: 5, marginTop: 2}}/>
                 </BadgeMoreComponent>
             </BadgeContainerTitleLine>
-            <ScrollView horizontal={true}>
+            <ScrollView horizontal={true} 
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}>
                 {   
                     badges.map((badge, idx) => (
-                        <Badge key={badge.badgeId} badge={badge}></Badge>
+                        <Badge key={badge.badgeId} badge={badge} margin={3} width={80}></Badge>
                     ))
                 }
-                <Icon name="dots-three-horizontal" size={20} color={color.primaryDark} style={{alignSelf: 'center', marginLeft: 20, marginRight: 20}}/>
+                <Icon name="dots-three-horizontal" size={15} color={color.primaryDark} style={{alignSelf: 'center', marginLeft: 15, marginRight: 20, marginBottom: 51}}/>
             </ScrollView>
         </BadgesContainer>
     )

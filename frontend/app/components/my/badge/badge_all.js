@@ -8,10 +8,11 @@ import {
     BadgeComponentTouchchable
 } from "./styles"
 import axiosInstance from '../../../../utils/API';
+import { useSelector } from 'react-redux';
 
 
 const BadgeList = () => {
-    const userId = 1;
+    const userId = useSelector(state => state.userId);
     const [badges, setBadges] = useState([]);
     const [badgeSelete, setBadgeSelete] = useState();
     const [ modalVisible, setModalVisible ] = useState(false);
@@ -19,7 +20,7 @@ const BadgeList = () => {
     const renderBadges = ({ item }) => {
         return(
             <BadgeComponentTouchchable onPress={() => _handleBadgePress({badge: item})}>
-                <Badge badge={item}></Badge>
+                <Badge badge={item} margin={5} width={100}></Badge>
             </BadgeComponentTouchchable>
         )
     }
@@ -51,6 +52,8 @@ const BadgeList = () => {
         <BadgesContainer style={{ flex: 1, alignItems: 'center'}}>
             <FlatList 
                 data={badges}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
                 renderItem={renderBadges}
                 keyExtractor={item => item.badgeId}
                 numColumns={3} 

@@ -1,28 +1,40 @@
-import React, { Component, Node, useEffect, useState } from 'react';
+import React, { Component, Node, useEffect, useState, useRef, useCallback } from 'react';
 import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { StyleSheet, Text, View, TextInput, Image, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+import { StyleSheet, Text, View, Dimensions, TextInput, Image, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../plogging/map";
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 import axiosInstance from '../../../utils/API';
 import Config from 'react-native-config'
 import AWS from 'aws-sdk';
+import { createMeeting } from '../../../utils/firestore';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFirstMeeting } from '../../actions/badgeAction'
 
-const openMeeting5 = () => {
+
+const OpenMeeting5 = () => {
   const navigation = useNavigation();
   const [meetingImgUri, setMeetingImgUri] = useState("https://i.postimg.cc/QtNKqGGJ/default-Meeting-Img.png");
   const [meetingImgFileName, setMeetingImgFileName] = useState("");
   const [meetingName, setMeetingName] = useState("");
   const [detail, setDetail] = useState("");
+  const [item, setItem] = useState("");
+  const [items, setItems] = useState([]);
   const [meetingPlace, setMeetingPlace] = useState("");
   const [memberMax, setMemberMax] = useState(1);
   // const [memberCnt, setMemberCnt] = useState(1);
   const [meetingDate, setMeetingDate] = useState("");
+  const [meetingPlaceDetail, setMeetingPlaceDetail] = useState("");
   const [latitude, setLatitude] = useState(37.564362);
   const [longitude, setLongitude] = useState(126.977011);
   var loc = {latitude: latitude, longitude: longitude};
+  const userId = useSelector(state => state.userId);
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+  const [isFirstMeeting, setIsFirstMeeting] = useState(false)
 
   var s3 = new AWS.S3({
     apiVersion: '2006-03-01',
@@ -34,6 +46,18 @@ const openMeeting5 = () => {
       IdentityPoolId: Config.IDENTITYPOOLID,
     })
   })
+
+  //날짜포멧
+  const week = ['일', '월', '화', '수', '목', '금', '토'];
+  function parse(str) {
+    var y = str.substr(0, 4);
+    var m = str.substr(5, 2);
+    var d = str.substr(8, 2);
+    var ymd = new Date(y,m-1,d);
+    let day = week[ymd.getDay()];
+    var res = m+"월 "+d+"일("+day+") "+ str.substr(11, 5)
+    return res
+  }
 
   const uploadImg = async () => {
     const response1 = await fetch(meetingImgUri)
@@ -54,6 +78,23 @@ const openMeeting5 = () => {
     });
   }
 
+  const thisIsMyMeeting = async (mId) => {
+    try {
+      await axiosInstance.post("/meetings", {
+        userId: userId,
+        meetingId: mId,
+        isLeader: true,
+      })
+        .then(async (response) => {
+          if (response.status === 200) {
+            console.log(response); 
+          } else {
+            console.log(response);
+          }
+        })
+        .catch((response) => { console.log(response); });
+    } catch (err) { console.log(err); }
+  };
 
   const creatMeeting = async () => {
     uploadImg();
@@ -63,16 +104,28 @@ const openMeeting5 = () => {
         meetingName: meetingName,
         meetingDesc: detail,
         meetingPlace: meetingPlace,
-        meetingPlaceDetail: "주소", //필요하면 수정
+        meetingPlaceDetail: meetingPlaceDetail,
         lat: latitude,
         lng: longitude,
         memberMax: memberMax,
         meetingDate: meetingDate,
-        item: "쓰레기봉투"
+        item: item
       })
         .then(async (response) => {
           if (response.status === 200) {
-            console.log(response); 
+            console.log(response);
+            thisIsMyMeeting(response.data.meetingId);
+            const userIdStr = userId.toString();
+            const meeting = {
+              meetingId: response.data.meetingId.toString(),
+              createdAt: Date.now(),
+              notice: "안녕하세요! "+meetingName+" 방 입니다.",
+            };
+            createMeeting({ meeting, userId: userIdStr });
+            if (isFirstMeeting) dispatch(setFirstMeeting(true))
+            else dispatch(setFirstMeeting(false))
+
+
             navigation.popToTop()
           } else {
             console.log(response);
@@ -81,6 +134,35 @@ const openMeeting5 = () => {
         .catch((response) => { console.log(response); });
     } catch (err) { console.log(err); }
   };
+
+  useEffect(() => {
+    if (isFocused){
+      const checkFirstMeeting = async () => { 
+        try {
+          await axiosInstance.get(`/badges/${userId}/3`)
+            .then((response) => {
+              if (response.status === 200) {
+                console.log("뱃지!!!!", response.data.isOwned)
+                if (!response.data.isOwned) {
+                  setIsFirstMeeting(true)
+
+                  console.log("나 첫 모임게설 뱃지 첨받아봄!")
+                }
+                else {
+                  setIsFirstMeeting(false)
+                }
+              }
+              else {
+                console.log("error" + response.status);
+              }
+            })
+        } catch (err) { 
+          console.log(err)
+        }
+      }
+      checkFirstMeeting()
+    }
+  }, [isFocused])
 
   useEffect(() => {
     AsyncStorage.getItem('meetingName', (err, result) => {
@@ -115,6 +197,15 @@ const openMeeting5 = () => {
       console.log(result);
       setMeetingDate(result);
     })
+    AsyncStorage.getItem('item', (err, result) => {
+      console.log(result);
+      setItem(result);
+      setItems(result.split('&'));
+    })
+    AsyncStorage.getItem('address', (err, result) => {
+      console.log(result);
+      setMeetingPlaceDetail(result);
+    })
     AsyncStorage.getItem('meetingImgFileName', (err, result) => {
       console.log("meetingImgFileName : " +result);
       if(result) setMeetingImgFileName(result);
@@ -147,9 +238,27 @@ const openMeeting5 = () => {
                 <Text style={styles.subtext}>1 / {memberMax}</Text>
               </View>
               <View style={styles.row}>
-                <Icon name='ios-calendar-sharp' size={20} color='#313333' />
+                <Icon2 name='calendar' size={17} style={[{marginLeft:2}, {marginRight:1}]} color='#313333' />
                 <Text style={styles.subtitle}>날짜</Text>
-                <Text style={styles.subtext}>{meetingDate}</Text>
+                <Text style={styles.subtext}>{parse(meetingDate)}</Text>
+              </View>
+              <View style={styles.row}>
+                <Icon2 name='magnifier-add' size={17} style={[{marginLeft:2}, {marginRight:1}]} color='#313333' />
+                <Text style={styles.subtitle}>주소</Text>
+                <Text style={styles.subtext}>{meetingPlaceDetail}</Text>
+              </View>
+              <View style={[styles.row, {marginTop : 20}]}>
+                <Icon2 name='bag' size={20} color='#313333' />
+                <Text style={[styles.subtitle, {marginRight:30}]}>준비물</Text>
+                {items[0] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[0]}</Text></View>}
+                {items[1] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[1]}</Text></View>}
+                {items[2] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[2]}</Text></View>}
+              </View>
+              <View style={[styles.row, { marginLeft: 125 }, { marginTop: 7 }]}>
+                {items[3] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[3]}</Text></View>}
+                {items[4] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[4]}</Text></View>}
+                {items[5] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[5]}</Text></View>}
+                {items[6] !== undefined && <View style={styles.itemChip}><Text style={{color:"#fff"}}>{items[6]}</Text></View>}
               </View>
 
               <View style={styles.tempMap}>
@@ -237,13 +346,20 @@ const styles = StyleSheet.create({
   },
   subtext: {
     fontSize: 14,
-    marginLeft: 50,
+    marginLeft: 34,
     color: "#545454"
   },
   buttonText: {
     fontSize: 18,
     color: "#fff"
   },
+  itemChip : {
+    backgroundColor: "#1BE58D",
+    borderRadius: 20,
+    paddingHorizontal:12,
+    paddingVertical: 5,
+    marginHorizontal: 3
+  }
 });
 
-export default openMeeting5;
+export default OpenMeeting5;

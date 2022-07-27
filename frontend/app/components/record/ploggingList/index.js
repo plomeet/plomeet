@@ -3,6 +3,7 @@ import { Text, View, StyleSheet } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Config from 'react-native-config'
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import DetailArrow from '../icon/detailArrow.svg';
 
 const PloggingList = ({ id, log, mm, index }) => {
@@ -34,7 +35,8 @@ const PloggingList = ({ id, log, mm, index }) => {
                     <Text style={styles.timeInfo}>{log.plogDist}km / {log.plogTime}</Text>
                 </View>
                 <View style={styles.detailButtonContainer}>
-                    <DetailArrow></DetailArrow>
+                    {/* <DetailArrow></DetailArrow> */}
+                    <Icon name="arrow-right" size={18} color="#7A7A7A" style={[{ marginLeft: 5 }, {marginRight:10}]} />
                 </View>
             </View>
         </TouchableOpacity>
@@ -44,13 +46,14 @@ const PloggingList = ({ id, log, mm, index }) => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
-        height: 63,
-        marginLeft: 22,
-        marginRight: 22,
-        borderRadius: 15,
+        height: 70,
+        marginLeft: 15,
+        marginRight: 15,
+        borderRadius: 20,
         marginTop: 9,
         backgroundColor: "#FFFFFF",
-        padding: 8,
+        paddingVertical: 10,
+        marginVertical: 3,
     },
     dateContainer: {
         flex: 2,
@@ -61,7 +64,7 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         paddingLeft: 16,
-        flex: 8,
+        flex: 6.5,
         justifyContent: "center",
     },
     detailButtonContainer: {
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
     },
     dateText: {
         color: "#12D3DD",
-        fontSize: 20,
+        fontSize: 18,
     },
     countInfo: {
         color: "#000000",

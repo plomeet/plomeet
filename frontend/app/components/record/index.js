@@ -1,21 +1,22 @@
 import React, { Component, Node, Button, useEffect, useState, useRef } from 'react';
 import 'react-native-gesture-handler';
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View, Alert } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import RecordStatusBar from './record-status-bar/index'
 import LogCalendar from './calendar/index'
 import PloggingList from './ploggingList/index'
 import axiosInstance from "../../../utils/API";
-//import axiosInstance from "../../../utils/ApiLocal";
 import { useSelector } from "react-redux"
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Spinner from 'react-native-spinkit'
+import { useDispatch } from 'react-redux'
+import { setFirstPlogging } from '../../actions/badgeAction';
 
 const Record = ({ saveLogs, setListMonth }) => {
     const [plogLists, setPlogLists] = useState([]);
     const savedLogs = useSelector(state => state.savedLogs);
     const listMonth = useSelector(state => state.listMonth);
-    const userId = 1; //나중에 리덕스 스토어에서 가져오기
+    const userId = useSelector(state => state.userId);
     const [td, setTd] = useState(0.0);
     const [tt, setTt] = useState("0 : 00");
     const [tc, setTc] = useState(0);
@@ -24,26 +25,50 @@ const Record = ({ saveLogs, setListMonth }) => {
     const isFocused = useIsFocused();
     const scrollViewRef = useRef();
     const [showSpinner, setShowSpinner] = useState(true);
+    const firstPlogging = useSelector(state => state.firstPlogging);
+    const dispatch = useDispatch();
+    const [isTotalDistTen, setIsTotalDistTen] = useState(false);
 
     useEffect(() => {
-        const getSavedLogs = async () => {
-            console.log("기록들 가져오기");
-            try {
-                await axiosInstance.get(`/ploggings/${userId}`)
-                    .then((response) => {
-                        if (response.status === 200) {
-                            saveLogs(response.data.data);
-                        } else if (response.status === 204) {
-                            console.log("저장된 기록이 없습니다") // todo 기록없을때 처리
-                        }
-                        else {
-                            console.log("log insert FAIL " + response.status);
-                        }
-                    })
-                    .catch((response) => { console.log(response); });
-            } catch (err) { console.log(err); }
-        };
-        getSavedLogs();
+        if (isFocused) {
+            const getSavedLogs = async () => {
+                console.log("기록들 가져오기");
+                try {
+                    await axiosInstance.get(`/ploggings/${userId}`)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                saveLogs(response.data.data);
+                            } else if (response.status === 204) {
+                                console.log("저장된 기록이 없습니다") // todo 기록없을때 처리
+                            }
+                            else {
+                                console.log("log insert FAIL " + response.status);
+                            }
+                            setShowSpinner(false);
+                        })
+                        .catch((response) => { console.log(response); });
+                } catch (err) { console.log(err); }
+            };
+
+            const checkFirstLog = () => {
+                if (firstPlogging) {
+                    Alert.alert(
+                        "",
+                        "'플로깅의 시작' 뱃지 획득!",
+                        [
+                            {
+                                text: '닫기'
+                            }
+                        ],
+                        { cancelable: true }
+                    );
+                    dispatch(setFirstPlogging(false))
+                }
+            }
+            getSavedLogs();
+            checkFirstLog();
+        }
+
     }, [isFocused]);
 
     useEffect(() => {
@@ -51,7 +76,7 @@ const Record = ({ saveLogs, setListMonth }) => {
         if (listMonth.length > 1) {
             const mm = parseInt(listMonth.substring(5, 7));
             setMonth(mm);
-            if (savedLogs[0] !== undefined)
+            if (savedLogs[0] !== undefined) {
                 savedLogs.map((data, i) => {
                     if (i === savedLogs.length - 1) setShowSpinner(false);
                     const min = parseInt(data.plogTime.substring(0, data.plogTime.indexOf(' ')));
@@ -65,8 +90,12 @@ const Record = ({ saveLogs, setListMonth }) => {
                         }
                     }
                 });
+            } else {
+                setShowSpinner(false);
+            }
+
         }
-    }, [listMonth, isFocused]);
+    }, [listMonth, savedLogs]);
 
     useEffect(() => {
         if (savedLogs[0] !== undefined) {
@@ -106,8 +135,69 @@ const Record = ({ saveLogs, setListMonth }) => {
             const now = new Date();
             const dateString = dateFormat(now);
             setListMonth(dateString);
+
+            if (isTotalDistTen) {
+                if (totalDist >= 10.0) {
+                    Alert.alert(
+                        "",
+                        "'제법 걸었네요' 뱃지 획득!",
+                        [
+                            {
+                                text: '닫기'
+                            }
+                        ],
+                        { cancelable: true }
+                    );
+
+                    saveBadgeTotalDistTen();
+                }
+            }
         }
     }, [savedLogs]);
+
+    useEffect(() => { 
+        if (isFocused) {
+            const checkTotalDistTen = async () => {
+                try {
+                    await axiosInstance.get(`/badges/${userId}/23`)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                console.log("뱃지!!!!", response.data.isOwned)
+                                if (!response.data.isOwned) {
+                                    setIsTotalDistTen(true);
+                                    console.log("나 누적10키로 뱃지 첨받아봄!")
+                                }
+                                else {
+                                    setIsTotalDistTen(false);
+                                }
+                            } else {
+                                console.log("error" + response.status);
+                            }
+                        })
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+        
+            checkTotalDistTen();
+        }
+    }, [isFocused])
+
+
+    const saveBadgeTotalDistTen = async () => {
+        try {
+            await axiosInstance.post('/badges/get', {
+                userId: userId,
+                badgeId: 23,
+            }).then((response) => {
+                if (response.status === 201) {
+                    console.log("뱃지 획득 성공!!");
+                    setIsTotalDistTen(false);
+                }
+            })
+        } catch (error) { console.log(error) }
+    }
 
     const dateFormat = (date) => {  //dateformat 마찬가지
         let month = date.getMonth() + 1;
@@ -143,7 +233,7 @@ const Record = ({ saveLogs, setListMonth }) => {
                 </ScrollView>
                 {showSpinner &&
                     <View style={styles.containerSpinner}>
-                        <Spinner isVisible={true} size={80} type={'ThreeBounce'} color={"#1BE58D"} />
+                        <Spinner isVisible={true} size={50} type={'ThreeBounce'} color={"#1BE58D"} />
                     </View>
                 }
             </View>

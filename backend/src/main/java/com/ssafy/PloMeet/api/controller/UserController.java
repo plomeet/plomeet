@@ -1,6 +1,8 @@
 package com.ssafy.PloMeet.api.controller;
 
+import com.ssafy.PloMeet.api.request.ProfileReq;
 import com.ssafy.PloMeet.api.request.UserRegisterReq;
+import com.ssafy.PloMeet.api.response.BaseResponseBody;
 import com.ssafy.PloMeet.api.response.UserRes;
 import com.ssafy.PloMeet.api.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,14 @@ public class UserController {
         Long userId = userService.signUp(userRegisterReq);
         responseMap.put("userId", userId);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<? extends BaseResponseBody> updateProfile(@RequestBody ProfileReq profileReq){
+
+        userService.updateProfile(profileReq);
+
+        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(200, "변경완료"));
     }
 
 }

@@ -3,11 +3,13 @@ import 'react-native-gesture-handler';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "../map/index";
 import { ScrollView, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import PloggingStatusBar from '../plogging-status-bar/index';
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { launchImageLibrary } from 'react-native-image-picker';
 import styled from "styled-components/native";
 import ImageAppend from '../icons/imageAppend.svg'
 import ImageDelete from '../icons/imageDelete.svg';
+import axiosInstance from '../../../../utils/API';
+import * as actions from '../../../actions/badgeAction';
 
 
 
@@ -25,6 +27,8 @@ const EndPlogging = ({ saveLogs, ploggingPath, center, setImages, distSum, isPlo
     const timeSum = useSelector(state => state.timeSum);
     const [imageSource, setImageSource] = useState([]);
     const nextId = useRef(1);
+    const userId = useSelector(state => state.userId);
+    const dispatch = useDispatch()
 
     const options = {
         title: 'Load Photo',
@@ -62,6 +66,44 @@ const EndPlogging = ({ saveLogs, ploggingPath, center, setImages, distSum, isPlo
 
         const week = WEEKDAY[kr_curr.getDay()];
         setEndTime([dateString, week, timeString, kr_curr]);
+
+        //첫 플로깅인지 확인
+        const checkFirstLog = async () => {
+            try {
+                await axiosInstance.get(`/badges/${userId}/2`)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            console.log("뱃지!!!!", response.data.isOwned)
+                            if (!response.data.isOwned) {
+                                //db 저장 
+                                try {
+                                    saveBadge();
+                                } catch (error) { console.log(error) }
+                            }
+                            else dispatch(actions.setFirstPlogging(false));
+                        } else {
+                            console.log("error" + response.status);
+                        }
+                    })
+            }
+            catch (err) { console.log(err); }
+        }
+
+        const saveBadge = async () => {
+            try {
+                await axiosInstance.post('/badges/get', {
+                    userId: userId,
+                    badgeId: 2,
+                }).then((response) => {
+                    if (response.status === 201) {
+                        console.log("뱃지 획득 성공!!");
+                        dispatch(actions.setFirstPlogging(true));
+                    }
+                })
+            } catch (error) { console.log(error) }
+        }
+
+        checkFirstLog();
 
         // let TimeTaken = kr_curr.getTime() - startTime[3].getTime();
 
@@ -130,7 +172,7 @@ const EndPlogging = ({ saveLogs, ploggingPath, center, setImages, distSum, isPlo
                         center={{ ...middle, zoom: 16 }}
                         useTextureView>
                         {ploggingPath.length >= 2 &&
-                            <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
+                            <Path coordinates={ploggingPath} onClick={() => console.log('onClick! path')} width={5} outlineWidth={0} color={'#0F58F9'} />
                         }
                     </NaverMapView>
                 </View>
@@ -149,7 +191,7 @@ const EndPlogging = ({ saveLogs, ploggingPath, center, setImages, distSum, isPlo
                     {
                         imageSource.map((img, i) => (
                             <View>
-                                <Photo source={{ uri: img.uri }} key={{ i }} />
+                                <Photo source={{ uri: img.uri }} key={i} />
                                 <TouchableOpacity onPress={() => deleteImg(img.id)} hitSlop={{ right: 12, bottom: -90, left: -90, top: 120 }}>
                                     <ImageDelete width={20} height={20} style={style.delBtn} />
                                 </TouchableOpacity>

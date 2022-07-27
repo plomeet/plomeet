@@ -45,12 +45,12 @@ const LogDetail = ({ route }) => {
                     center={{ ...middle, zoom: 16 }}
                     useTextureView>
                     {ploggingPathJson !== undefined && ploggingPathJson.length >= 2 &&
-                        <Path coordinates={ploggingPathJson} onClick={() => console.log('onClick! path')} width={5} color={'blue'} />
+                        <Path coordinates={ploggingPathJson} onClick={() => console.log('onClick! path')} width={5} outlineWidth={0} color={'#0F58F9'} />
                     }
                 </NaverMapView>
             </View>
             <View style={styles.containerState} >
-                <PloggingStatusBar distSum={log.plogDist} isPlogging={false} timeSumString={log.plogTime} islogDetail={true} logDetailWeather={log.plogWeather}></PloggingStatusBar>
+                <PloggingStatusBar isLogDetail={true} distSumLog={log.plogDist} isPlogging={false} timeSumString={log.plogTime} islogDetail={true} logDetailWeather={log.plogWeather}></PloggingStatusBar>
             </View>
         </View>
     )

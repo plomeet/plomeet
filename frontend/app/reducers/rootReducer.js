@@ -16,6 +16,9 @@ const initialState = {
     img: "",
     name: "",
     email: "",
+    firstPlogging: false,
+    firstMeeting: false,
+    firstRegister: false,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -56,6 +59,12 @@ const rootReducer = (state = initialState, action) => {
             return { ...state, name: action.payload }
         case "SET_EMAIL":
             return { ...state, email: action.payload }
+        case "SET_FIRSTPLOGGING":
+            return { ...state, firstPlogging: action.payload }
+        case "SET_FIRSTMEETING":
+            return {...state, firstMeeting: action.payload}
+        case "SET_FIRSTREGISTER":
+            return {...state, firstRegister: action.payload}
         default:
             return state;
     }

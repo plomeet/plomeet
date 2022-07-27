@@ -1,19 +1,28 @@
 import React, { Component, Node, useState, useEffect } from 'react';
-import 'react-native-gesture-handler';
 import { Chip, ToggleButton } from 'react-native-paper';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
-import { StyleSheet, Modal, Text, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, TouchableOpacity  } from "react-native";
+import { StyleSheet, Modal, Text, View, TextInput, Button, KeyboardAvoidingView, Keyboard, Platform, TouchableOpacity, TouchableWithoutFeedback  } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const openMeeting3 = () => {
+const OpenMeeting3 = () => {
   const navigation = useNavigation();
   const [memberMax, setMemberMax] = useState(1);
   var [memberMaxValid, setMemberMaxValid] = useState(false);
   const [nextDisable, setNextDisable] = useState(true);
   var isOverZero = false;
+  const itemList = ["쓰레기 봉투", "집게", "물티슈", "목장갑", "운동화", "물", "도시락"];
 
   function goNext() {
+    var items = [];
+    var str = "";
+    for(var i=0; i<7; i++){
+      if(item[i]) items.push(itemList[i]);
+      str = items.join('&');
+    }
+    AsyncStorage.setItem('item', str, () => {
+      console.log('[준비물 저장 완료] '+ str);
+    });
     AsyncStorage.setItem('memberMax', memberMax, () => {
       console.log('[모임 최대 인원 저장 완료] '+memberMax);
     });
@@ -43,11 +52,12 @@ const openMeeting3 = () => {
     }
   };
   const isDone = () => {
-    console.log("확인");
-    if((memberMax>0) && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택')){
-      setNextDisable(false);
+    if(item != [false, false, false, false, false, false, false]){
+      if((memberMax>0) && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택')){
+        setNextDisable(false);
+      }
+      if(isOverZero && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택') ) {setNextDisable(false);}
     }
-    if(isOverZero && (selectedDate != '모임 날짜 선택') && (selectedTime != '모임 시간 선택') ) {setNextDisable(false);}
   }
 
   // Modal을 표시하거나 숨기기 위한 변수 
@@ -57,6 +67,19 @@ const openMeeting3 = () => {
   const [selectedTime, setSelectedTime] = useState('모임 시간 선택');
   const current= getToday();
 
+  const [item, setItem] = useState([false, false, false, false, false, false, false]);
+
+  function setToggle(index){
+    if(index==0) setItem([!item[0], item[1], item[2], item[3], item[4], item[5], item[6]]);
+    else if(index==1) setItem([item[0], !item[1], item[2], item[3], item[4], item[5], item[6]]);
+    else if(index==2) setItem([item[0], item[1], !item[2], item[3], item[4], item[5], item[6]]);
+    else if(index==3) setItem([item[0], item[1], item[2], !item[3], item[4], item[5], item[6]]);
+    else if(index==4) setItem([item[0], item[1], item[2], item[3], !item[4], item[5], item[6]]);
+    else if(index==5) setItem([item[0], item[1], item[2], item[3], item[4], !item[5], item[6]]);
+    else if(index==6) setItem([item[0], item[1], item[2], item[3], item[4], item[5], !item[6]]);
+    isDone();
+  }
+
   function SelectedTime(time){
     setSelectedTime(time);
     setVisibleTimer(false);
@@ -64,6 +87,7 @@ const openMeeting3 = () => {
   }
 
     return (
+        <TouchableWithoutFeedback onPressOut={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <Text style={styles.title}>최대 인원</Text>
         <TextInput
@@ -117,21 +141,19 @@ const openMeeting3 = () => {
             onSelectedChange={date => setSelectedDate(date)}
             />
             {/* Modal 다이얼로그 숨기기 */} 
-            <TouchableOpacity activeOpacity={0.8} style={[styles.closeButton, {paddingHorizontal:30}]} onPress={() => setVisibleCalendar(false)}><Text style={styles.text}>선택</Text></TouchableOpacity>
-
-          
+            <TouchableOpacity activeOpacity={0.8} style={[styles.closeButton, {paddingHorizontal:30}]} onPress={() => setVisibleCalendar(false)}><Text style={styles.text}>선택</Text></TouchableOpacity>          
           </View> 
         </Modal>
-
+            
         <View  style={[styles.row, {marginLeft:30}, {marginBottom:10}, {marginTop:20}]}>
-          <Chip style={{marginRight:10}} onPress={()=> setVisibleCalendar(true)} icon="calendar" mode="outlined" selectedColor='#232732'> {selectedDate}</Chip>
+            <Chip style={{ marginRight: 10 }} onPress={() => setVisibleCalendar(true)} icon="calendar" mode="outlined" selectedColor='#232732'> {selectedDate}</Chip>
         </View>
 
         <Text style={[styles.title, {marginTop:40}]}>모임 시간</Text>
         <View  style={[styles.row, {marginLeft:30}, {marginBottom:10}, {marginTop:20}]}>
-          <Chip style={{marginRight:10}} onPress={()=> setVisibleTimer(true)} icon="clock" mode="outlined" selectedColor='#232732'> {selectedTime}</Chip>
+          <Chip style={[{marginRight:10}, {zIndex: 100}]} onPress={()=> setVisibleTimer(true)} icon="clock" mode="outlined" selectedColor='#232732'> {selectedTime}</Chip>
         </View>
-
+      
         <Modal animationType="slide" 
           transparent={false} 
           visible={visibleTimer}> 
@@ -165,21 +187,22 @@ const openMeeting3 = () => {
 
         <Text style={[styles.title, {marginTop:40}]}>준비물</Text>
         <View style={[styles.row, {marginLeft:30}, {marginBottom:10}, {marginTop:20}]}>
-          <TouchableOpacity style={styles.chip}><Text style={{color:"#000"}}>쓰레기 봉투</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.chipOver}><Text style={{color:"#fff"}}>집게</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.chip}><Text style={{color:"#000"}}>물티슈</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.chipOver}><Text style={{color:"#fff"}}>면장갑</Text></TouchableOpacity>
+          <TouchableOpacity style={item[0] ? styles.chipOver : styles.chip} onPress={() => setToggle(0)}><Text style={item[0] ?{color:"#fff"}:{color:"#000"}}>쓰레기 봉투</Text></TouchableOpacity>
+          <TouchableOpacity style={item[1] ? styles.chipOver : styles.chip} onPress={() => setToggle(1)}><Text style={item[1] ?{color:"#fff"}:{color:"#000"}}>집게</Text></TouchableOpacity>
+          <TouchableOpacity style={item[2] ? styles.chipOver : styles.chip} onPress={() => setToggle(2)}><Text style={item[2] ?{color:"#fff"}:{color:"#000"}}>물티슈</Text></TouchableOpacity>
+          <TouchableOpacity style={item[3] ? styles.chipOver : styles.chip} onPress={() => setToggle(3)}><Text style={item[3] ?{color:"#fff"}:{color:"#000"}}>면장갑</Text></TouchableOpacity>
         </View>
         <View style={[styles.row, {marginLeft:30}, {marginBottom:10}]}>
-          <TouchableOpacity style={styles.chip}><Text style={{color:"#000"}}>운동화</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.chipOver}><Text style={{color:"#fff"}}>물</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.chip}><Text style={{color:"#000"}}>도시락</Text></TouchableOpacity>
-        </View>
+          <TouchableOpacity style={item[4] ? styles.chipOver : styles.chip} onPress={() => setToggle(4)}><Text style={item[4] ?{color:"#fff"}:{color:"#000"}}>운동화</Text></TouchableOpacity>
+          <TouchableOpacity style={item[5] ? styles.chipOver : styles.chip} onPress={() => setToggle(5)}><Text style={item[5] ?{color:"#fff"}:{color:"#000"}}>물</Text></TouchableOpacity>
+          <TouchableOpacity style={item[6] ? styles.chipOver : styles.chip} onPress={() => setToggle(6)}><Text style={item[6] ?{color:"#fff"}:{color:"#000"}}>도시락</Text></TouchableOpacity>
+          </View>
         <View style={{flex:1}}/>
         <TouchableOpacity activeOpacity={0.8} disabled={nextDisable} style={nextDisable? styles.disButton :styles.button} onPress={() => goNext()}>
           <Text style={styles.text}>다음</Text>
         </TouchableOpacity>
       </View>
+          </TouchableWithoutFeedback>
     );
 };
 
@@ -263,4 +286,4 @@ const styles = StyleSheet.create({
   
 });
 
-export default openMeeting3;
+export default OpenMeeting3;

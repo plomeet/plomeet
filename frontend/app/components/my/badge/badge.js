@@ -8,16 +8,18 @@ import {
 
 const Badge = ( props ) => {
     const badge = props.badge;
+    const margin = props.margin;
+    const width = props.width;
     
     return(
-        <BadgeComponent>
+        <BadgeComponent margin={margin} width={width}>
             {/* <BadgeImage source={{uri: badge.BadgeImage}}></BadgeImage> */}
             { badge.isOwned
             ?
             <BadgeImage source={{uri: badge.badgeImg}}></BadgeImage>
             :
             <View>
-                <BadgeImage style={{ tintColor: 'gray' }} source={{uri: badge.badgeImg}}></BadgeImage>
+                <BadgeImage style={{ tintColor: 'lightgray' }} source={{uri: badge.badgeImg}}></BadgeImage>
                 <BadgeImage style={{ position: 'absolute', opacity: 0.3 }} source={{uri: badge.badgeImg}}></BadgeImage>
             </View>
             }

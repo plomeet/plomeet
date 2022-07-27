@@ -8,7 +8,7 @@ import styled from "styled-components/native";
 import * as ImagePicker from 'react-native-image-picker';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const openMeeting4 = () => {
+const OpenMeeting4 = () => {
 
   const [imageSource, setImageSource] = useState({uri:'', fileName:''});
 
@@ -135,4 +135,4 @@ const openMeeting4 = () => {
     border-radius: 10px;
 `;
 
-export default openMeeting4;
+export default OpenMeeting4;
