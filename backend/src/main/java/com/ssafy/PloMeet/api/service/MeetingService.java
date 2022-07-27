@@ -18,6 +18,7 @@ public interface MeetingService {
     Long createMeeting(MeetingReq meetingReq);
     MeetingRes findMeetingById(Long meetingId);
     List<MeetingRes> findAllMeeting();
+    List<MeetingRes> findAllMeetingAfterNow();
     void updateMeeting(Long meetingId, MeetingReq meetingReq);
 
 }

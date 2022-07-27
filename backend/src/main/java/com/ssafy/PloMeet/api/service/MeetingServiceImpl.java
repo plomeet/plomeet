@@ -42,6 +42,15 @@ public class MeetingServiceImpl implements MeetingService{
                 .collect(Collectors.toList());
     }
 
+    //현재 시점 이후의 모임 전체 조회
+    public List<MeetingRes> findAllMeetingAfterNow() {
+        List<Meeting> meetings = new ArrayList<>();
+        meetings = meetingRepository.findAllMeetingAfterNow();
+        return meetings.stream()
+                .map(MeetingRes::new)
+                .collect(Collectors.toList());
+    }
+
     //모임 수정
     @Transactional
     public void updateMeeting(Long meetingId, MeetingReq meetingReq) {

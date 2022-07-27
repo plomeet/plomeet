@@ -53,6 +53,14 @@ public class MeetingController {
         return ResponseEntity.status(HttpStatus.OK).body(meetings);
     }
 
+    //현재 시점 이후의 모임 전체 조회
+    @GetMapping("/allafternow")
+    public ResponseEntity<Object> findAllMeetingAfterNow() {
+        List<MeetingRes> meetings = meetingService.findAllMeetingAfterNow();
+        if (meetings.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body(meetings);
+    }
+
     //모임 수정
     @PutMapping("/{meetingId}")
     public ResponseEntity updateMeeting(@PathVariable("meetingId") Long meetingId, @RequestBody MeetingReq meetingReq) {
