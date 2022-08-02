@@ -12,6 +12,7 @@ import TrashcanInfo from './trashcan-modal/index';
 import EndPlogging from './endScreen/index';
 import dfs_xy_conv from '../../../utils/IHateMeteorologicalAgency';
 import PlomeetSpinner from '../../../utils/PlomeetSpinner';
+import AsyncStorage from '@react-native-community/async-storage';
 
 //테스트용으로 남겨둔 데이터 삭제 X
 const P0 = { latitude: 37.564362, longitude: 126.977011 };
@@ -54,6 +55,10 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
         setPrevLocation({})
         return () => { }
     }, [isPlogging, showPloggingEndPage])
+
+    useEffect(() => {
+        AsyncStorage.removeItem("startedTime");
+    }, [])
 
     //시작시 쓰레기통 전부를 가져온다.
     useEffect(() => {
@@ -224,7 +229,7 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
             longitude,
         });
     }
-
+    
     async function requestLocationPermission() { // 승인 안했을때나 에러 났을때의 처리는 나중에..
         try {
             const granted = await PermissionsAndroid.request(
@@ -239,6 +244,32 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log('You can use the location');
+                requestBackGroundLocationPermission();
+                return true;
+            } else {
+                console.log('Location permission denied');
+                return false;
+            }
+        } catch (err) {
+            console.warn(err);
+            return false;
+        }
+    }
+
+    async function requestBackGroundLocationPermission() { 
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
+                {
+                    title: '위치 권한',
+                    message: '앱 위치정보를 항상 허용해주세요!',
+                    buttonNeutral: '나중에',
+                    buttonNegative: '거부',
+                    buttonPositive: '승인',
+                },
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('You can use the location in background');
                 return true;
             } else {
                 console.log('Location permission denied');
