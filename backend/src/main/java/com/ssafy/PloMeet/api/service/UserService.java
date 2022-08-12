@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public interface UserService {
-    UserRes findUserByKakaoUserId(Long kakaoUserId);
+    UserRes findUserByKakaoUserId(String kakaoUserId);
     Long signUp(UserRegisterReq userRegisterReq);
     Optional<User> getUserInfo(Long userId) throws Exception;
     void updateProfile(ProfileReq profileReq);
