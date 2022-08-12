@@ -23,7 +23,7 @@ public class UserController {
 
     //회원 가입 여부 조회
     @GetMapping("/{kakaoUserId}")
-    public ResponseEntity findUserByKakaoId(@PathVariable("kakaoUserId") Long kakaoUserId) {
+    public ResponseEntity findUserByKakaoId(@PathVariable("kakaoUserId") String kakaoUserId) {
         try {
             UserRes userRes = userService.findUserByKakaoUserId(kakaoUserId);
             return ResponseEntity.status(HttpStatus.OK).body(userRes);
