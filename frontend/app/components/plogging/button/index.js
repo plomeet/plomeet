@@ -10,6 +10,7 @@ import { useCameraDevices, Camera, LoadingView } from 'react-native-vision-camer
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import DeletePloggingBtn from '../icons/deletePlogging.svg'
+import AsyncStorage from '@react-native-community/async-storage';
 import { setTimeSum, setDistSum, resetPloggingPath } from '../../../actions/action';
 
 const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndPage, handleShowEndPage, setStart, setIsSave }) => {
@@ -71,7 +72,9 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
         const timeString = hours + ':' + minutes;
 
         const week = WEEKDAY[kr_curr.getDay()];
-        setStart([dateString, week, timeString, kr_curr]);
+        const timeStr = year + "-" +kr_curr.getMonth() + "-" + kr_curr.getDate() + "-"+ kr_curr.getHours() + "-"+ kr_curr.getMinutes() + "-"+ kr_curr.getSeconds();
+        AsyncStorage.setItem('startedTime', timeStr);
+        setStart([dateString, week, timeString]);
     }
 
 
@@ -157,7 +160,7 @@ const PloggingStartEndButton = ({ isPlogging, handleIsPlogging, showPloggingEndP
             <View style={styles.endState} >
                 <View style={styles.endBtn}>
                     <TouchableOpacity style={styles.elevation} onPress={() => {
-                        handleIsPlogging(false); handleShowEndPage(true);
+                        handleIsPlogging(false); handleShowEndPage(true); AsyncStorage.removeItem("startedTime");
                     }}>
                         <EndBtn />
                     </TouchableOpacity>

@@ -12,6 +12,7 @@ import TrashcanInfo from './trashcan-modal/index';
 import EndPlogging from './endScreen/index';
 import dfs_xy_conv from '../../../utils/IHateMeteorologicalAgency';
 import PlomeetSpinner from '../../../utils/PlomeetSpinner';
+import AsyncStorage from '@react-native-community/async-storage';
 
 //테스트용으로 남겨둔 데이터 삭제 X
 const P0 = { latitude: 37.564362, longitude: 126.977011 };
@@ -38,14 +39,15 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
     const ploggingPath = useSelector(state => state.ploggingPath);
     //화면에 렌더링되면 권한부터 살피자
     useEffect(() => {
-
         if (Platform.OS === 'ios') {
             Geolocation.requestAuthorization('whenInUse');
             getRealTimeLoc();
         }
-        if (Platform.OS === 'android')
-            if (requestLocationPermission())//권한 활용에 동의한 상태라면 처음 위치를 가져와서 지도 중심으로 잡는다. ios도 동일하게 해줘야한다
-                getRealTimeLoc();           // 이거 안하면 사용자 입장에서 시작시 좌표 중심이 바로 바뀐다.
+        if (Platform.OS === 'android'){//권한 활용에 동의한 상태라면 처음 위치를 가져와서 지도 중심으로 잡는다. ios도 동일하게 해줘야한다
+            requestLocationPermission();
+            // if (requestLocationPermission()) getRealTimeLoc();// 이거 안하면 사용자 입장에서 시작시 좌표 중심이 바로 바뀐다.
+        }
+                         
     }, []);
 
     //플로깅 저장 안하고 돌아왔을 때 처리에 필요
@@ -54,6 +56,10 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
         setPrevLocation({})
         return () => { }
     }, [isPlogging, showPloggingEndPage])
+
+    useEffect(() => {
+        AsyncStorage.removeItem("startedTime");
+    }, [])
 
     //시작시 쓰레기통 전부를 가져온다.
     useEffect(() => {
@@ -75,34 +81,34 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
     }, []);
 
     // 일정 시간 간격으로 위치 감시해서 현재 위치 갱신하자
-    useEffect(() => {
-        const _watchId = Geolocation.watchPosition(
-            position => {
-                const { latitude, longitude } = position.coords;
+    // useEffect(() => {
+    //     const _watchId = Geolocation.watchPosition(
+    //         position => {
+    //             const { latitude, longitude } = position.coords;
 
-                setLocation({
-                    ...location,
-                    latitude,
-                    longitude,
-                });
-            },
-            error => {
-                console.log(error);
-            },
-            {
-                enableHighAccuracy: true,
-                distanceFilter: 0,
-                interval: 3000,
-                fastestInterval: 2000,
-            },
-        );
+    //             setLocation({
+    //                 ...location,
+    //                 latitude,
+    //                 longitude,
+    //             });
+    //         },
+    //         error => {
+    //             console.log(error);
+    //         },
+    //         {
+    //             enableHighAccuracy: true,
+    //             distanceFilter: 0,
+    //             interval: 3000,
+    //             fastestInterval: 2000,
+    //         },
+    //     );
 
-        return () => {
-            if (_watchId) {
-                Geolocation.clearWatch(_watchId);
-            }
-        };
-    }, []);
+    //     return () => {
+    //         if (_watchId) {
+    //             Geolocation.clearWatch(_watchId);
+    //         }
+    //     };
+    // }, []);
 
     // 위치가 갱신되면 플로깅 이동 기록 쌓자
     useEffect(() => {
@@ -164,6 +170,35 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
 
     }, [showThisNum]);
 
+    const watchingLoc = () => {
+        const _watchId = Geolocation.watchPosition(
+            position => {
+                const { latitude, longitude } = position.coords;
+
+                setLocation({
+                    ...location,
+                    latitude,
+                    longitude,
+                });
+            },
+            error => {
+                console.log(error);
+            },
+            {
+                enableHighAccuracy: true,
+                distanceFilter: 0,
+                interval: 3000,
+                fastestInterval: 2000,
+            },
+        );
+
+        return () => {
+            if (_watchId) {
+                Geolocation.clearWatch(_watchId);
+            }
+        };
+    }
+
     //렌더링 시 실행해서 현재 위치 및 주요 state들 셋팅
     const getRealTimeLoc = () => {
         Geolocation.getCurrentPosition(
@@ -224,7 +259,7 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
             longitude,
         });
     }
-
+    
     async function requestLocationPermission() { // 승인 안했을때나 에러 났을때의 처리는 나중에..
         try {
             const granted = await PermissionsAndroid.request(
@@ -232,13 +267,42 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                 {
                     title: '위치 권한',
                     message: '플로깅 중 위치정보 활용에 동의합니다.',
-                    buttonNeutral: '나중에',
-                    buttonNegative: '거부',
+                    //buttonNeutral: '나중에',
+                    //buttonNegative: '거부',
+                    buttonPositive: '승인',
+                },
+            );
+
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('You can use the location');
+                requestBackGroundLocationPermission();
+                getRealTimeLoc();
+                watchingLoc();
+                return true;
+            } else {
+                console.log('Location permission denied');
+                return false;
+            }
+        } catch (err) {
+            console.warn(err);
+            return false;
+        }
+    }
+
+    async function requestBackGroundLocationPermission() { 
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
+                {
+                    title: '위치 권한',
+                    message: '앱 위치정보를 항상 허용해주세요!',
+                    //buttonNeutral: '나중에',
+                    //buttonNegative: '거부',
                     buttonPositive: '승인',
                 },
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log('You can use the location');
+                console.log('You can use the location in background');
                 return true;
             } else {
                 console.log('Location permission denied');
