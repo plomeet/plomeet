@@ -14,6 +14,8 @@ import com.nom.plomeet.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import io.xogus.reactnative.versioncheck.RNVersionCheckPackage;
+import com.github.wumke.RNExitApp.RNExitAppPackage;
+import com.burnweb.rnsendintent.RNSendIntentPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -28,12 +30,13 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
+          //packages.add(new RNExitAppPackage());
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           //packages.add(new SvgPackage());
           return packages;
         }
-
+        
         @Override
         protected String getJSMainModuleName() {
           return "index";

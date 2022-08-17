@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import 'react-native-gesture-handler';
 import NaverMapView, { Align, Circle, Marker, Path, Polygon, Polyline } from "./map";
-import { ImageBackground, PermissionsAndroid, Platform, ScrollView, Text, TouchableOpacity, View, StyleSheet, Image } from "react-native";
+import { ImageBackground, PermissionsAndroid, Platform, ScrollView, Text, Alert, Linking, TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { LayerGroup } from './map/index';
 import { useSelector } from "react-redux"
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -13,6 +13,8 @@ import EndPlogging from './endScreen/index';
 import dfs_xy_conv from '../../../utils/IHateMeteorologicalAgency';
 import PlomeetSpinner from '../../../utils/PlomeetSpinner';
 import AsyncStorage from '@react-native-community/async-storage';
+import RNExitApp from 'react-native-exit-app';
+import SendIntentAndroid from 'react-native-send-intent'
 
 //테스트용으로 남겨둔 데이터 삭제 X
 const P0 = { latitude: 37.564362, longitude: 126.977011 };
@@ -38,14 +40,14 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
     const [trashInfoDetail, setTrashInfoDetail] = useState();
     const ploggingPath = useSelector(state => state.ploggingPath);
     //화면에 렌더링되면 권한부터 살피자
-    useEffect(() => {
+    useEffect(async() => {
         if (Platform.OS === 'ios') {
             Geolocation.requestAuthorization('whenInUse');
             getRealTimeLoc();
+            watchingLoc();
         }
         if (Platform.OS === 'android'){//권한 활용에 동의한 상태라면 처음 위치를 가져와서 지도 중심으로 잡는다. ios도 동일하게 해줘야한다
-            requestLocationPermission();
-            // if (requestLocationPermission()) getRealTimeLoc();// 이거 안하면 사용자 입장에서 시작시 좌표 중심이 바로 바뀐다.
+            await requestLocationPermission();
         }
                          
     }, []);
@@ -80,35 +82,6 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
         getTrashCans();
     }, []);
 
-    // 일정 시간 간격으로 위치 감시해서 현재 위치 갱신하자
-    // useEffect(() => {
-    //     const _watchId = Geolocation.watchPosition(
-    //         position => {
-    //             const { latitude, longitude } = position.coords;
-
-    //             setLocation({
-    //                 ...location,
-    //                 latitude,
-    //                 longitude,
-    //             });
-    //         },
-    //         error => {
-    //             console.log(error);
-    //         },
-    //         {
-    //             enableHighAccuracy: true,
-    //             distanceFilter: 0,
-    //             interval: 3000,
-    //             fastestInterval: 2000,
-    //         },
-    //     );
-
-    //     return () => {
-    //         if (_watchId) {
-    //             Geolocation.clearWatch(_watchId);
-    //         }
-    //     };
-    // }, []);
 
     // 위치가 갱신되면 플로깅 이동 기록 쌓자
     useEffect(() => {
@@ -267,8 +240,8 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                 {
                     title: '위치 권한',
                     message: '플로깅 중 위치정보 활용에 동의합니다.',
-                    //buttonNeutral: '나중에',
-                    //buttonNegative: '거부',
+                    buttonNeutral: '나중에',
+                    buttonNegative: '거부',
                     buttonPositive: '승인',
                 },
             );
@@ -280,7 +253,8 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                 watchingLoc();
                 return true;
             } else {
-                console.log('Location permission denied');
+                console.log('FINE Location permission denied');
+                RNExitApp.exitApp();
                 return false;
             }
         } catch (err) {
@@ -296,8 +270,8 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                 {
                     title: '위치 권한',
                     message: '앱 위치정보를 항상 허용해주세요!',
-                    //buttonNeutral: '나중에',
-                    //buttonNegative: '거부',
+                    buttonNeutral: '나중에',
+                    buttonNegative: '거부',
                     buttonPositive: '승인',
                 },
             );
@@ -305,7 +279,14 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
                 console.log('You can use the location in background');
                 return true;
             } else {
-                console.log('Location permission denied');
+                console.log('BackGround Location permission denied');
+                Alert.alert(
+                    "",
+                    "위치 권한 항상 허용하지 않으면 다른 앱 사용 시 플로깅 기록이 정확하지 않아요.\n위치 권한을 항상 허용해주세요",[
+                      {text:"확인",onPress:()=>Linking.openSettings()},
+                      //SendIntentAndroid.openSettings("android.settings.LOCATION_SOURCE_SETTINGS")
+                  ]
+                  )
                 return false;
             }
         } catch (err) {
