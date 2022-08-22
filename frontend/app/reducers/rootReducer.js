@@ -19,6 +19,9 @@ const initialState = {
     firstPlogging: false,
     firstMeeting: false,
     firstRegister: false,
+    fineLoc:false,
+    backgroundLoc:false,
+    camera:false
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -65,6 +68,12 @@ const rootReducer = (state = initialState, action) => {
             return {...state, firstMeeting: action.payload}
         case "SET_FIRSTREGISTER":
             return {...state, firstRegister: action.payload}
+        case "SET_FINE_LOC":
+            return { ...state, fineLoc: action.payload }
+        case "SET_BACK_LOC":
+           return { ...state, backgroundLoc: action.payload }
+        case "SET_CAMERA":
+            return { ...state, camera: action.payload }
         default:
             return state;
     }

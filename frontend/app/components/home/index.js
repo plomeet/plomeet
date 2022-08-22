@@ -1,9 +1,9 @@
-import React, { Component, Node, Button, useEffect, useState } from 'react';
+import React, { Component, Node, Button, useEffect, useState, useRef } from 'react';
 import 'react-native-gesture-handler';
 import { Chip } from 'react-native-paper';
 import { useSelector, useDispatch } from 'react-redux';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
-import { BackHandler, Alert, LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, KeyboardAvoidingView, NativeModules } from "react-native";
+import { Linking, AppState, BackHandler, Alert, LogBox, SafeAreaView, Modal, StyleSheet, TextInput, Text, View, FlatList, Image, StatusBar, TouchableOpacity, KeyboardAvoidingView, NativeModules, PermissionsAndroid, Platform } from "react-native";
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -13,6 +13,8 @@ import axiosInstance from '../../../utils/API';
 import AsyncStorage from '@react-native-community/async-storage';
 import PlomeetSpinner from '../../../utils/PlomeetSpinner'
 import { setFirstMeeting, setFirstRegister } from '../../actions/badgeAction'
+import * as actions from '../../actions/grantAction';
+import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
 const { StatusBarManager } = NativeModules
 
@@ -153,8 +155,152 @@ const Home = () => {
   //const [textInputValue, setTextInputValue] = useState();
   const isFirstMeeting = useSelector(state => state.firstMeeting);
   const isFirstRegister = useSelector(state => state.firstRegister);
+  const fineLoc = useSelector(state => state.fineLoc);
   const [latestSort, setLatestSort] = useState(true);
+  const appState = useRef(AppState.currentState);
   const dispatch = useDispatch();
+
+
+  useEffect(() => { //설정에서 권한을 바꾸는 경우를 잡기 위함
+    const subscription = AppState.addEventListener("change", nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === "active"
+      ) {
+        console.log("App has come to the foreground!");
+        checkPermission();//백 -> 포어 로 넘어온 경우 권한을 재확인 함
+      }
+
+      appState.current = nextAppState;
+      console.log("AppState", appState.current);
+    });
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  const checkPermission = () => {
+    if (Platform.OS === 'ios'){ //ios의 경우 처리, 앱 사용중 위치만 확인 (이 권한만 허용하면 앱 사용은 가능함)
+      // 혜민's to do
+      // check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
+      // .then(result => {
+      //   switch (result) {
+      //     case RESULTS.UNAVAILABLE:
+      //       console.log(
+      //         '',
+      //       );
+      //       break;
+      //   }
+      // })
+      // .catch(error => {
+      //   console.log('PERMISSION ERROR : ', error);
+      // });
+
+      //dispatch(actions.setFineLocGrant(true)); //중요 store에 권한 허용 여부를 저장하고 있음 참고!
+    }
+    if (Platform.OS === 'android'){
+      check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then(result => {
+        switch (result) { //허용하지 않은 경우는 아무것도 안해주는게 깔끔할꺼라고 생각함
+          case RESULTS.GRANTED: //설정에서 허용하고 넘어온 경우
+            dispatch(actions.setFineLocGrant(true));
+          break;
+        }
+      })
+      .catch(error => {
+        console.log('PERMISSION ERROR : ', error);
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      //혜민's to do
+    }
+    if (Platform.OS === 'android'){//현재 권한 허용 상태를 확인 및 요청 후 그 결과를 기록한다.
+      requestLocationPermission();
+    }
+  }, []);
+
+    
+
+  async function requestLocationPermission() { // 승인 안했을때나 에러 났을때의 처리는 나중에..
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: '위치 권한',
+          message: '플로깅 중 위치정보 활용에 동의합니다.',
+          buttonNeutral: '나중에',
+          buttonNegative: '거부',
+          buttonPositive: '승인',
+        },
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the location');
+        dispatch(actions.setFineLocGrant(true));
+        requestBackGroundLocationPermission();
+        return true;
+      } else {
+        console.log('FINE Location permission denied');
+        return false;
+      }
+    } catch (err) {
+      console.warn(err);
+      return false;
+    }
+  }
+
+  async function requestBackGroundLocationPermission() { 
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
+        {
+          title: '위치 권한',
+          message: '앱 위치정보를 항상 허용해주세요!',
+          buttonNeutral: '나중에',
+          buttonNegative: '거부',
+          buttonPositive: '승인',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the location in background');
+        dispatch(actions.setBackLocGrant(true));
+        return true;
+      } else {
+        console.log('BackGround Location permission denied');
+        Alert.alert(
+          "",
+          "위치 권한 항상 허용하지 않으면 다른 앱 사용 시 플로깅 기록이 정확하지 않아요.\n위치 권한을 항상 허용해주세요",[
+          {text:"확인",onPress:()=>Linking.openSettings()},
+          //SendIntentAndroid.openSettings("android.settings.LOCATION_SOURCE_SETTINGS")
+          ]
+        )
+        return false;
+      }
+    } catch (err) {
+        console.warn(err);
+        return false;
+    }
+  }
+
+  const createMeetingGrantCheck = () => {
+    if(fineLoc) navigation.navigate('OpenMeeting');
+    else {
+      if (Platform.OS === 'ios') {
+        //혜민's to do
+      }
+      if (Platform.OS === 'android'){
+        Alert.alert(
+          "",
+          "위치 권한을 허용하지 않으면 모임을 생성할 수 없어요.\n위치 권한을 허용해주세요",[
+            {text:"확인",onPress:()=>Linking.openSettings()},
+          ]
+        )
+      }    
+    }
+  }
 
   function deleteDate() {
     setSelectedDate('일시');
@@ -588,7 +734,7 @@ const Home = () => {
         windowSize={50}
         numColumns={2}
       />
-      <TouchableOpacity onPress={() => navigation.navigate('OpenMeeting')} activeOpacity={0.5} style={styles.TouchableOpacityStyle} >
+      <TouchableOpacity onPress={() => createMeetingGrantCheck()} activeOpacity={0.5} style={styles.TouchableOpacityStyle} >
         <Image source={{ uri: 'https://i.postimg.cc/v8p4fK53/plus-btn.png' }}
           style={styles.FloatingButtonStyle} />
       </TouchableOpacity>

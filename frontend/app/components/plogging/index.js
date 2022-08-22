@@ -8,6 +8,7 @@ import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Geolocation from 'react-native-geolocation-service';
 import axiosInstance from "../../../utils/API";
 import haversine from 'haversine';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import TrashcanInfo from './trashcan-modal/index';
 import EndPlogging from './endScreen/index';
 import dfs_xy_conv from '../../../utils/IHateMeteorologicalAgency';
@@ -39,18 +40,43 @@ const Plogging = ({ distSum, timeSumString, setDistSum, setTimeSum, isPlogging, 
     const [showInfoDetail, setShowInfoDetail] = useState(false);
     const [trashInfoDetail, setTrashInfoDetail] = useState();
     const ploggingPath = useSelector(state => state.ploggingPath);
-    //화면에 렌더링되면 권한부터 살피자
-    useEffect(async() => {
-        if (Platform.OS === 'ios') {
-            Geolocation.requestAuthorization('whenInUse');
-            getRealTimeLoc();
-            watchingLoc();
-        }
-        if (Platform.OS === 'android'){//권한 활용에 동의한 상태라면 처음 위치를 가져와서 지도 중심으로 잡는다. ios도 동일하게 해줘야한다
-            await requestLocationPermission();
-        }
-                         
-    }, []);
+    const navigation = useNavigation();
+    const fineLoc = useSelector(state => state.fineLoc);
+    // const backgroundLoc = useSelector(state => state.backgroundLoc);
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused) {
+            if(!fineLoc) { //허용이 없으면 돌아가기
+                if (Platform.OS === 'ios') {
+                    //혜민's to do
+                }
+                else if (Platform.OS === 'android'){
+                    navigation.navigate('홈');
+                    Alert.alert(
+                        "",
+                        "위치 권한을 허용하지 않으면 플로깅 기능을 사용할 수 없어요.\n위치 권한을 항상 허용해주세요",[
+                        {text:"확인",onPress:()=>Linking.openSettings()},
+                        ]
+                    );
+                    
+                }
+            }else {//백그라운드만 허용 안했을때나 둘다 허용했을때
+                if (Platform.OS === 'ios') {
+                    //혜민's to do
+                    //일단 앱 사용시 위치 권한 허용시 앱 사용은 가능하게 하되
+                    //항상 허용상태가 아니면 alert로 설명하고 다시 설정 창으로 유도했음
+                    //그 후에도 허용을 안했다면 그냥 이용하게 냅둠
+                    // getRealTimeLoc();
+                    // watchingLoc();
+                }
+                else if (Platform.OS === 'android'){
+                    requestLocationPermission();
+                }
+            }
+         }
+    }, [isFocused]);
+
 
     //플로깅 저장 안하고 돌아왔을 때 처리에 필요
     useEffect(() => {
