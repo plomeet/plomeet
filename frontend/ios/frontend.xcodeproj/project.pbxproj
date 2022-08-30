@@ -43,6 +43,8 @@
 		192514772820B5A100033847 /* libreact-native-nmap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-nmap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		192514792820B7C500033847 /* libreact-native-nmap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-nmap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1978927D281A24ED009CDEB2 /* geoSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = geoSetting.swift; sourceTree = "<group>"; };
+		19912051289171D60029830D /* PloMeet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PloMeet-Bridging-Header.h"; path = "/Users/ihyemin/Desktop/plomeet/frontend/ios/PloMeet-Bridging-Header.h"; sourceTree = "<absolute>"; };
+		19912052289808F00029830D /* frontend.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = frontend.entitlements; path = frontend/frontend.entitlements; sourceTree = "<group>"; };
 		199420712831279D0091AB58 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		635DF426EFA2FC0BDC6BDAF0 /* Pods-frontend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-frontend.debug.xcconfig"; path = "Target Support Files/Pods-frontend/Pods-frontend.debug.xcconfig"; sourceTree = "<group>"; };
 		6CA9EB96FC3BF6D738006CDB /* libPods-frontend-frontendTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-frontend-frontendTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,6 +98,8 @@
 		13B07FAE1A68108700A75B9A /* frontend */ = {
 			isa = PBXGroup;
 			children = (
+				19912052289808F00029830D /* frontend.entitlements */,
+				19912051289171D60029830D /* PloMeet-Bridging-Header.h */,
 				199420712831279D0091AB58 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -524,11 +528,14 @@
 			baseConfigurationReference = 635DF426EFA2FC0BDC6BDAF0 /* Pods-frontend.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = frontend/frontend.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8NTL25S723;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = frontend/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -552,10 +559,13 @@
 			baseConfigurationReference = 725A2F0AEEF1BCCB61C2941C /* Pods-frontend.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = frontend/frontend.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8NTL25S723;
 				INFOPLIST_FILE = frontend/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -622,7 +632,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -686,7 +696,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",

@@ -19,6 +19,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../actions/userActions';
+import AppleLogin from '../auth/AppleLogin';
 
 // const kakaoHelper = require('./KakaoHelper.js');
 
@@ -163,6 +164,9 @@ const SignUp = () => {
           <Text style={styles.title3}>카카오톡으로 시작하기</Text>
         </View>
       </TouchableOpacity>
+      <View style={styles.button2}>
+        <AppleLogin></AppleLogin>
+      </View>
       <View style={styles.logo}>
         <Image
           source={LogoImage}

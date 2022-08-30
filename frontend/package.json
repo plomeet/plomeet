@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@callstack/react-theme-provider": "^3.0.7",
+    "@invertase/react-native-apple-authentication": "^2.2.2",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/cameraroll": "^4.1.2",
     "@react-native-community/masked-view": "^0.1.11",
@@ -26,6 +27,7 @@
     "axios": "^0.26.1",
     "fbjs": "^3.0.4",
     "haversine": "^1.1.1",
+    "jwt-decode": "^3.1.2",
     "moment": "^2.29.3",
     "react": "17.0.2",
     "react-native": "^0.68.2",

@@ -25,6 +25,7 @@ import * as actions from '../../actions/userActions';
 import { createUser } from '../../../utils/firestore';
 import axiosInstance from '../../../utils/API';
 import { setFirstRegister } from '../../actions/badgeAction'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const kakaoHelper = require('./KakaoHelper.js');
 
@@ -52,12 +53,17 @@ const NicknameRegister = () => {
   
   // kakaoHelper.getProfile();
   useEffect(() => { 
-    KakaoLogins.getProfile().then(result => {
-      dispatch(actions.setkakaoId(result.id))
-      dispatch(actions.setImg(result.profileImageUrl))
-      dispatch(actions.setName(result.nickname))
-      dispatch(actions.setEmail(result.email))
+    AsyncStorage.getItem('refreshToken').then(res => {
+      if (res) { //토큰이있으면
+        KakaoLogins.getProfile().then(result => {
+          dispatch(actions.setkakaoId(result.id))
+          dispatch(actions.setImg(result.profileImageUrl))
+          dispatch(actions.setName(result.nickname))
+          dispatch(actions.setEmail(result.email))
+        });
+      }
     });
+
   },[])
 
   // setTimeout(() => {console.log(img)},100);
