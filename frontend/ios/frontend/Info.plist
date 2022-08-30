@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>frontend</string>
+	<string>PloMeet</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -20,6 +20,8 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -27,19 +29,18 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao9bef4a006b485a14d9cc91999dfd4f5d</string>
+				<string>kakao12dc50ffbe14ed6c738bbce909382de1</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>KAKAO_APP_KEY</key>
-	<string>9bef4a006b485a14d9cc91999dfd4f5d</string>
+	<string>12dc50ffbe14ed6c738bbce909382de1</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>kakaokompassauth</string>
 		<string>storykompassauth</string>
-		<string>kakao9bef4a006b485a14d9cc91999dfd4f5d</string>
 		<string>kakaolink</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
@@ -55,19 +56,14 @@
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 			</dict>
-			<key>localhost</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-			</dict>
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Camera를 사용합니다</string>
+	<string>카메라 접근 권한을 허용해주세요. 플로깅 인증 사진 촬영에 사용됩니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Program requires GPS to track cars and job orders</string>
+	<string>위치 접근 권한을 허용해주세요. 플로깅 기록 저장에 사용됩니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>CameraRoll을 사용합니다</string>
+	<string>사진첩 접근 권한을 허용합니다. 플로깅 인증 사진을 가져오는 데에 사용됩니다.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
