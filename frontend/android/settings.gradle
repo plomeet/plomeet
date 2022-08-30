@@ -8,6 +8,10 @@ project(':react-native-config').projectDir = new File(rootProject.projectDir, '.
 includeBuild('../node_modules/react-native-gradle-plugin')
 include ':react-native-version-check'
 project(':react-native-version-check').projectDir = new File(rootProject.projectDir,    '../node_modules/react-native-version-check/android')
+include ':react-native-exit-app'
+project(':react-native-exit-app').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-exit-app/android')
+include ':RNSendIntentModule', ':app'
+project(':RNSendIntentModule').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-send-intent/android')
 if (settings.hasProperty("newArchEnabled") && settings.newArchEnabled == "true") {
     include(":ReactAndroid")
     project(":ReactAndroid").projectDir = file('../node_modules/react-native/ReactAndroid')
