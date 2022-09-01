@@ -14,6 +14,8 @@ import * as actions from '../../actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
+import jwt_decode from 'jwt-decode';
+
 
 const AuthComponent = () => {
   const navigation = useNavigation();
@@ -53,11 +55,43 @@ const AuthComponent = () => {
           //})},2000);
         }else{
           console.log('조기')
+          checkAppleToken();
           //setTimeout(() => {navigation.navigate('SignUp');},1000);
           navigation.navigate('SignUp');
         }
-      });
+    });
+    
   }, []);
+
+  function checkAppleToken() { // case2: 토큰 있으면 - 회원 조회(자동 로그인)
+    console.log("애플 토큰 확인")
+
+    AsyncStorage.getItem('refreshTokenForApple').then(res => {
+      var userId = jwt_decode(res).sub;
+      console.log('토큰정보', res);
+      console.log('회원정보', jwt_decode(res).sub);
+      if (userId) {
+        //회원(userId) 조회
+        axios.get('http://plomeet-app.com:8000/user/' + userId)
+        .then((response) => {
+            console.log(response.status);
+            if (response.status == 200) { //홈으로, Redux 저장
+                console.log(response.data)
+                
+                dispatch(actions.setNickname(response.data.userNickName));
+                dispatch(actions.setUserId(response.data.userId));
+                dispatch(actions.setkakaoId(response.data.kakaoUserId))
+                dispatch(actions.setImg(response.data.userProfileImg))
+                dispatch(actions.setName(response.data.userName))
+                dispatch(actions.setEmail(response.data.userEmail))
+                navigation.replace('M');
+            }
+        })
+      } else { 
+        navigation.navigate('SignUp');
+      }
+    })
+  }
 
   return (
     <LinearGradient
