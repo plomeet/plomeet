@@ -7,7 +7,7 @@ public class UserRegisterReq {
 
     private Long userId;
 
-    private Long kakaoUserId;
+    private String kakaoUserId;
 
     private String userNickName;
 
@@ -20,7 +20,7 @@ public class UserRegisterReq {
     private Boolean idDelete;
 
     @Builder
-    public UserRegisterReq(Long kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail) {
+    public UserRegisterReq(String kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail) {
         this.kakaoUserId = kakaoUserId;
         this.userNickName = userNickName;
         this.userProfileImg = userProfileImg;

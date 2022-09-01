@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.28, for macos11 (x86_64)
 --
--- Host: k6a205.p.ssafy.io    Database: plomeetDB
+-- Host: plomeet-app.com    Database: plomeetDB
 -- ------------------------------------------------------
 -- Server version	8.0.28
 

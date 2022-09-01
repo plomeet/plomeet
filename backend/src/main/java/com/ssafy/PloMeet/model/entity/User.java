@@ -21,8 +21,8 @@ public class User {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     Long userId;
 
-    @Column(nullable = false, unique = true, length = 20)
-    Long kakaoUserId;
+    @Column(nullable = false, unique = true, length = 100)
+    String kakaoUserId;
 
     @Column(nullable = false, length = 10)
     String userNickName;
@@ -41,7 +41,7 @@ public class User {
 
 
     @Builder
-    public User(Long kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail) {
+    public User(String kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail) {
         this.kakaoUserId = kakaoUserId;
         this.userNickName = userNickName;
         this.userProfileImg = userProfileImg;

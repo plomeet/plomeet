@@ -148,8 +148,8 @@ android {
         applicationId "com.nom.plomeet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
-        versionName "1.2.0"
+        versionCode 13
+        versionName "1.3.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
@@ -314,6 +314,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:29.3.1')
     implementation ('com.google.firebase:firebase-analytics')
     implementation project(':react-native-version-check')
+    implementation project(':react-native-exit-app')
+    implementation project(':RNSendIntentModule')
 }
 
 if (isNewArchitectureEnabled()) {

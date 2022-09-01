@@ -9,7 +9,7 @@ public class UserRes {
 
     Long userId;
 
-    Long kakaoUserId;
+    String kakaoUserId;
 
     String userNickName;
 
@@ -23,7 +23,7 @@ public class UserRes {
 
 
     @Builder
-    public UserRes(Long userId, Long kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail, Boolean idDelete) {
+    public UserRes(Long userId, String kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail, Boolean idDelete) {
         this.userId = userId;
         this.kakaoUserId = kakaoUserId;
         this.userNickName = userNickName;

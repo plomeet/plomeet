@@ -6,7 +6,7 @@ import Icon2 from 'react-native-vector-icons/Entypo';
 import { Menu, MenuItem } from 'react-native-material-menu'; // Home 드롭다운
 import { useNavigation } from '@react-navigation/native';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Linking, TouchableOpacity, View, StyleSheet, Image, Text } from "react-native";
+import { Linking, TouchableOpacity, View, StyleSheet, Image, Text, Alert } from "react-native";
 import { useSelector } from "react-redux"
 //Screens
 import Splash from './components/auth/Splash';
@@ -45,6 +45,24 @@ const MainScreenTab = createBottomTabNavigator();
 
 const AppTabComponent = () => {
     const navigation = useNavigation();
+    const fineLoc = useSelector(state => state.fineLoc);
+
+    const ploggingTabGrantCheck = () => {
+        if(fineLoc) navigation.navigate('ploggingActivity', { msg: "plogging start" });
+        else {
+            if (Platform.OS === 'ios') {
+                //혜민's to do
+            }
+            if (Platform.OS === 'android'){
+                Alert.alert(
+                    "",
+                    "위치 권한을 허용하지 않으면 플로깅 기능을 사용할 수 없어요.\n위치 권한을 항상 허용해주세요",[
+                    {text:"확인",onPress:()=>Linking.openSettings()},
+                    ]
+                )
+            }
+        }
+    }
 
     return (
         <MainScreenTab.Navigator
@@ -62,18 +80,21 @@ const AppTabComponent = () => {
                         iconName = focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline';
                     } else if (route.name === 'MY') {
                         iconName = focused ? 'person-circle' : 'person-circle-outline';
-                    }
-                    if (route.name === '플로깅') return (
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate('ploggingActivity', { msg: "plogging start" })}>
-                            <View style={style.backGround}>
-                                <Image
-                                    style={style.icon}
-                                    source={{ uri: "https://i.postimg.cc/p96ypGcJ/plogging-Bottom-Tap.png" }}
-                                />
-                            </View>
-                        </TouchableOpacity>
-                    )
+                    }else if (route.name === '플로깅'){
+                            return (
+                                <TouchableOpacity
+                                    onPress={() => ploggingTabGrantCheck()}
+                                    >
+                                    <View style={style.backGround}>
+                                        <Image
+                                            style={style.icon}
+                                            source={{ uri: "https://i.postimg.cc/p96ypGcJ/plogging-Bottom-Tap.png" }}
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                       
+                    } 
                     // You can return any component that you like here!
                     return <Icon name={iconName} size={size} color={color} />;
                 },

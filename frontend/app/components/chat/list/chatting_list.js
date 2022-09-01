@@ -97,14 +97,13 @@ const ChattingList = React.memo(()=> {
                     lastChatInfo.lastTime=null;
                     lastChatInfo.lastMsg="";
                 }else{
-                    lastChatInfo.unReadCnt = (lastReadChatTime==lastChatInfo.lastTime) ? chatDocs.length : chatDocs.length-1;
+                    const firstChatData = chatDocs[chatDocs.length-1].data();
                     const lastChatData = chatDocs[0].data();
                     lastChatInfo.lastTime=lastChatData.createdAt;
                     lastChatInfo.lastMsg=lastChatData.text;
-                    /*
-                    lastChatInfo.unReadCnt=chatDocs.length;
-                    if(lastReadChatTime!=lastChatInfo.lastTime) lastChatInfo.unReadCnt-=1;
-                    */
+                    lastChatInfo.unReadCnt = chatDocs.length;
+                    if(firstChatData.createdAt==lastReadChatTime) lastChatInfo.unReadCnt=chatDocs.length-1;
+                    if(lastReadChatTime==lastChatInfo.lastTime) lastChatInfo.unReadCnt=0;
                 }
             });
         return lastChatInfo;

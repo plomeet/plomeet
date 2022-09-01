@@ -25,6 +25,7 @@ import * as actions from '../../actions/userActions';
 import { createUser } from '../../../utils/firestore';
 import axiosInstance from '../../../utils/API';
 import { setFirstRegister } from '../../actions/badgeAction'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const kakaoHelper = require('./KakaoHelper.js');
 
@@ -52,33 +53,37 @@ const NicknameRegister = () => {
   
   // kakaoHelper.getProfile();
   useEffect(() => { 
-    KakaoLogins.getProfile().then(result => {
-      dispatch(actions.setkakaoId(result.id))
-      dispatch(actions.setImg(result.profileImageUrl))
-      dispatch(actions.setName(result.nickname))
-      dispatch(actions.setEmail(result.email))
+    AsyncStorage.getItem('refreshToken').then(res => {
+      if (res) { //토큰이있으면
+        KakaoLogins.getProfile().then(result => {
+          dispatch(actions.setkakaoId(result.id))
+          dispatch(actions.setImg(result.profileImageUrl))
+          dispatch(actions.setName(result.nickname))
+          dispatch(actions.setEmail(result.email))
+        });
+      }
     });
+
   },[])
 
   // setTimeout(() => {console.log(img)},100);
   // setTimeout() 걸어줄것
-  
   // setTimeout(() => {},100);
-  const Register = () => {
-    axios.post('http://k6a205.p.ssafy.io:8000/user', {
+  const Register = async () => {
+    await axiosInstance.post(`/user`, {
       kakaoUserId: kakaoId,
       userNickName: value, // 입력받은값으로 변경
       userProfileImg: img,
       userName: name,
       userEmail: email,
-    }, {
-      "Content-Type": "application/json",
-    },).then(async(response) => {
+    })
+    .then(async(response) => {
       console.log(response);
       NicknameUpdate();
       dispatch(actions.setUserId(response.data.userId));
       const userIdRegister = response.data.userId.toString();
-      await createUser({userId: userIdRegister, userNickName: value, userProfileImg: img});
+      const userProfileImg = (img==null)? "https://i.postimg.cc/G23gPzdy/profile-default.png":img;
+      await createUser({userId: userIdRegister, userNickName: value, userProfileImg: userProfileImg});
       await getFirstRegisterBadge({userId: userIdRegister});
       navigation.navigate('M');
     }).then((error) => {

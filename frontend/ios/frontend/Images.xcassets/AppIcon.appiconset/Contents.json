@@ -67,6 +67,7 @@
       "size" : "60x60"
     },
     {
+<<<<<<< HEAD
       "filename" : "20.png",
       "idiom" : "ipad",
       "scale" : "1x",
@@ -146,17 +147,126 @@
     },
     {
       "filename" : "1024.png",
+=======
+      "filename" : "appIcon.png",
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
     },
     {
+<<<<<<< HEAD
+=======
+      "filename" : "20.png",
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "size" : "20x20",
+      "unassigned" : true
+    },
+    {
+      "filename" : "40.png",
+      "idiom" : "ipad",
+      "scale" : "2x",
+      "size" : "20x20",
+      "unassigned" : true
+    },
+    {
+      "filename" : "29.png",
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "size" : "29x29",
+      "unassigned" : true
+    },
+    {
+      "filename" : "58.png",
+      "idiom" : "ipad",
+      "scale" : "2x",
+      "size" : "29x29",
+      "unassigned" : true
+    },
+    {
+      "filename" : "40.png",
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "size" : "40x40",
+      "unassigned" : true
+    },
+    {
+      "filename" : "80.png",
+      "idiom" : "ipad",
+      "scale" : "2x",
+      "size" : "40x40",
+      "unassigned" : true
+    },
+    {
+      "filename" : "50.png",
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "size" : "50x50",
+      "unassigned" : true
+    },
+    {
+      "filename" : "100.png",
+      "idiom" : "ipad",
+      "scale" : "2x",
+      "size" : "50x50",
+      "unassigned" : true
+    },
+    {
+      "filename" : "72.png",
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "size" : "72x72",
+      "unassigned" : true
+    },
+    {
+      "filename" : "144.png",
+      "idiom" : "ipad",
+      "scale" : "2x",
+      "size" : "72x72",
+      "unassigned" : true
+    },
+    {
+      "filename" : "76.png",
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "size" : "76x76",
+      "unassigned" : true
+    },
+    {
+      "filename" : "152.png",
+      "idiom" : "ipad",
+      "scale" : "2x",
+      "size" : "76x76",
+      "unassigned" : true
+    },
+    {
+      "filename" : "167.png",
+      "idiom" : "ipad",
+      "scale" : "2x",
+      "size" : "83.5x83.5",
+      "unassigned" : true
+    },
+    {
+      "filename" : "1024.png",
+      "idiom" : "ios-marketing",
+      "scale" : "1x",
+      "size" : "1024x1024",
+      "unassigned" : true
+    },
+    {
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
       "filename" : "48.png",
       "idiom" : "watch",
       "role" : "notificationCenter",
       "scale" : "2x",
       "size" : "24x24",
+<<<<<<< HEAD
       "subtype" : "38mm"
+=======
+      "subtype" : "38mm",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "55.png",
@@ -164,20 +274,31 @@
       "role" : "notificationCenter",
       "scale" : "2x",
       "size" : "27.5x27.5",
+<<<<<<< HEAD
       "subtype" : "42mm"
+=======
+      "subtype" : "42mm",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "58.png",
       "idiom" : "watch",
       "role" : "companionSettings",
       "scale" : "2x",
+<<<<<<< HEAD
       "size" : "29x29"
+=======
+      "size" : "29x29",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "87.png",
       "idiom" : "watch",
       "role" : "companionSettings",
       "scale" : "3x",
+<<<<<<< HEAD
       "size" : "29x29"
     },
     {
@@ -186,6 +307,10 @@
       "scale" : "2x",
       "size" : "33x33",
       "subtype" : "45mm"
+=======
+      "size" : "29x29",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "80.png",
@@ -193,7 +318,12 @@
       "role" : "appLauncher",
       "scale" : "2x",
       "size" : "40x40",
+<<<<<<< HEAD
       "subtype" : "38mm"
+=======
+      "subtype" : "38mm",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "88.png",
@@ -201,6 +331,7 @@
       "role" : "appLauncher",
       "scale" : "2x",
       "size" : "44x44",
+<<<<<<< HEAD
       "subtype" : "40mm"
     },
     {
@@ -209,6 +340,10 @@
       "scale" : "2x",
       "size" : "46x46",
       "subtype" : "41mm"
+=======
+      "subtype" : "40mm",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "100.png",
@@ -216,6 +351,7 @@
       "role" : "appLauncher",
       "scale" : "2x",
       "size" : "50x50",
+<<<<<<< HEAD
       "subtype" : "44mm"
     },
     {
@@ -224,6 +360,10 @@
       "scale" : "2x",
       "size" : "51x51",
       "subtype" : "45mm"
+=======
+      "subtype" : "44mm",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "172.png",
@@ -231,7 +371,12 @@
       "role" : "quickLook",
       "scale" : "2x",
       "size" : "86x86",
+<<<<<<< HEAD
       "subtype" : "38mm"
+=======
+      "subtype" : "38mm",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "196.png",
@@ -239,7 +384,12 @@
       "role" : "quickLook",
       "scale" : "2x",
       "size" : "98x98",
+<<<<<<< HEAD
       "subtype" : "42mm"
+=======
+      "subtype" : "42mm",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "216.png",
@@ -247,6 +397,7 @@
       "role" : "quickLook",
       "scale" : "2x",
       "size" : "108x108",
+<<<<<<< HEAD
       "subtype" : "44mm"
     },
     {
@@ -255,72 +406,131 @@
       "scale" : "2x",
       "size" : "117x117",
       "subtype" : "45mm"
+=======
+      "subtype" : "44mm",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "1024.png",
       "idiom" : "watch-marketing",
       "scale" : "1x",
+<<<<<<< HEAD
       "size" : "1024x1024"
+=======
+      "size" : "1024x1024",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "16.png",
       "idiom" : "mac",
       "scale" : "1x",
+<<<<<<< HEAD
       "size" : "16x16"
+=======
+      "size" : "16x16",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "32.png",
       "idiom" : "mac",
       "scale" : "2x",
+<<<<<<< HEAD
       "size" : "16x16"
+=======
+      "size" : "16x16",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "32.png",
       "idiom" : "mac",
       "scale" : "1x",
+<<<<<<< HEAD
       "size" : "32x32"
+=======
+      "size" : "32x32",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "64.png",
       "idiom" : "mac",
       "scale" : "2x",
+<<<<<<< HEAD
       "size" : "32x32"
+=======
+      "size" : "32x32",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "128.png",
       "idiom" : "mac",
       "scale" : "1x",
+<<<<<<< HEAD
       "size" : "128x128"
+=======
+      "size" : "128x128",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "256.png",
       "idiom" : "mac",
       "scale" : "2x",
+<<<<<<< HEAD
       "size" : "128x128"
+=======
+      "size" : "128x128",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "256.png",
       "idiom" : "mac",
       "scale" : "1x",
+<<<<<<< HEAD
       "size" : "256x256"
+=======
+      "size" : "256x256",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "512.png",
       "idiom" : "mac",
       "scale" : "2x",
+<<<<<<< HEAD
       "size" : "256x256"
+=======
+      "size" : "256x256",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "512.png",
       "idiom" : "mac",
       "scale" : "1x",
+<<<<<<< HEAD
       "size" : "512x512"
+=======
+      "size" : "512x512",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     },
     {
       "filename" : "1024.png",
       "idiom" : "mac",
       "scale" : "2x",
+<<<<<<< HEAD
       "size" : "512x512"
+=======
+      "size" : "512x512",
+      "unassigned" : true
+>>>>>>> d169378a31d99463b156908eceff6c1a052ab7a8
     }
   ],
   "info" : {

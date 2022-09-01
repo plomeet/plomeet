@@ -6,7 +6,7 @@ import { WebView } from 'react-native-webview';
 const PolicyDoc = () => {
     return (
         //<WebView source={{ uri: 'http://127.0.0.1:8000' }} />
-        <WebView source={{ uri: 'http://k6a205.p.ssafy.io' }} />
+        <WebView source={{ uri: 'http://plomeet-app.com:8000' }} />
     );
 };
 

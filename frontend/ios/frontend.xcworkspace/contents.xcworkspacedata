@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:PloMeet-Bridging-Header.h">
+      location = "group:/Users/ihyemin/Desktop/plomeet/frontend/ios/PloMeet-Bridging-Header.h">
    </FileRef>
    <FileRef
       location = "group:frontend.xcodeproj">

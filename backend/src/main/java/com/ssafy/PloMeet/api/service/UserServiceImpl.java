@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
     //유저 정보 조회
     @Transactional
-    public UserRes findUserByKakaoUserId(Long kakaoUserId) {
+    public UserRes findUserByKakaoUserId(String kakaoUserId) {
         User user = userRepository.findByKakaoUserId(kakaoUserId).orElseThrow(() -> new NoSuchElementException("[가입하지 않는 회원] kakaoId : " + kakaoUserId));
         return new UserRes(user);
     }

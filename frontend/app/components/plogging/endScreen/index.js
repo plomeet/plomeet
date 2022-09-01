@@ -105,24 +105,6 @@ const EndPlogging = ({ saveLogs, ploggingPath, center, setImages, distSum, isPlo
 
         checkFirstLog();
 
-        // let TimeTaken = kr_curr.getTime() - startTime[3].getTime();
-
-        // const hour = parseInt(TimeTaken / 1000 / 60 / 60);
-        // TimeTaken = TimeTaken - (hour * 1000 * 60 * 60);
-        // const min = parseInt(TimeTaken / 1000 / 60);
-        // TimeTaken = TimeTaken - (min * 1000 * 60);
-        // const sec = parseInt(TimeTaken / 1000);
-        // let str = "총 ";
-        // if (hour > 0)
-        //     str += hour + "시간 "
-        // if (min > 0)
-        //     str += min + "분 "
-        // if (sec > 0)
-        //     str += sec + "초 "
-        // str += "플로깅을 했어요"
-
-        // if (elapsedTime === "")
-        //     setElapsedTime(str);
     }, []);
 
     const showCameraRoll = () => {
