@@ -67,7 +67,7 @@ const SignUp = () => {
             })
             
           })
-      }else{ //토큰없으면
+      }else{ //토큰없으면 - 재가입유저는 이쪽 로직으로 연결
         console.log('토큰없음')
         KakaoLogins.login()
           .then(result => {
@@ -78,7 +78,6 @@ const SignUp = () => {
                   kakaoUserId = result.id;
                   axios.get('http://plomeet-app.com:8000/user/' + kakaoUserId)
                   .then((response) => {
-                    console.log(response.status);
                     dispatch(actions.setNickname(response.data.userNickName));
                     dispatch(actions.setUserId(response.data.userId));
                     if(response.status == 200){ //홈으로, Redux 저장
@@ -86,15 +85,12 @@ const SignUp = () => {
                       dispatch(actions.setImg(result.profileImageUrl))
                       dispatch(actions.setName(result.nickname))
                       dispatch(actions.setEmail(result.email))
-                      navigation.replace('M');
-                    }else{ // 진행시켜
-                      console.log('토큰은있지만 가입한적없어?? ->말이안됨')
-                      navigation.navigate('NicknameRegister');
-                    }
+                      if(response.data.isDelete=='Y') navigation.navigate('NicknameRegister');
+                      else navigation.replace('M');
+                    }else{}
                   }).catch((error) => {
                     console.log(error); 
                   });
-                //navigation.navigate('NicknameRegister');
               })
               .catch(err => {
                 console.log(`### Profile Error : ${JSON.stringify(err)}`);

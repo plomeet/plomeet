@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface PloggingRepository extends JpaRepository<PloggingLog, String> {
     List<PloggingLog> findAllByUser (User user);
+    void deleteByUserId (Long userId);
 }

@@ -2,6 +2,8 @@ package com.ssafy.PloMeet.model.entity;
 
 import com.ssafy.PloMeet.api.request.ProfileReq;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ssafy.PloMeet.common.util.IsDeleteConverter;
+import com.ssafy.PloMeet.model.entity.enumtype.IsDelete;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -30,8 +32,8 @@ public class User {
     @Column(length = 100, columnDefinition = "varchar(100) default 'https://i.postimg.cc/G23gPzdy/profile-default.png'")
     String userProfileImg;
 
-    @Column(columnDefinition = "boolean default false")
-    Boolean idDelete;
+    @Convert(converter = IsDeleteConverter.class)
+    IsDelete isDelete;
 
     @Column(length = 10)
     String userName;
@@ -52,5 +54,5 @@ public class User {
     public void updateProfile(String userNickName) {
         this.userNickName = userNickName;
     }
-
+    public void updateIsDelete(IsDelete isDelete){this.isDelete = isDelete;}
 }

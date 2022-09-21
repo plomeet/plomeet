@@ -15,7 +15,7 @@ public class PloggingLog {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long plogId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "userId")
     private User user;
     @Column

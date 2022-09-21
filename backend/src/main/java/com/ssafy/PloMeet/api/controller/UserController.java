@@ -49,4 +49,31 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(200, "변경완료"));
     }
 
+    @PutMapping("/delete/{userId}")
+    public ResponseEntity deleteUser(@PathVariable("userId") Long userId){
+        userService.deleteUser(userId);
+        return null;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

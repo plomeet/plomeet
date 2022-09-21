@@ -40,17 +40,15 @@ const NicknameRegister = () => {
   const name = useSelector(state => state.name)
   const img = useSelector(state => state.img)
   const email = useSelector(state => state.email)
+  const [canRegi, canRegiChange] = useState(false);
 
 
-  
-  // console.log(value);
   const NicknameUpdate = () => {
     dispatch(actions.setNickname(value));
     console.log("hey",nickname);
   }
   
-  
-  // kakaoHelper.getProfile();
+
   useEffect(() => { 
     KakaoLogins.getProfile().then(result => {
       dispatch(actions.setkakaoId(result.id))
@@ -60,10 +58,11 @@ const NicknameRegister = () => {
     });
   },[])
 
-  // setTimeout(() => {console.log(img)},100);
-  // setTimeout() 걸어줄것
-  
-  // setTimeout(() => {},100);
+  useEffect(() => { 
+    if(/^[a-zA-Zㄱ-힣0-9]{2,10}$/.test(value))canRegiChange(true);
+    else canRegiChange(false);
+  },[value])
+
   const Register = () => {
     axios.post('http://plomeet-app.com:8000/user', {
       kakaoUserId: kakaoId,
@@ -128,9 +127,11 @@ const NicknameRegister = () => {
             onChangeText={text => onChangeText(text)}
             value={value}>
           </TextInput>
+          <Text>사용 가능한 닉네임입니다.</Text>
         </View>
         <TouchableOpacity
           style={styles.button}
+          disabled={canRegi}
           onPress={() => Register()}>
           <View style={styles.button2}>
             <Text style={styles.title2}>회원가입</Text>

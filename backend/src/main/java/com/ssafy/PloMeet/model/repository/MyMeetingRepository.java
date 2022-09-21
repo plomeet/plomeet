@@ -25,4 +25,5 @@ public interface MyMeetingRepository extends JpaRepository<MyMeeting, Long> {
 
     public List<MyMeeting> findAllByMeetingId(Meeting meetingId);
 
+    void deleteByUserId(Long userId);
 }

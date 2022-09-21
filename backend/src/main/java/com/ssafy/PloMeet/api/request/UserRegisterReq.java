@@ -17,7 +17,7 @@ public class UserRegisterReq {
 
     private String userEmail;
 
-    private Boolean idDelete;
+    private Boolean isDelete;
 
     @Builder
     public UserRegisterReq(Long kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail) {

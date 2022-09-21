@@ -85,4 +85,6 @@ public class Meeting {
         this.meetingDate = meetingReq.getMeetingDate();
         this.item = meetingReq.getItem();
     }
+
+    public void updateCnt(Integer memberCnt){this.memberCnt=memberCnt;}
 }

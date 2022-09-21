@@ -17,4 +17,5 @@ public interface UserService {
     Long signUp(UserRegisterReq userRegisterReq);
     Optional<User> getUserInfo(Long userId) throws Exception;
     void updateProfile(ProfileReq profileReq);
+    void deleteUser(Long userId);
 }

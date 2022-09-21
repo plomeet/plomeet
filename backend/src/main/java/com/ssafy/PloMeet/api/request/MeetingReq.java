@@ -41,7 +41,6 @@ public class MeetingReq {
         this.item = item;
     }
 
-
     public Meeting toEntity() {
         return Meeting.builder()
                 .meetingImg(meetingImg)

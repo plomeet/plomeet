@@ -19,18 +19,18 @@ public class UserRes {
 
     String userEmail;
 
-    Boolean idDelete;
+    String isDelete;
 
 
     @Builder
-    public UserRes(Long userId, Long kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail, Boolean idDelete) {
+    public UserRes(Long userId, Long kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail, String isDelete) {
         this.userId = userId;
         this.kakaoUserId = kakaoUserId;
         this.userNickName = userNickName;
         this.userProfileImg = userProfileImg;
         this.userName = userName;
         this.userEmail = userEmail;
-        this.idDelete = idDelete;
+        this.isDelete = isDelete;
     }
 
     public UserRes(User user){
@@ -40,6 +40,6 @@ public class UserRes {
         this.userProfileImg = user.getUserProfileImg();
         this.userName = user.getUserName();
         this.userEmail = user.getUserEmail();
-        this.idDelete = user.getIdDelete();
+        this.isDelete = user.getIsDelete().getCode();
     }
 }
