@@ -37,6 +37,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Long signUp(UserRegisterReq userRegisterReq) {
         User user = userRegisterReq.toEntity();
+        if(userRegisterReq.getIsDelete()) {
+            user.updateIsDelete(IsDelete.ALIVE);
+        }
+        System.out.println("wait..");
         return userRepository.save(user).getUserId();
     }
 
@@ -54,17 +58,17 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public void deleteUser(Long userId) {
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findByUserId(userId).get();
         user.updateIsDelete(IsDelete.DEAD);
         userRepository.save(user);
-        myBadgeRepository.deleteByUserId(userId);
+        myBadgeRepository.deleteByUserId(user);
         List<MyMeeting> outList =  myMeetingRepository.findAllByUserId(userId);
-        myMeetingRepository.deleteByUserId(userId);
+        myMeetingRepository.deleteByUserId(user);
         for(MyMeeting m : outList){
             Meeting meeting = meetingRepository.findByMeetingId(m.getMeetingId().getMeetingId()).get();
             meeting.updateCnt(meeting.getMemberCnt()-1);
             meetingRepository.save(meeting);
         }
-        ploggingRepository.deleteByUserId(userId);
+        ploggingRepository.deleteByUserId(user);
     }
 }

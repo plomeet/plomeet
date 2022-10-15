@@ -1,3 +1,8 @@
+export const setIsDelete = (isDelete) => ({
+    type: "SET_ISDELETE",
+    payload: isDelete,
+});
+
 export const setUserId = (userId) => ({
     type: "SET_USERID",
     payload: userId,

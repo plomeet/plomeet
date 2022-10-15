@@ -17,7 +17,7 @@ public class PloggingLog {
     private long plogId;
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "userId")
-    private User user;
+    private User userId;
     @Column
     private float plogDist;
     @Column(length = 11)

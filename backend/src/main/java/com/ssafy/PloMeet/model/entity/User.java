@@ -41,15 +41,16 @@ public class User {
     @Column(length = 100, unique = true)
     String userEmail;
 
-
     @Builder
-    public User(Long kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail) {
+    public User(Long userId, Long kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail) {
+        this.userId = userId;
         this.kakaoUserId = kakaoUserId;
         this.userNickName = userNickName;
         this.userProfileImg = userProfileImg;
         this.userName = userName;
         this.userEmail = userEmail;
     }
+
 
     public void updateProfile(String userNickName) {
         this.userNickName = userNickName;

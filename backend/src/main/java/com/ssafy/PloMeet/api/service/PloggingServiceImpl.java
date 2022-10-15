@@ -35,7 +35,7 @@ public class PloggingServiceImpl implements PloggingService{
                     weather = w;
             }
             return ploggingRepo.save(PloggingLog.builder()
-                    .user(user.get()).plogDist(insertLog.getPlogDist())
+                    .userId(user.get()).plogDist(insertLog.getPlogDist())
                     .plogTime(insertLog.getPlogTime()).plogDate(insertLog.getPlogDate())
                     .plogWeather(weather).route(routeJson).build());
         }else{
@@ -46,6 +46,6 @@ public class PloggingServiceImpl implements PloggingService{
 
     @Override
     public List<PloggingLog> getPloggingLogs(Optional<User> user) throws Exception {
-        return ploggingRepo.findAllByUser(user.get());
+        return ploggingRepo.findAllByUserId(user.get());
     }
 }

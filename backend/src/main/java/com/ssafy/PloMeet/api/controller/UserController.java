@@ -4,7 +4,7 @@ import com.ssafy.PloMeet.api.request.ProfileReq;
 import com.ssafy.PloMeet.api.request.UserRegisterReq;
 import com.ssafy.PloMeet.api.response.BaseResponseBody;
 import com.ssafy.PloMeet.api.response.UserRes;
-import com.ssafy.PloMeet.api.service.UserService;
+import com.ssafy.PloMeet.api.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     //회원 가입 여부 조회
     @GetMapping("/{kakaoUserId}")
@@ -49,10 +49,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(200, "변경완료"));
     }
 
-    @PutMapping("/delete/{userId}")
-    public ResponseEntity deleteUser(@PathVariable("userId") Long userId){
-        userService.deleteUser(userId);
-        return null;
+    @PutMapping("/delete")
+    public ResponseEntity deleteUser(@RequestBody UserRegisterReq userReq){
+        userService.deleteUser(userReq.getUserId());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }
 

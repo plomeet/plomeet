@@ -26,14 +26,13 @@ const AuthComponent = () => {
   const email = useSelector(state => state.email)
   
   useEffect(()=>{
+    AsyncStorage.removeItem('refreshToken');
     AsyncStorage.getItem('refreshToken').then( async res => {
-      console.log(res);
         if(res) {
           await KakaoLogins.getProfile().then(result => {
             kakaoUserId = result.id;
           });
-         
-          await axios.get('http://plomeet-app.com:8000/user/' + kakaoUserId)
+          await axios.get('http://127.0.0.1:8000/user/' + kakaoUserId)
           .then(async (response) => {
             // console.log(response.data.userId);
             dispatch(actions.setNickname(response.data.userNickName));
@@ -52,7 +51,6 @@ const AuthComponent = () => {
           })
           //})},2000);
         }else{
-          console.log('조기')
           //setTimeout(() => {navigation.navigate('SignUp');},1000);
           navigation.navigate('SignUp');
         }

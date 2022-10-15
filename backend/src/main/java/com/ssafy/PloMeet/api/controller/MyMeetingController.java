@@ -19,9 +19,6 @@ import java.util.Map;
 @RequestMapping("")
 public class MyMeetingController {
 
-    @Autowired
-    UserServiceImpl userService;
-
     private final MyMeetingService myMeetingService;
 
     //모임 가입

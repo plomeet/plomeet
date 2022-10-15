@@ -15,6 +15,7 @@ import com.ssafy.PloMeet.model.entity.Weather;
 import com.ssafy.PloMeet.model.repository.PloggingRepository;
 import com.ssafy.PloMeet.model.repository.TrashcanRepository;
 import com.ssafy.PloMeet.model.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +26,11 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PloggingLogController {
-    @Autowired
-    UserServiceImpl userService;
-    @Autowired
-    PloggingServiceImpl ploggingService;
+    private final UserServiceImpl userService;
+    private final PloggingServiceImpl ploggingService;
 
 
     @PostMapping("/ploggings")

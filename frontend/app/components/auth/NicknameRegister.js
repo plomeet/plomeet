@@ -35,6 +35,7 @@ const NicknameRegister = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const nickname = useSelector(state => state.nickname)
+  const isDelete = useSelector(state => state.isDelete)
   const userId = useSelector(state => state.userId)
   const kakaoId = useSelector(state => state.kakaoId)
   const name = useSelector(state => state.name)
@@ -63,14 +64,32 @@ const NicknameRegister = () => {
     else canRegiChange(false);
   },[value])
 
+  const getParam = ()=>{
+    let param = {};
+    if(isDelete){
+      param = {
+        userId: userId,
+        kakaoUserId: kakaoId,
+        userNickName: value, // 입력받은값으로 변경
+        userProfileImg: img,
+        userName: name,
+        userEmail: email,
+        isDelete: true
+      }
+    }else{
+      param = {
+        kakaoUserId: kakaoId,
+        userNickName: value, // 입력받은값으로 변경
+        userProfileImg: img,
+        userName: name,
+        userEmail: email,
+      }
+    }
+    return param;
+  }
+
   const Register = () => {
-    axios.post('http://plomeet-app.com:8000/user', {
-      kakaoUserId: kakaoId,
-      userNickName: value, // 입력받은값으로 변경
-      userProfileImg: img,
-      userName: name,
-      userEmail: email,
-    }, {
+    axios.post('http://127.0.0.1:8000/user', getParam(), {
       "Content-Type": "application/json",
     },).then(async(response) => {
       console.log(response);
@@ -127,11 +146,11 @@ const NicknameRegister = () => {
             onChangeText={text => onChangeText(text)}
             value={value}>
           </TextInput>
-          <Text>사용 가능한 닉네임입니다.</Text>
+          {canRegi ? <Text style={styles.blue}>사용 가능한 닉네임입니다.</Text> : <Text style={styles.red}>영문, 한글, 숫자로 이루어진 2~10자리만 가능합니다.</Text>}
         </View>
         <TouchableOpacity
           style={styles.button}
-          disabled={canRegi}
+          disabled={!canRegi}
           onPress={() => Register()}>
           <View style={styles.button2}>
             <Text style={styles.title2}>회원가입</Text>
@@ -200,6 +219,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 250,
   },
+  blue: {
+    color: "blue"
+  },
+  red: {
+    color: "red"
+  }
 });
 
 const mapStateToProps = state => {

@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as KakaoLogins from '@react-native-seoul/kakao-login';
-
+import axiosInstance from "../../../utils/API";
 import LogoImage from '../../../assets/imgs/6881.png';
 import KakaoLogo from '../../../assets/imgs/kakao1.png';
 import LinearGradient from 'react-native-linear-gradient';
@@ -39,28 +39,25 @@ const SignUp = () => {
       if(res) { //토큰이있으면
         KakaoLogins.login()
           .then(result => {
-            console.log('갱신함')
             AsyncStorage.setItem('refreshToken', result.refreshToken);
+            //AsyncStorage.setItem('accessToken', result.accessToken);
             KakaoLogins.getProfile()
             .then(result => {
-              console.log('프로필받음?')
               kakaoUserId = result.id;
               console.log(`### Profile Result : ${JSON.stringify(result)}`);
-              axios.get('http://plomeet-app.com:8000/user/' + kakaoUserId)
+              axiosInstance.get(`/user/${kakaoUserId}`)
               .then((response) => {
                 console.log(response.status);
-                dispatch(actions.setNickname(response.data.userNickName));
-                dispatch(actions.setUserId(response.data.userId));
+                dispatch(actions.setkakaoId(result.id))
+                dispatch(actions.setImg(result.profileImageUrl))
+                dispatch(actions.setName(result.nickname))
+                dispatch(actions.setEmail(result.email))
                 if(response.status == 200){ //홈으로, Redux 저장
-                  dispatch(actions.setkakaoId(result.id))
-                  dispatch(actions.setImg(result.profileImageUrl))
-                  dispatch(actions.setName(result.nickname))
-                  dispatch(actions.setEmail(result.email))
+                  dispatch(actions.setNickname(response.data.userNickName));
+                  dispatch(actions.setUserId(response.data.userId));
                   navigation.replace('M');
-                }else{ // 진행시켜
-                  console.log('토큰은있지만 가입한적없어?? ->말이안됨')
-                  navigation.navigate('NicknameRegister');
-                }
+                }else  navigation.navigate('NicknameRegister');
+                
               }).catch((error) => {
                 console.log(error); 
               }); 
@@ -68,26 +65,32 @@ const SignUp = () => {
             
           })
       }else{ //토큰없으면 - 재가입유저는 이쪽 로직으로 연결
-        console.log('토큰없음')
         KakaoLogins.login()
           .then(result => {
             AsyncStorage.setItem('refreshToken', result.refreshToken);
+            //AsyncStorage.setItem('accessToken', result.accessToken);
             KakaoLogins.getProfile()
               .then(result => {
-                console.log(`### Profile Result : ${JSON.stringify(result)}`);
                   kakaoUserId = result.id;
-                  axios.get('http://plomeet-app.com:8000/user/' + kakaoUserId)
+                  console.log(kakaoUserId + ": kakaoUserId");
+                  axiosInstance.get(`/user/${kakaoUserId}`)
                   .then((response) => {
-                    dispatch(actions.setNickname(response.data.userNickName));
-                    dispatch(actions.setUserId(response.data.userId));
+                    console.log(response);
+                    dispatch(actions.setkakaoId(result.id))
+                    dispatch(actions.setImg(result.profileImageUrl))
+                    dispatch(actions.setName(result.nickname))
+                    dispatch(actions.setEmail(result.email))
                     if(response.status == 200){ //홈으로, Redux 저장
-                      dispatch(actions.setkakaoId(result.id))
-                      dispatch(actions.setImg(result.profileImageUrl))
-                      dispatch(actions.setName(result.nickname))
-                      dispatch(actions.setEmail(result.email))
-                      if(response.data.isDelete=='Y') navigation.navigate('NicknameRegister');
-                      else navigation.replace('M');
-                    }else{}
+                      dispatch(actions.setUserId(response.data.userId));
+                      if(response.data.isDelete=='Y'){
+                        dispatch(actions.setIsDelete(true))
+                        navigation.navigate('NicknameRegister');
+                      }
+                      else {
+                        dispatch(actions.setNickname(response.data.userNickName));
+                        navigation.replace('M');
+                      }
+                    }else navigation.navigate('NicknameRegister');
                   }).catch((error) => {
                     console.log(error); 
                   });
@@ -99,39 +102,6 @@ const SignUp = () => {
       }
     })
   }
- 
-
-  // function login() {
-  //   KakaoLogins.login()
-  //     .then(result => {
-  //       console.log(`### Login Result : ${JSON.stringify(result)}`);
-  //       AsyncStorage.setItem('refreshToken', result.refreshToken);
-  //       KakaoLogins.getProfile()
-  //         .then(result => {
-  //           console.log(`### Profile Result : ${JSON.stringify(result)}`);
-  //           navigation.navigate('NicknameRegister');
-  //         })
-  //         .catch(err => {
-  //           console.log(`### Profile Error : ${JSON.stringify(err)}`);
-  //         });
-  //     })
-  //     .catch(err => {
-  //       console.log(`### Login Error : ${JSON.stringify(err)}`);
-  //     });
-  // }
-
-  // function logout() {
-  //   AsyncStorage.clear();
-  //   KakaoLogins.logout()
-  //     .then(result => {
-  //       console.log(`### Logout Result : ${JSON.stringify(result)}`);
-  //     })
-  //     .catch(err => {
-  //       console.log(`### Logout Error : ${JSON.stringify(err)}`);
-  //     });
-  //     console.log('여기서걸리나?')
-  //   KakaoLogins.unlink();
-  // }
 
   BackHandler.addEventListener('hardwareBackPress', () => {
     return true;

@@ -7,6 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MyBadgeRepository extends JpaRepository<MyBadge, Long> {
     boolean existsByUserIdAndBadgeId(User user, Badge badge);
-
-    void deleteByUserId(Long userId);
+    void deleteByUserId(User user);
 }

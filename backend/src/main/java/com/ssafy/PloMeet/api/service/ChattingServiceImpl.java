@@ -45,7 +45,7 @@ public class ChattingServiceImpl implements ChattingService{
         List<ChattingMemberRes> chattingMembers = new ArrayList<>();
         for(MyMeeting myMeeting: myMeetings) {
             Long userId = myMeeting.getUserId().getUserId();
-            User user = userRepository.findByUserId(userId);
+            User user = userRepository.findByUserId(userId).get();
             ChattingMemberRes chattingMember = new ChattingMemberRes(user.getUserId(), user.getUserNickName(), user.getUserProfileImg(), myMeeting.getIsLeader());
             chattingMembers.add(chattingMember);
         }

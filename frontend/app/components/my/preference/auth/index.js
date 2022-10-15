@@ -5,24 +5,34 @@ import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
-import axiosInstance from "../../../utils/API";
+import axiosInstance from "../../../../../utils/API";
+import * as KakaoLogins from '@react-native-seoul/kakao-login';
 
 const PreferenceAuth = () => {
     const navigation = useNavigation();
     const userId = useSelector(state => state.userId);
 
     const userDelete = () => {
-        AsyncStorage.removeItem('refreshToken');
-        
-        axiosInstance.put("/user/delete/" + userId)
+        KakaoLogins.logout().then(result => {
+            console.log("로그아웃 성공");
+            KakaoLogins.unlink()
+            .then(result => {
+                console.log("연결해제 성공");
+                axiosInstance.put("/user/delete",{userId:userId})
                     .then((response) => {
                         if (response.status === 200) {
                             console.log("delete success");
+                            
                         } else {
                             console.log("delete fail");
                         }
                     })
-                    .catch((response) => { console.log(response); });
+                    .catch((response) => { console.log("delete error because : " + response); });
+            }).catch(err => console.log(`### unLink Error : ${JSON.stringify(err)}`))
+        }).catch(err => {
+                console.log(`### logOut Error : ${JSON.stringify(err)}`);
+        }); 
+        AsyncStorage.removeItem('refreshToken');
     }
 
     return (

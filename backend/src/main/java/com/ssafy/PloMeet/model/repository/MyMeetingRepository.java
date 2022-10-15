@@ -2,6 +2,7 @@ package com.ssafy.PloMeet.model.repository;
 
 import com.ssafy.PloMeet.model.entity.Meeting;
 import com.ssafy.PloMeet.model.entity.MyMeeting;
+import com.ssafy.PloMeet.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
@@ -25,5 +26,5 @@ public interface MyMeetingRepository extends JpaRepository<MyMeeting, Long> {
 
     public List<MyMeeting> findAllByMeetingId(Meeting meetingId);
 
-    void deleteByUserId(Long userId);
+    void deleteByUserId(User user);
 }

@@ -2,7 +2,9 @@ package com.ssafy.PloMeet.api.request;
 
 import com.ssafy.PloMeet.model.entity.User;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class UserRegisterReq {
 
     private Long userId;
@@ -20,15 +22,26 @@ public class UserRegisterReq {
     private Boolean isDelete;
 
     @Builder
-    public UserRegisterReq(Long kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail) {
+    public UserRegisterReq(Long userId, Long kakaoUserId, String userNickName, String userProfileImg, String userName, String userEmail, boolean isDelete) {
+        this.userId = userId;
         this.kakaoUserId = kakaoUserId;
         this.userNickName = userNickName;
         this.userProfileImg = userProfileImg;
         this.userName = userName;
         this.userEmail = userEmail;
+        this.isDelete = isDelete;
     }
 
     public User toEntity() {
+        if(userId != 0l)
+            return User.builder()
+                    .userId(userId)
+                    .kakaoUserId(kakaoUserId)
+                    .userNickName(userNickName)
+                    .userProfileImg(userProfileImg)
+                    .userName(userName)
+                    .userEmail(userEmail)
+                    .build();
         return User.builder()
                 .kakaoUserId(kakaoUserId)
                 .userNickName(userNickName)
